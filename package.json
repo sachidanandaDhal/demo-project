@@ -1,0 +1,29 @@
+{
+  "name": "demo-project",
+  "description": "Webcomponent demo-project following open-wc recommendations",
+  "license": "MIT",
+  "author": "demo-project",
+  "version": "0.0.0",
+  "type": "module",
+  "main": "index.js",
+  "module": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./demo-project.js": "./demo-project.js"
+  },
+  "scripts": {
+    "analyze": "cem analyze --litelement",
+    "start": "web-dev-server"
+  },
+  "dependencies": {
+    "@vaadin/router": "^1.7.5",
+    "bulma": "^1.0.0",
+    "lit": "^2.8.0",
+    "omni-ui": "bitbucket:annalect/omni-ui#semver:~7.20.4"
+  },
+  "devDependencies": {
+    "@custom-elements-manifest/analyzer": "^0.4.17",
+    "@web/dev-server": "^0.1.34"
+  },
+  "customElements": "custom-elements.json"
+}
