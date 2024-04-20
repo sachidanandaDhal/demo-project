@@ -70,6 +70,7 @@ export default class LogIn extends OmniElement {
       this.showSuccessMessage = true;
       this.userRole = matchedUser.user_login_details.role || [];
       this.loggedInUserName = matchedUser.personal_details.first_name;
+      this.loggedInUserdata = matchedUser;
     } else {
       this.showloginErrorMessage = true;
     }
@@ -266,7 +267,7 @@ export default class LogIn extends OmniElement {
       ></nav-bar>`;
     } else if (this.userRole.includes("User")) {
       return html`<test-nab
-       .userName=${this.loggedInUserName}
+       .userData=${this.loggedInUserdata}
       ></test-nab>`;
     } else {
       return html``;

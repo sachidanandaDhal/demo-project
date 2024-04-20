@@ -4,7 +4,6 @@ import "../home/user-data.js";
 import "../form/user-form.js";
 import "../home/home-tab.js";
 
-
 OmniElement.register();
 OmniStyleElement.register();
 
@@ -13,7 +12,7 @@ export default class NavBar extends OmniElement {
     return {
       drawerOpen: { type: Boolean },
       endDrawerOpen: { type: Boolean },
-      userName: { type: String }
+      userData: { type: String },
     };
   }
 
@@ -64,12 +63,12 @@ export default class NavBar extends OmniElement {
           --omni-app-layout-end-drawer-z-index: 34;
           --omni-app-layout-header-z-index: 36;
         }
-   
       `,
     ];
   }
 
   render() {
+    console.log("renderdata:", this.userData);
     return html`
       <omni-style>
         <omni-app-layout
@@ -88,19 +87,9 @@ export default class NavBar extends OmniElement {
                 }"
               ></omni-icon>
             </button>
-          
-          
-        
-     
- 
               <p class=" title is-2 pt-2 ">User Management</p>
-               <div slot="center-end" class="pr-4">
-                <!-- <button class="button is-outlined" @click="${
-                  this.openUserForm
-                }">
-                  Create new
-                </button> -->
-                <div>Hello, ${this.userName}</div>
+                <div slot="center-end" class="pr-4">
+                <div>Hello, ${this.userData.personal_details.first_name}</div>
               </div>
               <!-- <user-profile></user-profile> -->
               
@@ -108,12 +97,11 @@ export default class NavBar extends OmniElement {
           </header>
 
           <main>
-            <home-tab></home-tab>
+            
           </main>
 
 
           <nav slot="drawer" class="menu">
-            
           <div class="pl-8 ">
             <!-- <button  class="button is-text " @click="${this.toggleDrawer}">
               <omni-icon
