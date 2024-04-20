@@ -13,6 +13,7 @@ export default class NavBar extends OmniElement {
     return {
       drawerOpen: { type: Boolean },
       endDrawerOpen: { type: Boolean },
+      userName: { type: String }
     };
   }
 
@@ -93,13 +94,14 @@ export default class NavBar extends OmniElement {
      
  
               <p class=" title is-2 pt-2 ">User Management</p>
-              <!-- <div slot="center-end" class="pr-4">
-                <button class="button is-outlined" @click="${
+               <div slot="center-end" class="pr-4">
+                <!-- <button class="button is-outlined" @click="${
                   this.openUserForm
                 }">
                   Create new
-                </button>
-              </div> -->
+                </button> -->
+                <div>Hello, ${this.userName}</div>
+              </div>
               <!-- <user-profile></user-profile> -->
               
             </omni-toolbar>
