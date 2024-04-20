@@ -505,7 +505,7 @@ export default class UserForm extends OmniElement {
 
         <div class="columns col-spacing">
           <div class="column is-one-third">
-            <p class="mb-2 ml-2">* First name</p>
+            <p class="mb-2 ml-2">* First Name</p>
             <input
               class="${this.firstNameError ? "input error-border" : "input"}"
               type="text"
