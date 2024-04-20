@@ -51,7 +51,7 @@ export default class NavBar extends OmniElement {
           --omni-app-layout-drawer-closed-width: 4px;
           --omni-app-layout-end-drawer-width: 300px;
           --omni-app-layout-bg: #f1f5fa;
-          --omni-app-layout-header-bg: #fff;
+          --omni-app-layout-header-bg: #ffffff;
           --omni-app-layout-drawer-bg: #f1f5fa;
           --omni-app-layout-end-drawer-bg: #f5f0f0;
 
@@ -96,9 +96,7 @@ export default class NavBar extends OmniElement {
             </omni-toolbar>
           </header>
 
-          <main>
-            
-          </main>
+          
 
 
           <nav slot="drawer" class="menu">
