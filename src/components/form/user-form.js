@@ -528,7 +528,7 @@ export default class UserForm extends OmniElement {
             </div>
           </div>
           <div class="column is-one-third ">
-            <p class="mb-2 ml-2 ">* Last name</p>
+            <p class="mb-2 ml-2 ">* Last Name</p>
             <input
               class="${this.lastNameError ? "input error-border" : "input"}"
               type="text"

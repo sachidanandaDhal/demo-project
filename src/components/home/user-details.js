@@ -53,6 +53,7 @@ export default class UserDetails extends OmniStyleElement {
       gender:`${user.personal_details.gender}`,
       officeEmail: `${user.user_login_details.officeEmail}`,
       role: `${user.user_login_details.role}`,
+
       actions: html`
       <omni-style>
       <td part="table-body-cell ">

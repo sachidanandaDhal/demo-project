@@ -1,6 +1,6 @@
 import { OmniElement, OmniStyleElement, css, html, nothing } from "omni-ui";
 import "../navbar/nav-bar.js";
-import "../home/user-data1.js";
+import "../navbar/test-nab.js";
 
 OmniElement.register();
 OmniStyleElement.register();
@@ -265,9 +265,9 @@ export default class LogIn extends OmniElement {
        .userName=${this.loggedInUserName}
       ></nav-bar>`;
     } else if (this.userRole.includes("User")) {
-      return html`<user-data1
+      return html`<test-nab
        .userName=${this.loggedInUserName}
-      ></user-data1>`;
+      ></test-nab>`;
     } else {
       return html``;
     }

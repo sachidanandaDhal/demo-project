@@ -12,21 +12,19 @@
 //   }
 //   static get properties() {
 //     return {
-//       userData: { type: Object }, // Define a property to store the user data
+//       userData: { type: Object }, 
 //     };
 //   }
 
 //   constructor() {
 //     super();
 
-//     this.userData = {}; // Initialize userData object
+//     this.userData = {}; 
 //   }
 
 //   closeUserData() {
 //     this.dispatchEvent(new CustomEvent("close-user-data"));
 //   }
-  
-
 //   render() {
 //     return html`
 //     <omni-style>
@@ -41,11 +39,11 @@
 //                         <tbody>
 //                         <tr>
 //                             <th class="is-uppercase is-size-6"> Name</th>
-//                             <td class="is-uppercase is-size-6">${this.userData.firstName} ${this.userData.lastName}</td>
+//                             <td class="is-uppercase is-size-6">${this.userData.personal_details.first_name} ${this.userData.personal_details.last_name}</td>
 //                         </tr>
 //                         <tr>
 //                             <th class="is-uppercase is-size-6">Gender</th>
-//                             <td>${this.userData.gender}</td>
+//                             <td>${this.userData.personal_details.gender}</td>
 //                         </tr>
 //                         <tr>
 //                             <th class="is-uppercase is-size-6"> Employee ID</th>
@@ -53,11 +51,11 @@
 //                         </tr>
 //                         <tr>
 //                             <th class="is-uppercase is-size-6"> Birth Date</th>
-//                             <td>${this.userData.birthDate}</td>
+//                             <td>${this.userData.personal_details.dob}</td>
 //                         </tr>
 //                         <tr>
 //                             <th class="is-uppercase is-size-6">Phone Number</th>
-//                             <td>${this.userData.phoneNumber}</td>
+//                             <td>${this.userData.contact_details.phoneNumber}</td>
 //                         </tr>
 //                         <tr>
 //                             <th class="is-uppercase is-size-6"> Personal Email</th>
@@ -78,7 +76,7 @@
 //                         </tbody>
 //                     </table>
 //                     <div class="buttons are-medium is-right pt-5 pr-4">
-//                         <button class="button is-size-5 is-link" @click="${this.closeUserData}">Close</button>
+//                         <button class="button is-size-5 is-link"  @click="${this.closeUserData}">Close</button>
 //                     </div>
 //                 </section>
 //             </div>
