@@ -44,7 +44,7 @@ export default class Navbar1 extends (OmniElement) {
             <button class="button is-text is-shadowless is-warning is-small">Item 2</button>
             <div slot="content">Hello World!</div>
             </omni-tooltip>
-          <div slot="center-end">
+          <!-- <div slot="center-end">
             
             <button class="button is-text">
               <omni-icon class="is-size-1" icon-id="omni:interactive:launch"></omni-icon>
@@ -52,8 +52,8 @@ export default class Navbar1 extends (OmniElement) {
             <button slot="end" class="button is-text">
             <omni-icon class="is-size-1" icon-id="omni:interactive:actions"></omni-icon>
           </button>
-          </div>
-          <div slot="end" class="toolbar-divider"></div>
+          </div> -->
+          <!-- <div slot="end" class="toolbar-divider"></div> -->
           <button slot="end" class="button is-text">
             <omni-icon class="is-size-1" icon-id="omni:interactive:actions"></omni-icon>
           </button>
