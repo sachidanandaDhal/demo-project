@@ -1202,4 +1202,4 @@ export default class UserForm extends OmniElement {
     `;
   }
 }
-customElements.define("user-form", UserForm);
+customElements.define("try-user-form", UserForm);

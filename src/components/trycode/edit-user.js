@@ -1,5 +1,5 @@
 import { OmniElement, OmniStyleElement, css, html, nothing } from "omni-ui";
-import "../alerts/my-alerts.js";
+// import "../alerts/my-alerts.js";
 OmniElement.register();
 OmniStyleElement.register();
 
@@ -11,8 +11,8 @@ export default class EditUser extends OmniElement {
         border-bottom: 1px solid rgb(241, 245, 250) !important;
         height: 43px;
       }
-      .pd-4{
-        padding-right : 16px;
+      .pd-4 {
+        padding-right: 16px;
       }
       .modal-card-body p {
         font-size: 0.8em !important;
@@ -21,49 +21,31 @@ export default class EditUser extends OmniElement {
       .omni .footer-container span {
         text-align: left !important ;
       }
-      .g-1{
+      .g-1 {
         margin-block-start: -25px !important;
       }
       .error-border {
         border: 1px solid var(--color-melon) !important;
       }
-  
     `,
   ];
   static get properties() {
     return {
-      userData: { type: Object }, 
-      states: { type: Array },
-      districts: { type: Array },
-      showSuccessMessage: { type: Boolean },
-      firstName: { type: String },
-      lastName: { type: String },
-      phoneNumber: { type: String },
-      empId : { type: String },
+      userData: { type: Object },
       selectedState: { type: String },
       selectedDistrict: { type: String },
-      personalEmail: { type: String },
-      officeEmail: { type: String },
-      gender: { type: String },
-      firstNameError: { type: String },
-      lastNameError: { type: String },
-      phoneNumberError: { type: String },
-      personalEmailError: { type: String },
-      officeEmailError: { type: String },
+      selectedStateError: { type: String },
+      selectedDistrictError: { type: String },
     };
   }
 
   constructor() {
     super();
-    this.firstName = "";
-    this.lastName = "";
-    this.phoneNumber = "";
-    this.empId ="";
-    this.birthDate ="";
-    this.phoneType = "primary";
-    this.gender = "";
-    this.personalEmail = "";
-    this.officeEmail = "";
+    this.originalUserData = {};
+    this.selectedState = "";
+    this.selectedDistrict = "";
+    this.userData = {};
+    this.dataArray = [];
     this.states = [
       "Maharashtra",
       "Uttar Pradesh",
@@ -89,68 +71,59 @@ export default class EditUser extends OmniElement {
       "Jaipur",
       "Kota",
     ];
-    this.selectedState = "";
-    this.selectedDistrict = "";
-    
-    this.showSuccessMessage = false;
-
-    this.userData = {}; 
-    this.dataArray = [];
+  }
+  connectedCallback() {
+    super.connectedCallback();
+    this.originalUserData = { ...this.userData };
+    const storedData = JSON.parse(localStorage.getItem("userData")) || [];
+    this.dataArray = storedData; 
   }
 
- 
-
   handleFirstNameChange(e) {
-    this.firstName = e.target.value.trim(); // Trim to remove leading/trailing whitespace
+    this.firstName = e.target.value.trim(); 
     if (!this.firstName) {
       this.firstNameError = "First name is required";
     } else {
-      // const isDuplicate = this.dataArray.some(
-      //   (data) => data.firstName === this.firstName
-      // );
-      // this.firstNameError = isDuplicate ? "First name already exists" : "";
       this.firstNameError = "";
     }
     this.requestUpdate();
   }
-  
+
   handleLastNameChange(e) {
-    this.lastName = e.target.value.trim(); // Trim to remove leading/trailing whitespace
+    this.lastName = e.target.value.trim(); 
     if (!this.lastName) {
       this.lastNameError = "Last name is required";
     } else {
-      // const isDuplicate = this.dataArray.some(
-      //   (data) => data.lastName === this.lastName
-      // );
-      // this.lastNameError = isDuplicate ? "Last name already exists" : "";
       this.lastNameError = "";
     }
     this.requestUpdate();
   }
+
   handlePhoneNumberChange(e) {
-    const input = e.target.value.trim(); // Trim to remove leading/trailing whitespace
+    const input = e.target.value.trim();
     if (!input) {
       this.phoneNumberError = "Phone number is required";
     } else if (!/^\d+$/.test(input)) {
       this.phoneNumberError = "Phone number must contain only numbers";
     } else if (input.length !== 10) {
       this.phoneNumberError = "Phone number must be exactly 10 digits";
-    } else if (this.dataArray.some((data) => data.phoneNumber === input)) {
+    } else if (input !== this.userData.phoneNumber && this.dataArray.some((data) => data.phoneNumber === input)) {
       this.phoneNumberError = "Phone number already exists";
     } else {
       this.phoneNumber = input;
-      this.phoneNumberError = "";
+      this.phoneNumberError = ""; 
     }
-    this.requestUpdate();
-  }
+    this.requestUpdate(); 
+}
+
+
   handleEmployeeIdChange(e) {
-    this.empId = e.target.value.trim(); 
+    this.empId = e.target.value.trim();
     if (!this.empId) {
       this.empIdError = "Employee id is required";
-    }else if
-      (!/^\d{5}$/.test(this.empId)) {
-        this.empIdError = "Employee id must be 5 numbers.";
-      }else {
+    } else if (!/^\d{5}$/.test(this.empId)) {
+      this.empIdError = "Employee id must be 5 numbers.";
+    } else {
       const isDuplicate = this.dataArray.some(
         (data) => data.empId === this.empId
       );
@@ -165,88 +138,133 @@ export default class EditUser extends OmniElement {
     const selectedDate = new Date(inputDate);
 
     if (selectedDate > currentDate) {
-        this.birthDateError = true;
-        this.birthDateError = "Date of birth cannot be in the future.";
+      this.birthDateError = true;
+      this.birthDateError = "Date of birth cannot be in the future.";
     } else {
-        this.birthDateError = false;
-        this.birthDateError = "";
+      this.birthDateError = false;
+      this.birthDateError = "";
+    }
+    this.requestUpdate();
+  }
+
+  handlePersonalEmailChange(e) {
+    this.personalEmail = e.target.value.trim(); 
+    if (!this.personalEmail) {
+        this.personalEmailError = "Personal email is required";
+    } else if (!/^(?=.*[@])(?=.*(yahoo\.com|outlook\.com|gmail\.com|gmail\.uk|gmail\.us)).*$/.test(this.personalEmail)) {
+        this.personalEmailError = "Invalid email format";
+    } else if (this.personalEmail !== this.userData.personalEmail && this.dataArray.some((data) => data.personalEmail === this.personalEmail)) {
+        this.personalEmailError = "Personal email already exists";
+    } else {
+        this.personalEmailError = "";
     }
     this.requestUpdate();
 }
-  
-  handlePersonalEmailChange(e) {
-    this.personalEmail = e.target.value.trim(); // Trim to remove leading/trailing whitespace
-    if (!this.personalEmail) {
-      this.personalEmailError = "Personal email is required";
-    } else if (
-      !/^(?=.*[@])(?=.*(yahoo\.com|outlook\.com|gmail\.com|gmail\.uk|gmail\.us)).*$/.test(
-        this.personalEmail
-      )
-    ) {
-      this.personalEmailError = "Invalid email format";
-    } else {
-      const isDuplicate = this.dataArray.some(
-        (data) => data.personalEmail === this.personalEmail
-      );
-      this.personalEmailError = isDuplicate
-        ? "Personal email already exists"
-        : "";
-    }
-    this.requestUpdate();
-  }
-  handleOfficeEmailChange(e) {
-    this.officeEmail = e.target.value.trim(); // Trim to remove leading/trailing whitespace
+
+handleOfficeEmailChange(e) {
+    this.officeEmail = e.target.value.trim(); 
     if (!this.officeEmail) {
-      this.officeEmailError = "Office email is required";
+        this.officeEmailError = "Office email is required";
     } else if (!this.officeEmail.endsWith("@annalect.com")) {
-      this.officeEmailError = "Office email must end with @annalect.com";
+        this.officeEmailError = "Office email must end with @annalect.com";
+    } else if (this.officeEmail !== this.userData.officeEmail && this.dataArray.some((data) => data.officeEmail === this.officeEmail)) {
+        this.officeEmailError = "Office email already exists";
     } else {
-      const isDuplicate = this.dataArray.some(
-        (data) => data.officeEmail === this.officeEmail
-      );
-      this.officeEmailError = isDuplicate ? "Office email already exists" : "";
+        this.officeEmailError = "";
     }
     this.requestUpdate();
-  }
+}
+
+
   handleStateChange(e) {
-    this.selectedState = e.target.value;
+    this.selectedState = e.target.value; // Update selected state
+    this.userData.selectedState = this.selectedState; // Update selected state
     this.selectedStateError =
       this.selectedState.length === 0 ? "State is required" : "";
     this.requestUpdate();
   }
+
   handleDistrictChange(e) {
     this.selectedDistrict = e.target.value;
+    this.userData.selectedDistrict = this.selectedDistrict; 
     this.selectedDistrictError =
       this.selectedDistrict.length === 0 ? "District is required" : "";
     this.requestUpdate();
   }
+  closeEditUser() {
+    this.userData = { ...this.originalUserData };
+    this.dispatchEvent(new CustomEvent("close-edit-user"));
+  }
 
-  closeUserForm() {
-    this.dispatchEvent(new CustomEvent("close-user-form"));
-    window.location.reload();
+  handleSave() {
+    if (this.firstName) {
+      this.userData.firstName = this.firstName;
+    }
+    if (this.lastName) {
+      this.userData.lastName = this.lastName;
+    }
+    if (this.phoneType) {
+      this.userData.phoneType = this.phoneType;
+    }
+    if (this.phoneNumber) {
+      this.userData.phoneNumber = this.phoneNumber;
+    }
+    if (this.gender) {
+      this.userData.gender = this.gender;
+    }
+    if (this.empId) {
+      this.userData.empId = this.empId;
+    }
+    if (this.birthDate) {
+      this.userData.birthDate = this.birthDate;
+    }
+    if (this.selectedState) {
+      this.userData.selectedState = this.selectedState;
+    }
+    if (this.selectedDistrict) {
+      this.userData.selectedDistrict = this.selectedDistrict;
+    }
+    if (this.personalEmail) {
+      this.userData.personalEmail = this.personalEmail;
+  }
+  if (this.officeEmail) {
+      this.userData.officeEmail = this.officeEmail;
+  }
+    const userData = JSON.parse(localStorage.getItem("userData")) || [];
+    const updatedUserData = userData.map((user) => {
+      if (user.id === this.userData.id) {
+        return this.userData;
+      } else {
+        return user; 
+      }
+    });
+    localStorage.setItem("userData", JSON.stringify(updatedUserData));
+    this.requestUpdate();
+    this.showSuccessMessage = true;
   }
 
   renderData() {
     console.log("select:", this.selectedState);
     const isFormValid =
-      this.firstName &&
-      this.lastName &&
-      this.phoneNumber &&
-      this.empId &&
-      this.gender &&
-    //   this.selectedState.length > 0 &&
-    //   this.selectedDistrict.length > 0 &&
-      this.personalEmail &&
-      this.officeEmail &&
-      !this.firstNameError &&
-      !this.lastNameError &&
-      !this.phoneNumberError &&
-      !this.birthDateError&&
-      !this.personalEmailError &&
-      !this.officeEmailError&&
-      this.birthDate&&
-      !this.birthDateError;
+      // (this.userData.firstName || this.firstName) &&
+      // (this.userData.lastName || this.lastName) &&
+      // (this.userData.phoneNumber || this.phoneNumber) &&
+      // (this.userData.empId || this.empId) &&
+      // (this.userData.gender || this.gender) &&
+      // (this.userData.selectedState || this.selectedState) &&
+      // (this.userData.selectedDistrict || this.selectedDistrict) &&
+      // (this.userData.personalEmail || this.personalEmail) &&
+      // (this.userData.officeEmail || this.officeEmail) &&
+      // (this.userData.birthDate || this.birthDate) &&
+      // !this.firstNameError &&
+      // !this.lastNameError &&
+      // !this.phoneNumberError &&
+      // !this.birthDateError &&
+      // !this.personalEmailError &&
+      !this.officeEmailError;
+
     console.log("disable:", isFormValid);
+    console.log("checkNumber:",this.dataArray);
     return html`
       <header class="modal-card-head header-separator">
         <p class="modal-card-title has-text-black">Edit Form</p>
@@ -313,7 +331,6 @@ export default class EditUser extends OmniElement {
                   value="primary"
                   @change="${(e) => (this.phoneType = e.target.value)}"
                   ?checked="${this.userData.phoneType === "primary"}"
-                 
                 />
                 Primary
               </label>
@@ -358,7 +375,7 @@ export default class EditUser extends OmniElement {
                   type="radio"
                   name="gender"
                   value="Male"
-                  ?checked="${this.userData.gender === 'Male'}"
+                  ?checked="${this.userData.gender === "Male"}"
                   @change="${(e) => (this.gender = e.target.value)}"
                 />
                 Male
@@ -368,7 +385,7 @@ export default class EditUser extends OmniElement {
                   type="radio"
                   name="gender"
                   value="Female"
-                  ?checked="${this.userData.gender === 'Female'}"
+                  ?checked="${this.userData.gender === "Female"}"
                   @change="${(e) => (this.gender = e.target.value)}"
                 />
                 Female
@@ -386,6 +403,7 @@ export default class EditUser extends OmniElement {
               placeholder="Employee id"
               value="${this.userData.empId}"
               maxlength="5"
+              disabled
               @input="${(e) => this.handleEmployeeIdChange(e)}"
             />
 
@@ -408,7 +426,6 @@ export default class EditUser extends OmniElement {
             <input
               id="dobInput"
               type="date"
-              
               slot="invoker"
               class="${this.birthDateError ? "input error-border" : "input"}"
               placeholder="yyyy-mm-dd"
@@ -436,41 +453,40 @@ export default class EditUser extends OmniElement {
           <div class="column is-half">
             <p class="mb-3 ml-3">* State</p>
             <omni-dropdown
-              class="pd-4 "
+              class="pd-4"
               placeholder="State"
               typeahead
-              .value="${this.userData.selectedState}"
-              error="${this.selectedStateError ? this.selectedStateError : ''}"
+              error="${this.selectedStateError ? this.selectedStateError : ""}"
               searchindropdown
-              
               .options=${this.states}
+              .value="${this.userData.selectedState}"
               @change="${(e) => this.handleStateChange(e)}"
-            >
-            </omni-dropdown>
+            ></omni-dropdown>
           </div>
           <div class="column is-half">
             <p class="mb-3 ml-3 ">* District</p>
             <omni-dropdown
-              part="target "
-              class="pd-4 "
+              part="target"
+              class="pd-4"
               placeholder="District"
-              error="${this.selectedDistrictError ? this.selectedDistrictError : ''}"
+              error="${this.selectedDistrictError
+                ? this.selectedDistrictError
+                : ""}"
               typeahead
-              .value="${this.userData.selectedDistrict}"
               searchindropdown
-             
               .options=${this.districts}
+              .value="${this.userData.selectedDistrict}"
               @change="${(e) => this.handleDistrictChange(e)}"
-            >
-            </omni-dropdown>
+            ></omni-dropdown>
           </div>
         </div>
-
         <div class="columns col-spacing g-1">
           <div class="column is-half">
             <p class="mb-3 ml-3">* Personal email</p>
             <input
-              class="${this.personalEmailError ? "input error-border" : "input"}"
+              class="${this.personalEmailError
+                ? "input error-border"
+                : "input"}"
               type="text"
               placeholder="abc@gmail.com"
               value="${this.userData.personalEmail}"
@@ -524,7 +540,7 @@ export default class EditUser extends OmniElement {
           <div class="buttons are-medium">
             <button
               class="button is-size-5 is-text"
-              @click="${this.closeUserForm}"
+              @click="${this.closeEditUser}"
             >
               Cancel
             </button>
@@ -542,6 +558,7 @@ export default class EditUser extends OmniElement {
   }
 
   renderNotification() {
+    
     return html`
       <article
         class="notification is-success"
@@ -555,9 +572,9 @@ export default class EditUser extends OmniElement {
         <button
           class="delete"
           aria-label="delete"
-          @click="${this.closeUserForm}"
+          @click="${this.closeEditUser}"
         ></button>
-       Your profile has been successfully created!
+        Your profile has been successfully created!
       </article>
     `;
   }

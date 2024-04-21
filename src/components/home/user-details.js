@@ -28,7 +28,7 @@ export default class UserDetails extends OmniStyleElement {
   constructor() {
     super();
     const userData = JSON.parse(localStorage.getItem("userData"));
-    this.dataArray = userData || [];
+    this.users = userData || [];
     this.columns = [
       // { label: "ID", key: "id", isSortable: true },
       { label: "Name", key: "fullName", isSortable: true },
@@ -46,7 +46,7 @@ export default class UserDetails extends OmniStyleElement {
       },
       { label: "Actions", key: "actions" },
     ];
-    this.data = this.dataArray.map(user => ({
+    this.data = this.users.map(user => ({
       id: user.id,
       fullName: `${user.personal_details.first_name} ${user.personal_details.last_name}`,
       phoneNumber: `${user.contact_details.phoneNumber}`,
@@ -97,10 +97,10 @@ export default class UserDetails extends OmniStyleElement {
 
   deleteUser(user) {
     console.log("Deleting user:", user);
-    const index = this.dataArray.findIndex(u => u.id === user.id);
+    const index = this.users.findIndex(u => u.id === user.id);
     if (index !== -1) {
-      this.dataArray.splice(index, 1);
-      localStorage.setItem("userData", JSON.stringify(this.dataArray));
+      this.users.splice(index, 1);
+      localStorage.setItem("userData", JSON.stringify(this.users));
       this.data = this.data.filter(u => u.id !== user.id);
       this.requestUpdate();
     }

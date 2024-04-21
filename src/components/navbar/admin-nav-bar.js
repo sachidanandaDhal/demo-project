@@ -92,7 +92,7 @@ export default class AdminNavBar extends OmniElement{
           </header>
 
           <main>
-            <!-- <nav-bar1></nav-bar1> -->
+           
             <home-tab></home-tab>
           </main>
 

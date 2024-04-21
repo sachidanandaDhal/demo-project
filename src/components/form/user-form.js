@@ -11,7 +11,6 @@ export default class UserForm extends OmniElement {
         border-bottom: 1px solid rgb(241, 245, 250) !important;
         height: 43px;
       }
-
       .pd-4 {
         padding-right: 22px !important;
       }
@@ -190,12 +189,32 @@ export default class UserForm extends OmniElement {
       this.users = JSON.parse(storedData);
     }
   }
+  // adduserData() {
+  //   const empId = this.generateUniqueempId();
+  //   const Id = this.generateUniqueId();
+  //   this.userData.id = Id;
+  //   this.userData.empId = empId;
+  //   this.users.push(JSON.parse(JSON.stringify(this.userData)));
+  //   localStorage.setItem("userData", JSON.stringify(this.users));
+  //   this.showSuccessMessage = true;
+  //   this.requestUpdate();
+  // }
   adduserData() {
-    const empId = this.generateUniqueempId();
-    const Id = this.generateUniqueId();
-    this.userData.id = Id;
-    this.userData.empId = empId;
-    this.users.push(JSON.parse(JSON.stringify(this.userData)));
+    if (this.userData.id) {
+      // If userData contains an ID, it means we're updating an existing user
+      const index = this.users.findIndex(user => user.id === this.userData.id);
+      if (index !== -1) {
+        this.users[index] = JSON.parse(JSON.stringify(this.userData));
+      }
+    } else {
+      // If userData does not contain an ID, it means we're creating a new user
+      const empId = this.generateUniqueempId();
+      const Id = this.generateUniqueId();
+      this.userData.id = Id;
+      this.userData.empId = empId;
+      this.users.push(JSON.parse(JSON.stringify(this.userData)));
+    }
+    
     localStorage.setItem("userData", JSON.stringify(this.users));
     this.showSuccessMessage = true;
     this.requestUpdate();
