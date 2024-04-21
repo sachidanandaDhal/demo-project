@@ -6,7 +6,7 @@ import '../home/home-tab.js';
 OmniElement.register();
 OmniStyleElement.register();
 
-export default class NavBar extends OmniElement{
+export default class AdminNavBar extends OmniElement{
   static get properties() {
     return {
       drawerOpen: { type: Boolean },
@@ -112,4 +112,4 @@ export default class NavBar extends OmniElement{
     `;
   }
 }
-customElements.define("nav-bar", NavBar);
+customElements.define("admin-nav-bar", AdminNavBar);

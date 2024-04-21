@@ -11,8 +11,24 @@ export default class UserForm extends OmniElement {
         border-bottom: 1px solid rgb(241, 245, 250) !important;
         height: 43px;
       }
-      .pd-4{
-        padding-right : 16px;
+
+      .pd-4 {
+        padding-right: 22px !important;
+      }
+      .m-16 {
+        margin-block-start: -30px !important;
+      }
+      .g-1 {
+        margin-block-start: -25px !important;
+      }
+      .wt-1{
+        width: 550px !important;
+      }
+      .g-2 {
+        margin-block-start: -3px !important;
+      }
+      .g-3 {
+        margin-block-start: -15px !important;
       }
       .modal-card-body p {
         font-size: 0.8em !important;
@@ -21,9 +37,7 @@ export default class UserForm extends OmniElement {
       .omni .footer-container span {
         text-align: left !important ;
       }
-      .g-1{
-        margin-block-start: -25px !important;
-      }
+
       .error-border {
         border: 1px solid var(--color-melon) !important;
       }
@@ -31,32 +45,74 @@ export default class UserForm extends OmniElement {
         --color-icon-lines: #eb0465 !important;
         fill: var(--color-icon-lines) !important;
       }
-  
+      .omni .modal-card,
+      .omni .modal-content {
+        min-width: 940px !important;
+      }
+      omni-dropdown .footer-spacer {
+        height: 0px !important;
+        min-height: 0px !important;
+        max-height: 0px !important;
+        flex: 0 0 100%;
+      }
     `,
   ];
   static properties = {
     showSuccessMessage: { type: Boolean },
-    firstNameError: { type: String },
-    lastNameError: { type: String },
-    phoneNumberError: { type: String },
-    personalEmailError: { type: String },
-    officeEmailError: { type: String },
     sameAddress: { type: Boolean },
+    userData: { type: Object },
+    users: { type: Array },
   };
   constructor() {
     super();
-    const storedData = localStorage.getItem("userData");
-    this.dataArray = storedData ? JSON.parse(storedData) : [];
-    this.activeTab = 'basicInfo';
-    this.firstName = "";
-    this.lastName = "";
-    this.phoneNumber = "";
-    this.empId ="";
-    this.birthDate ="";
-    this.phoneType = "primary";
-    this.gender = "";
-    this.personalEmail = "";
-    this.officeEmail = "";
+    const currentDate = new Date();
+    const formattedDate = currentDate.toISOString().split("T")[0];
+    this.users = [];
+    this.userData = {
+      id: "",
+      empId: "",
+      modified_on: formattedDate,
+      personal_details: {
+        first_name: "",
+        last_name: "",
+        dob: "",
+        gender: "",
+        Marital: "",
+      },
+      contact_details: {
+        phoneNumber: "",
+        personalEmail: "",
+        officephoneNumber: "",
+      },
+      address: {
+        current_address: {
+          flat_house_no: "",
+          building_no: "",
+          pin: "",
+          state: "",
+          district: "",
+          state: "",
+          country: "",
+        },
+        permanent_address: {
+          flat_house_no: "",
+          building_no: "",
+          pin: "",
+          district: "",
+          state: "",
+          country: "",
+        },
+      },
+      user_login_details: {
+        username: "",
+        password: "OMNI.user",
+        officeEmail: "",
+        role: "",
+        active: true,
+      },
+    };
+    this.adduserData = this.adduserData.bind(this);
+
     this.states = [
       "Maharashtra",
       "Uttar Pradesh",
@@ -91,99 +147,64 @@ export default class UserForm extends OmniElement {
       "Separated",
       "Common Law",
     ];
-    // this.roles = ["User", "Super Admin", "Admin"];
-    // this.role = "User";
-    this.selectedCurrentstate = "";
-    this.selectedCurrentdistrict = "";
-    this.selectedCurrentcountry = "";
-    this.selectedpermanentcountry = "";
-    this.selectedpermanentDistrict = "";
-    this.selectedpermanentState = "";
-    this.currentAddress = "";
-    this.currentStreet = "";
-    this.currentPincode = "";
-    this.permanentAddress = "";
-    this.permanentStreet = "";
-    this.permanentPincode = "";
-    this.selectedMarital = "";
+    this.roles = ["User", "Super Admin", "Admin"];
+    this.loadUserData();
     this.sameAddress = false;
-    this.selectedState = "";
-    this.selectedDistrict = "";
-    
     this.showSuccessMessage = false;
-    this.generateEmpId();
+    this.generateUniqueId();
+    this.generateUniqueempId();
   }
-  generateEmpId() {
-    // Find the maximum empId in the existing data array
-    const maxEmpId = this.dataArray.reduce((max, data) => {
-      const idNumber = parseInt(data.empId);
-      return idNumber > max ? idNumber : max;
-    }, 0);
 
-    // Increment the maximum empId to generate a new unique empId
-    const newEmpId = (maxEmpId + 1).toString().padStart(4, "0");
-
-    // Set the empId property to the generated value
-    this.empId = newEmpId;
-  }
-  handleSave() {
-    const newId = Date.now();
-    const creationDate = new Date();
-    let username = this.firstName.toLowerCase() + ".user";
-    let password = this.lastName.toLowerCase() + ".user";
-    this.dataArray.push({
-      id: newId,
-      empId: this.empId,
-      modified_on: creationDate,
-      personal_details: {
-        first_name: this.firstName,
-        last_name: this.lastName,
-        dob: this.birthDate,
-        gender: this.gender,
-        Marital: this.selectedMarital,
-      },
-      contact_details: {
-        phoneType: this.phoneType,
-        phoneNumber: this.phoneNumber,
-        personalEmail: this.personalEmail,
-      },
-      address: {
-        current_address: {
-          flat_house_no: this.currentAddress,
-          building_no: this.currentStreet,
-          pin: this.currentPincode,
-          state: this.selectedCurrentstate,
-          district: this.selectedCurrentdistrict,
-          country: this.selectedCurrentcountry,
-        },
-        permanent_address: {
-          flat_house_no: this.permanentAddress,
-          building_no: this.permanentStreet,
-          pin: this.permanentPincode,
-          state: this.selectedpermanentState,
-          district: this.selectedpermanentDistrict,
-          country: this.selectedpermanentcountry,
-        },
-      },
-      user_login_details: {
-        username: username,
-        password: password,
-        officeEmail: this.officeEmail,
-        role: this.role,
-        active: true,
-      },
+  generateUniqueempId() {
+    const userData = JSON.parse(localStorage.getItem("userData")) || [];
+    // Find the maximum ID currently in use
+    let maxId = 0;
+    userData.forEach((user) => {
+      const id = parseInt(user.empId.split("_")[1]);
+      if (!isNaN(id) && id > maxId) {
+        maxId = id;
+      }
     });
-    localStorage.setItem("userData", JSON.stringify(this.dataArray));
-    console.log("Data Array:", this.dataArray);
-    console.log("New entry ID:", newId);
+
+    // Generate the new ID
+    const newId = (maxId + 1).toString().padStart(4, "0");
+
+    return `OMNI_${newId}`;
+  }
+  generateUniqueId() {
+    const userData = JSON.parse(localStorage.getItem("userData")) || [];
+    let maxId = 0;
+    userData.forEach((user) => {
+      const id = parseInt(user.id);
+      if (!isNaN(id) && id > maxId) {
+        maxId = id;
+      }
+    });
+    const newId = maxId + 1;
+    return newId.toString();
+  }
+
+  loadUserData() {
+    const storedData = localStorage.getItem("userData");
+    if (storedData) {
+      this.users = JSON.parse(storedData);
+    }
+  }
+  adduserData() {
+    const empId = this.generateUniqueempId();
+    const Id = this.generateUniqueId();
+    this.userData.id = Id;
+    this.userData.empId = empId;
+    this.users.push(JSON.parse(JSON.stringify(this.userData)));
+    localStorage.setItem("userData", JSON.stringify(this.users));
     this.showSuccessMessage = true;
     this.requestUpdate();
-    console.log(this.showSuccessMessage);
   }
 
+  ///////////////PERSONAL////////////////
   handleFirstNameChange(e) {
-    this.firstName = e.target.value.trim();
-    if (!this.firstName) {
+    this.userData.personal_details.first_name = e.target.value.trim();
+    if (!this.userData.personal_details.first_name) {
       this.firstNameError = "First name is required";
     } else {
       this.firstNameError = "";
@@ -192,53 +213,16 @@ export default class UserForm extends OmniElement {
   }
 
   handleLastNameChange(e) {
-    this.lastName = e.target.value.trim();
-    if (!this.lastName) {
+    this.userData.personal_details.last_name = e.target.value.trim();
+    if (!this.userData.personal_details.last_name) {
       this.lastNameError = "Last name is required";
     } else {
       this.lastNameError = "";
     }
     this.requestUpdate();
   }
-  handlePhoneNumberChange(e) {
-    const input = e.target.value.trim();
-    if (!input) {
-      this.phoneNumberError = "Phone number is required";
-    } else if (!/^\d+$/.test(input)) {
-      this.phoneNumberError = "Phone number must contain only numbers";
-    } else if (input.length !== 10) {
-      this.phoneNumberError = "Phone number must be exactly 10 digits";
-    } else if (this.dataArray.some((data) => data.phoneNumber === input)) {
-      this.phoneNumberError = "Phone number already exists";
-    } else {
-      this.phoneNumber = input;
-      this.phoneNumberError = "";
-    }
-    this.requestUpdate();
-  }
-  s;
-  handleMaritalChange(e) {
-    this.selectedMarital = e.target.value;
-    this.selectedMaritalError =
-      this.selectedMarital.length === 0 ? "Marital is required" : "";
-    this.requestUpdate();
-  }
-  handleEmployeeIdChange(e) {
-    this.empId = e.target.value.trim();
-    if (!this.empId) {
-      this.empIdError = "Employee id is required";
-    } else if (!/^\d{5}$/.test(this.empId)) {
-      this.empIdError = "Employee id must be 5 numbers.";
-    } else {
-      const isDuplicate = this.dataArray.some(
-        (data) => data.empId === this.empId
-      );
-      this.empIdError = isDuplicate ? "Employee id already exists" : "";
-    }
-    this.requestUpdate();
-  }
   handleDOBChange(e) {
-    this.birthDate = e.target.value.trim();
+    this.userData.personal_details.dob = e.target.value.trim();
     const inputDate = e.target.value;
     const currentDate = new Date();
     const selectedDate = new Date(inputDate);
@@ -252,45 +236,85 @@ export default class UserForm extends OmniElement {
     }
     this.requestUpdate();
   }
+  handleMaritalChange(e) {
+    this.userData.personal_details.Marital = e.target.value;
+    this.selectedMaritalError =
+      this.userData.personal_details.Marital.length === 0
+        ? "Marital is required"
+        : "";
+    this.requestUpdate();
+  }
 
-  handlePersonalEmailChange(e) {
-    this.personalEmail = e.target.value.trim();
-    if (!this.personalEmail) {
-      this.personalEmailError = "Personal email is required";
+  ////////////Contact////////////////////
+  handlePhoneNumberChange(e) {
+    const newPhoneNumber = e.target.value.trim();
+    if (newPhoneNumber === "") {
+      this.phoneNumberError = "Phone number cannot be empty";
+    } else if (!/^\d+$/.test(newPhoneNumber)) {
+      this.phoneNumberError = "Phone number must contain only digits";
+    } else if (newPhoneNumber.length !== 10) {
+      this.phoneNumberError = "Phone number must be exactly 10 digits";
     } else if (
-      !/^(?=.*[@])(?=.*(yahoo\.com|outlook\.com|gmail\.com|gmail\.uk|gmail\.us)).*$/.test(
-        this.personalEmail
+      this.users.some(
+        (user) => user.contact_details.phoneNumber === newPhoneNumber
       )
     ) {
+      this.phoneNumberError = "Phone number already exists";
+    } else {
+      this.userData.contact_details.phoneNumber = newPhoneNumber;
+      this.phoneNumberError = "";
+    }
+    this.requestUpdate();
+  }
+
+  handleOfficePhoneNumberChange(e) {
+    const newPhoneNumber = e.target.value.trim();
+
+    if (newPhoneNumber === "") {
+      this.officephoneNumberError = "Phone number cannot be empty";
+    } else if (!/^\d+$/.test(newPhoneNumber)) {
+      this.officephoneNumberError = "Phone number must contain only digits";
+    } else if (newPhoneNumber.length !== 10) {
+      this.officephoneNumberError = "Phone number must be exactly 10 digits";
+    } else if (
+      this.users.some(
+        (user) => user.contact_details.officephoneNumber === newPhoneNumber
+      )
+    ) {
+      this.officephoneNumberError = "Phone number already exists";
+    } else {
+      this.userData.contact_details.officephoneNumber = newPhoneNumber;
+      this.officephoneNumberError = "";
+    }
+    this.requestUpdate();
+  }
+  handlePersonalEmailChange(e) {
+    const email = e.target.value.trim();
+    const emailRegex =
+      /^[\w-]+(\.[\w-]+)*@(yahoo\.com|outlook\.com|gmail\.com|gmail\.uk|gmail\.us)$/;
+
+    // Check if email is empty
+    if (!email) {
+      this.personalEmailError = "Personal email is required";
+    } else if (!emailRegex.test(email)) {
+      // Check if email format is valid
       this.personalEmailError = "Invalid email format";
+    } else if (
+      this.users.some((user) => user.contact_details.personalEmail === email)
+    ) {
+      // Check if email already exists
+      this.personalEmailError = "Personal email already exists";
     } else {
-      const isDuplicate = this.dataArray.some(
-        (data) => data.personalEmail === this.personalEmail
-      );
-      this.personalEmailError = isDuplicate
-        ? "Personal email already exists"
-        : "";
+      this.personalEmailError = ""; // Clear error if all validations pass
     }
+
+    this.userData.contact_details.personalEmail = email;
     this.requestUpdate();
   }
-  handleOfficeEmailChange(e) {
-    this.officeEmail = e.target.value.trim();
-    if (!this.officeEmail) {
-      this.officeEmailError = "Office email is required";
-    } else if (!this.officeEmail.endsWith("@annalect.com")) {
-      this.officeEmailError = "Office email must end with @annalect.com";
-    } else {
-      const isDuplicate = this.dataArray.some(
-        (data) => data.officeEmail === this.officeEmail
-      );
-      this.officeEmailError = isDuplicate ? "Office email already exists" : "";
-    }
-    this.requestUpdate();
-  }
-  //
+  ////////////////////////////////////////ADDRESS-CURRENT/////////////
   handleCurrentAddressChange(e) {
-    this.currentAddress = e.target.value.trim();
-    if (!this.currentAddress) {
+    this.userData.address.current_address.flat_house_no = e.target.value.trim();
+    if (!this.userData.address.current_address.flat_house_no) {
       this.currentAddressError = "Current Address is required";
     } else {
       this.currentAddressError = "";
@@ -299,8 +323,8 @@ export default class UserForm extends OmniElement {
   }
 
   handleCurrentStreetChange(e) {
-    this.currentStreet = e.target.value.trim();
-    if (!this.currentStreet) {
+    this.userData.address.current_address.building_no = e.target.value.trim();
+    if (!this.userData.address.current_address.building_no) {
       this.currentStreetError = "Current Street is required";
     } else {
       this.currentStreetError = "";
@@ -309,10 +333,10 @@ export default class UserForm extends OmniElement {
   }
 
   handleCurrentPincodeChange(e) {
-    this.currentPincode = e.target.value.trim();
-    if (!this.currentPincode) {
+    this.userData.address.current_address.pin = e.target.value.trim();
+    if (!this.userData.address.current_address.pin) {
       this.currentPincodeError = "Current pincode is required.";
-    } else if (!/^\d{6}$/.test(this.currentPincode)) {
+    } else if (!/^\d{6}$/.test(this.userData.address.current_address.pin)) {
       this.currentPincodeError = "Pincode must be 6 numbers.";
     } else {
       this.currentPincodeError = "";
@@ -320,30 +344,35 @@ export default class UserForm extends OmniElement {
     this.requestUpdate();
   }
   handleStateChange(e) {
-    this.selectedCurrentstate = e.target.value;
+    this.userData.address.current_address.state = e.target.value;
     this.selectedCurrentstateError =
-      this.selectedCurrentstate.length === 0 ? "State is required" : "";
+      this.userData.address.current_address.state.length === 0
+        ? "State is required"
+        : "";
     this.requestUpdate();
   }
   handleDistrictChange(e) {
-    this.selectedCurrentdistrict = e.target.value;
+    this.userData.address.current_address.district = e.target.value;
     this.selectedCurrentdistrictError =
-      this.selectedCurrentdistrict.length === 0 ? "District is required" : "";
+      this.userData.address.current_address.district.length === 0
+        ? "District is required"
+        : "";
     this.requestUpdate();
   }
   handleCurrentCountryChange(e) {
-    this.selectedCurrentcountry = e.target.value;
+    this.userData.address.current_address.country = e.target.value;
     this.selectedCurrentcountryError =
-      this.selectedCurrentcountry.length === 0
+      this.userData.address.current_address.country.length === 0
         ? "Current Country is required"
         : "";
     this.requestUpdate();
   }
-  ///
+  ////////////////////////////PERMANENT////////////////////////////
 
   handlePermanentAddressChange(e) {
-    this.permanentAddress = e.target.value.trim();
-    if (!this.permanentAddress) {
+    this.userData.address.permanent_address.flat_house_no =
+      e.target.value.trim();
+    if (!this.userData.address.permanent_address.flat_house_no) {
       this.permanentAddressError = "Permanent Address is required";
     } else {
       this.permanentAddressError = "";
@@ -352,8 +381,8 @@ export default class UserForm extends OmniElement {
   }
 
   handlePermanentStreetChange(e) {
-    this.permanentStreet = e.target.value.trim();
-    if (!this.permanentStreet) {
+    this.userData.address.permanent_address.building_no = e.target.value.trim();
+    if (!this.userData.address.permanent_address.building_no) {
       this.permanentStreetError = "Permanent Street is required";
     } else {
       this.permanentStreetError = "";
@@ -362,10 +391,10 @@ export default class UserForm extends OmniElement {
   }
 
   handlePermanentPincodeChange(e) {
-    this.permanentPincode = e.target.value.trim();
-    if (!this.permanentPincode) {
+    this.userData.address.permanent_address.pin = e.target.value.trim();
+    if (!this.userData.address.permanent_address.pin) {
       this.permanentPincodeError = "Permanent pincode is required.";
-    } else if (!/^\d{6}$/.test(this.permanentPincode)) {
+    } else if (!/^\d{6}$/.test(this.userData.address.permanent_address.pin)) {
       this.permanentPincodeError = "Pincode must be 6 numbers.";
     } else {
       this.permanentPincodeError = "";
@@ -373,633 +402,688 @@ export default class UserForm extends OmniElement {
     this.requestUpdate();
   }
   handlePermanentStateChange(e) {
-    this.selectedpermanentState = e.target.value;
+    this.userData.address.permanent_address.state = e.target.value;
     this.selectedpermanentStateError =
-      this.selectedpermanentState.length === 0
+      this.userData.address.permanent_address.state.length === 0
         ? "Permanent State is required"
         : "";
     this.requestUpdate();
   }
   handlePermanentDistrictChange(e) {
-    this.selectedpermanentDistrict = e.target.value;
+    this.userData.address.permanent_address.district = e.target.value;
     this.selectedpermanentDistrictError =
-      this.selectedpermanentDistrict.length === 0
+      this.userData.address.permanent_address.district.length === 0
         ? "Permanent District is required"
         : "";
     this.requestUpdate();
   }
   handlePermanentCountryChange(e) {
-    this.selectedpermanentcountry = e.target.value;
+    this.userData.address.permanent_address.country = e.target.value;
     this.selectedpermanentcountryError =
-      this.selectedpermanentcountry.length === 0
+      this.userData.address.permanent_address.country.length === 0
         ? "Permanent Country is required"
         : "";
+    this.requestUpdate();
+  }
+  //////////////USERLOGIN////////////////////////////////////////////
+  handleuserNameChange(e) {
+    const username = e.target.value.trim();
+    if (!username) {
+      this.useridnameError = "Username is required";
+    } else if (username.length < 5) {
+      // Check if username has at least 5 characters
+      this.useridnameError = "Username must be at least 5 characters long";
+    } else if (
+      this.users.some((user) => user.user_login_details.username === username)
+    ) {
+      // Check if username already exists
+      this.useridnameError = "Username already exists";
+    } else {
+      this.useridnameError = "";
+    }
+    this.userData.user_login_details.username = username;
+    this.requestUpdate();
+  }
+
+  handleRoleChange(e) {
+    this.userData.user_login_details.role = e.target.value;
+    this.selectedRoleError =
+      this.userData.user_login_details.role.length === 0
+        ? "Role is required"
+        : "";
+    this.requestUpdate();
+  }
+
+  handleOfficeEmailChange(e) {
+    const email = e.target.value.trim();
+    const emailRegex = /^[\w-]+(\.[\w-]+)*@annalect\.com$/;
+    if (!email) {
+      this.officeEmailError = "Office email is required";
+    } else if (!emailRegex.test(email)) {
+      // Check if email format is valid
+      this.officeEmailError = "Office email must end with @annalect.com";
+    } else if (
+      this.users.some((user) => user.user_login_details.officeEmail === email)
+    ) {
+      // Check if email already exists
+      this.officeEmailError = "Office email already exists";
+    } else {
+      this.officeEmailError = "";
+    }
+
+    this.userData.user_login_details.officeEmail = email;
     this.requestUpdate();
   }
 
   handleSameAddressChange(e) {
     this.sameAddress = e.target.checked;
     if (this.sameAddress) {
-      this.permanentAddress = this.currentAddress;
-      this.permanentStreet = this.currentStreet;
-      this.permanentPincode = this.currentPincode;
-      this.selectedpermanentState = this.selectedCurrentstate;
-      this.selectedpermanentDistrict = this.selectedCurrentdistrict;
-      this.selectedpermanentcountry = this.selectedCurrentcountry;
+      this.userData.address.permanent_address.flat_house_no =
+        this.userData.address.current_address.flat_house_no;
+      this.userData.address.permanent_address.building_no =
+        this.userData.address.current_address.building_no;
+      this.userData.address.permanent_address.pin =
+        this.userData.address.current_address.pin;
+      this.userData.address.permanent_address.state =
+        this.userData.address.current_address.state;
+      this.userData.address.permanent_address.district =
+        this.userData.address.current_address.district;
+      this.userData.address.permanent_address.country =
+        this.userData.address.current_address.country;
     } else {
-      this.permanentAddress = "";
-      this.permanentStreet = "";
-      this.permanentPincode = "";
-      this.selectedpermanentState = "";
-      this.selectedpermanentDistrict = "";
-      this.selectedpermanentcountry = "";
+      this.userData.address.permanent_address.flat_house_no = "";
+      this.userData.address.permanent_address.building_no = "";
+      this.userData.address.permanent_address.pin = "";
+      this.userData.address.permanent_address.state = "";
+      this.userData.address.permanent_address.district = "";
+      this.userData.address.permanent_address.country = "";
     }
     this.requestUpdate();
     console.log("checkbox:", this.sameAddress);
-    console.log("currentaddresh:", this.currentAddress);
-    console.log("PermentAddresh:", this.permanentAddress);
+    console.log(
+      "currentaddresh:",
+      this.userData.address.current_address.flat_house_no
+    );
+    console.log(
+      "PermentAddresh:",
+      this.userData.address.permanent_address.flat_house_no
+    );
   }
 
   closeUserForm() {
     this.dispatchEvent(new CustomEvent("close-user-form"));
   }
-  handleTabClick(tab) {
-    this.activeTab = tab;
-    this.requestUpdate();
-  }
+
   handleGenderChange(e) {
-    this.gender = e.target.value; // Update gender state variable
+    this.userData.personal_details.gender = e.target.value; // Update gender state variable
     this.requestUpdate(); // Trigger re-render
   }
 
-
-  renderBasicInfoFields() {
-    return html`
-      <div class="columns col-spacing">
-        <div class="column is-half">
-          <p class="mb-2 ml-2">* First name</p>
-          <input
-            class="${this.firstNameError ? "input error-border" : "input"}"
-            type="text"
-            placeholder="First Name"
-            .value="${this.firstName}"
-            @input="${(e) => this.handleFirstNameChange(e)}"
-          />
-
-          <div class=" is-flex">
-            ${this.firstNameError
-              ? html`<omni-icon
-                    class="mt-2 ml-2 error-icon "
-                    icon-id="omni:informative:error"
-                    aria-label="icon"
-                    role="img"
-                  ></omni-icon>
-                  <span class="pt-2 pl-1  has-text-grey is-size-6"
-                    >${this.firstNameError}</span
-                  >`
-              : ""}
-          </div>
-        </div>
-        <div class="column is-half ">
-          <p class="mb-2 ml-2 ">* Last name</p>
-          <input
-            class="${this.lastNameError ? "input error-border" : "input"}"
-            type="text"
-            placeholder="Last Name"
-            .value="${this.lastName}"
-            @input="${(e) => this.handleLastNameChange(e)}"
-          />
-          <div class=" is-flex">
-            ${this.lastNameError
-              ? html`<omni-icon
-                    class="mt-2 ml-2 error-icon"
-                    icon-id="omni:informative:error"
-                    aria-label="icon"
-                    role="img"
-                  ></omni-icon
-                  ><span class="pt-2 pl-1 has-text-grey is-size-6"
-                    >${this.lastNameError}</span
-                  >`
-              : ""}
-          </div>
-        </div>
-      </div>
-
-      <div class="columns col-spacing">
-        <div class="column is-half">
-          <div class="control mb-3 ">
-            <label class="radio">
-              <input
-                type="radio"
-                name="phoneType"
-                value="primary"
-                @change="${(e) => (this.phoneType = e.target.value)}"
-                ?checked="${this.phoneType === "primary"}"
-              />
-              Primary
-            </label>
-            <label class="radio">
-              <input
-                type="radio"
-                name="phoneType"
-                value="secondary"
-                @change="${(e) => (this.phoneType = e.target.value)}"
-                ?checked="${this.phoneType === "secondary"}"
-              />
-              Secondary
-            </label>
-          </div>
-          <input
-            class="${this.phoneNumberError ? "input error-border" : "input"}"
-            type="tel"
-            maxlength="10"
-            placeholder="Phone Number"
-            .value="${this.phoneNumber}"
-            @input="${(e) => this.handlePhoneNumberChange(e)}"
-          />
-          <div class=" is-flex">
-            ${this.phoneNumberError
-              ? html`<omni-icon
-                    class="mt-2 ml-2 error-icon"
-                    icon-id="omni:informative:error"
-                    aria-label="icon"
-                    role="img"
-                  ></omni-icon
-                  ><span class="pt-2 pl-1 has-text-grey is-size-6"
-                    >${this.phoneNumberError}</span
-                  >`
-              : ""}
-          </div>
-        </div>
-        <div class="column is-half">
-          <p class="mb-2 ml-2">* Gender</p>
-          <div class="control pt-4">
-            <label class="radio">
-              <input
-                type="radio"
-                name="gender"
-                value="Male"
-                @change="${(e) => this.handleGenderChange(e)}" 
-                  ?checked="${this.gender === 'Male'}" 
-              />
-              Male
-            </label>
-            <label class="radio">
-              <input
-                type="radio"
-                name="gender"
-                value="Female"
-                @change="${(e) => this.handleGenderChange(e)}"
-                  ?checked="${this.gender === 'Female'}"
-              />
-              Female
-            </label>
-          </div>
-        </div>
-      </div>
-
-      <div class="columns col-spacing">
-        <div class="column is-half">
-          <p class="mb-2 ml-2">* Marital Status</p>
-          <omni-dropdown
-            class="pd-4 "
-            placeholder="Marital"
-            typeahead
-            error="${this.selectedMaritalError
-              ? this.selectedMaritalError
-              : ""}"
-            searchindropdown
-            .options=${this.marital}
-            .value="${this.selectedMarital}"
-            @change="${(e) => this.handleMaritalChange(e)}"
-          >
-          </omni-dropdown>
-        </div>
-        <div class="column is-half ">
-          <p class="mb-2 ml-2 ">* Date of birth</p>
-          <input
-            id="dobInput"
-            type="date"
-            slot="invoker"
-            class="${this.birthDateError ? "input error-border" : "input"}"
-            placeholder="yyyy-mm-dd"
-            max="2999-12-31"
-            .value="${this.birthDate}"
-            @input="${(e) => this.handleDOBChange(e)}"
-          />
-          <div class=" is-flex">
-            ${this.birthDateError
-              ? html`<omni-icon
-                    class="mt-2 ml-2 error-icon"
-                    icon-id="omni:informative:error"
-                    aria-label="icon"
-                    role="img"
-                  ></omni-icon
-                  ><span class="pt-2 pl-1 has-text-grey is-size-6"
-                    >${this.birthDateError}</span
-                  >`
-              : ""}
-          </div>
-        </div>
-      </div>
-
-      <div class="columns col-spacing">
-        <div class="column is-half">
-          <p class="mb-3 ml-3">* Personal email</p>
-          <input
-            class="${this.personalEmailError ? "input error-border" : "input"}"
-            type="text"
-            placeholder="abc@gmail.com"
-            .value="${this.personalEmail}"
-            @input="${(e) => this.handlePersonalEmailChange(e)}"
-          />
-          <div class="is-flex">
-            ${this.personalEmailError
-              ? html`<omni-icon
-                    class="mt-2 ml-2 error-icon"
-                    icon-id="omni:informative:error"
-                    aria-label="icon"
-                    role="img"
-                  ></omni-icon
-                  ><span class="pt-2 pl-1 has-text-grey is-size-6"
-                    >${this.personalEmailError}</span
-                  >`
-              : ""}
-          </div>
-        </div>
-        <div class="column is-half ">
-          <p class="mb-3 ml-3 ">* Office email</p>
-          <input
-            class="${this.officeEmailError ? "input error-border" : "input"}"
-            label="Choose One"
-            type="text"
-            placeholder="abc@annalect.com"
-            .value="${this.officeEmail}"
-            @input="${(e) => this.handleOfficeEmailChange(e)}"
-          />
-          <div class=" is-flex">
-            ${this.officeEmailError
-              ? html`<omni-icon
-                    class="mt-2 ml-2 error-icon"
-                    icon-id="omni:informative:error"
-                    aria-label="icon"
-                    role="img"
-                  ></omni-icon
-                  ><span class="pt-2 pl-1 has-text-grey is-size-6"
-                    >${this.officeEmailError}</span
-                  >`
-              : ""}
-          </div>
-        </div>
-      </div>
-    `;
-  }
-  renderPart2Fields() {
-    return html`
-      <!-- <p class="is-size-4 mb-16 has-text-weight-bold has-text-dark">
-        Current Address Detail
-      </p> -->
-
-      <div class="columns col-spacing pt-2">
-        <div class="column is-half">
-          <p class="mb-2 ml-2">* Flat/House/Wing Number</p>
-          <input
-            class="${this.currentAddressError ? "input error-border" : "input"}"
-            type="text"
-            placeholder="Address Detail"
-            .value="${this.currentAddress}"
-            @input="${(e) => this.handleCurrentAddressChange(e)}"
-          />
-          <div class=" is-flex">
-            ${this.currentAddressError
-              ? html`<omni-icon
-                    class="mt-2 ml-2 error-icon "
-                    icon-id="omni:informative:error"
-                    aria-label="icon"
-                    role="img"
-                  ></omni-icon>
-                  <span class="pt-2 pl-1  has-text-grey is-size-6"
-                    >${this.currentAddressError}</span
-                  >`
-              : ""}
-          </div>
-        </div>
-        <div class="column is-half ">
-          <p class="mb-2 ml-2 ">* Street/Locality/Area</p>
-          <input
-            class="${this.currentStreetError ? "input error-border" : "input"}"
-            type="text"
-            placeholder="Address Detail"
-            .value="${this.currentStreet}"
-            @input="${(e) => this.handleCurrentStreetChange(e)}"
-
-          />
-          <div class=" is-flex">
-            ${this.currentStreetError
-              ? html`<omni-icon
-                    class="mt-2 ml-2 error-icon"
-                    icon-id="omni:informative:error"
-                    aria-label="icon"
-                    role="img"
-                  ></omni-icon
-                  ><span class="pt-2 pl-1 has-text-grey is-size-6"
-                    >${this.currentStreetError}</span
-                  >`
-              : ""}
-          </div>
-        </div>
-      </div>
-
-      <div class="columns col-spacing pt-2">
-        <div class="column is-half">
-          <p class="mb-2 ml-2">* Pincode</p>
-          <input
-            class="${this.currentPincodeError ? "input error-border" : "input"}"
-            type="text"
-            maxlength="6"
-            placeholder="Pincode"
-            .value="${this.currentPincode}"
-            @input="${(e) => this.handleCurrentPincodeChange(e)}"
-          />
-          <div class=" is-flex">
-            ${this.currentPincodeError
-              ? html`<omni-icon
-                    class="mt-2 ml-2 error-icon "
-                    icon-id="omni:informative:error"
-                    aria-label="icon"
-                    role="img"
-                  ></omni-icon>
-                  <span class="pt-2 pl-1  has-text-grey is-size-6"
-                    >${this.currentPincodeError}</span
-                  >`
-              : ""}
-          </div>
-        </div>
-        <div class="column is-half">
-          <p class="mb-3 ml-3 ">* District</p>
-          <omni-dropdown
-            part="target "
-            class="pd-4 "
-            placeholder="District"
-            error="${this.selectedCurrentdistrictError
-              ? this.selectedCurrentdistrictError
-              : ""}"
-            typeahead
-            searchindropdown
-            .options=${this.districts}
-            .value=${this.selectedCurrentdistrict}
-            @change="${(e) => this.handleDistrictChange(e)}"
-          >
-          </omni-dropdown>
-        </div>
-      </div>
-
-      <div class="columns col-spacing">
-        <div class="column is-half">
-          <p class="mb-3 ml-3">* State</p>
-          <omni-dropdown
-            class="pd-4 "
-            placeholder="State"
-            typeahead
-            error="${this.selectedCurrentstateError
-              ? this.selectedCurrentstateError
-              : ""}"
-            searchindropdown
-            .options=${this.states}
-            .value=${this.selectedCurrentstate}
-            @change="${(e) => this.handleStateChange(e)}"
-          >
-          </omni-dropdown>
-        </div>
-        <div class="column is-half">
-          <p class="mb-3 ml-3 ">* Country</p>
-          <omni-dropdown
-            part="target "
-            class="pd-4 "
-            placeholder="Country"
-            error="${this.selectedCurrentcountryError
-              ? this.selectedCurrentcountryError
-              : ""}"
-            typeahead
-            searchindropdown
-            .options=${this.country}
-            .value=${this.selectedCurrentcountry}
-            @change="${(e) => this.handleCurrentCountryChange(e)}"
-          >
-          </omni-dropdown>
-        </div>
-      </div>
-    `;
-  }
-  renderPart3Fields() {
-    return html`
-      <label class="checkbox">
-        <input
-          type="checkbox"
-          id="sameAddressCheckbox"
-          @change="${this.handleSameAddressChange}"
-          .checked="${this.sameAddress}"
-        />
-        Same as current address
-      </label>
-      <!-- <p class="is-size-4 mb-16 has-text-weight-bold has-text-dark">
-        Permanent Address Detail
-      </p> -->
-
-      <div class="columns col-spacing pt-2">
-        <div class="column is-half">
-          <p class="mb-2 ml-2">* Flat/House/Wing Number</p>
-          <input
-            class="${this.permanentAddressError
-              ? "input error-border"
-              : "input"}"
-            type="text"
-            .value="${this.permanentAddress}"
-            placeholder="Address Detail"
-            @input="${(e) => this.handlePermanentAddressChange(e)}"
-          />
-          <div class=" is-flex">
-            ${this.permanentAddressError
-              ? html`<omni-icon
-                    class="mt-2 ml-2 error-icon "
-                    icon-id="omni:informative:error"
-                    aria-label="icon"
-                    role="img"
-                  ></omni-icon>
-                  <span class="pt-2 pl-1  has-text-grey is-size-6"
-                    >${this.permanentAddressError}</span
-                  >`
-              : ""}
-          </div>
-        </div>
-        <div class="column is-half ">
-          <p class="mb-2 ml-2 ">* Street/Locality/Area</p>
-          <input
-            class="${this.permanentStreetError
-              ? "input error-border"
-              : "input"}"
-            type="text"
-            placeholder="Address"
-            .value="${this.permanentStreet}"
-            @input="${(e) => this.handlePermanentStreetChange(e)}"
-          />
-          <div class=" is-flex">
-            ${this.permanentStreetError
-              ? html`<omni-icon
-                    class="mt-2 ml-2 error-icon"
-                    icon-id="omni:informative:error"
-                    aria-label="icon"
-                    role="img"
-                  ></omni-icon
-                  ><span class="pt-2 pl-1 has-text-grey is-size-6"
-                    >${this.permanentStreetError}</span
-                  >`
-              : ""}
-          </div>
-        </div>
-      </div>
-
-      <div class="columns col-spacing pt-2">
-        <div class="column is-half">
-          <p class="mb-2 ml-2">* Pincode</p>
-          <input
-            class="${this.permanentPincodeError
-              ? "input error-border"
-              : "input"}"
-            type="text"
-            maxlength="6"
-            placeholder="Pincode"
-            .value="${this.permanentPincode}"
-            @input="${(e) => this.handlePermanentPincodeChange(e)}"
-          />
-          <div class=" is-flex">
-            ${this.permanentPincodeError
-              ? html`<omni-icon
-                    class="mt-2 ml-2 error-icon "
-                    icon-id="omni:informative:error"
-                    aria-label="icon"
-                    role="img"
-                  ></omni-icon>
-                  <span class="pt-2 pl-1  has-text-grey is-size-6"
-                    >${this.permanentPincodeError}</span
-                  >`
-              : ""}
-          </div>
-        </div>
-        <div class="column is-half">
-          <p class="mb-3 ml-3 ">* District</p>
-          <omni-dropdown
-            part="target "
-            class="pd-4 "
-            placeholder="District"
-            error="${this.selectedpermanentDistrictError
-              ? this.selectedpermanentDistrictError
-              : ""}"
-            typeahead
-            .value="${this.selectedpermanentDistrict}"
-            searchindropdown
-            .options=${this.districts}
-            @change="${(e) => this.handlePermanentDistrictChange(e)}"
-          >
-          </omni-dropdown>
-        </div>
-      </div>
-
-      <div class="columns col-spacing">
-        <div class="column is-half">
-          <p class="mb-3 ml-3">* State</p>
-          <omni-dropdown
-            class="pd-4 "
-            placeholder="State"
-            typeahead
-            .value="${this.selectedpermanentState}"
-            error="${this.selectedpermanentStateError
-              ? this.selectedpermanentStateError
-              : ""}"
-            searchindropdown
-            .options=${this.states}
-            @change="${(e) => this.handlePermanentStateChange(e)}"
-          >
-          </omni-dropdown>
-        </div>
-        <div class="column is-half">
-          <p class="mb-3 ml-3 ">* Country</p>
-          <omni-dropdown
-            part="target "
-            class="pd-4 "
-            placeholder="Country"
-            error="${this.selectedpermanentcountryError
-              ? this.selectedpermanentcountryError
-              : ""}"
-            typeahead
-            searchindropdown
-            .value="${this.selectedpermanentcountry}"
-            .options=${this.country}
-            @change="${(e) => this.handlePermanentCountryChange(e)}"
-          >
-          </omni-dropdown>
-        </div>
-      </div>
-    `;
-  }
-
-
-
   renderData() {
     console.log("select:", this.selectedState);
-    const isFormValid =
-      !this.birthDateError;
+    const isFormValid = !this.birthDateError;
     console.log("disable:", isFormValid);
     return html`
       <header class="modal-card-head header-separator">
         <p class="modal-card-title has-text-black">Create New User</p>
       </header>
-
-      
-
       <section class="modal-card-body">
+        <p class="is-size-4  has-text-weight-bold has-text-dark pb-4">
+          Personal Details
+        </p>
 
-
-      <div class="is-flex is-flex-direction-column pl-6">
-        <header class="card-header">
-          <div class="card-header-title">
-            <div class="columns">
-              <div
-                class="column is-flex is-justify-content-flex-start is-align-items-center"
-                style="gap:10px;"
-              >
-              <button
-          class="button is-size-5 tab-container ${this.activeTab === 'basicInfo' ? 'is-link' : 'is-white'}"
-          @click="${() => this.handleTabClick('basicInfo')}"
-        >
-          Report details
-        </button>
-        <button
-          class="button is-size-5 tab-container ${this.activeTab === 'part2' ? 'is-link' : 'is-white'}"
-          @click="${() => this.handleTabClick('part2')}"
-        >
-          part2
-        </button>
-        <button
-          class="button is-size-5 tab-container ${this.activeTab === 'part3' ? 'is-link' : 'is-white'}"
-          @click="${() => this.handleTabClick('part3')}"
-        >
-          part3
-        </button>
-                
-              </div>
+        <div class="columns col-spacing">
+          <div class="column is-one-third">
+            <p class="mb-2 ml-2">* First Name</p>
+            <input
+              class="${this.firstNameError ? "input error-border" : "input"}"
+              type="text"
+              placeholder="First Name"
+              .value="${this.userData.personal_details.first_name}"
+              @input="${(e) => this.handleFirstNameChange(e)}"
+            />
+            <div class=" is-flex">
+              ${this.firstNameError
+                ? html`<omni-icon
+                      class="mt-2 ml-2 error-icon "
+                      icon-id="omni:informative:error"
+                      aria-label="icon"
+                      role="img"
+                    ></omni-icon>
+                    <span class="pt-2 pl-1  has-text-grey is-size-6"
+                      >${this.firstNameError}</span
+                    >`
+                : ""}
             </div>
           </div>
-        </header>
-      </div>
-        
+          <div class="column is-one-third ">
+            <p class="mb-2 ml-2 ">* Last Name</p>
+            <input
+              class="${this.lastNameError ? "input error-border" : "input"}"
+              type="text"
+              placeholder="Last Name"
+              .value="${this.userData.personal_details.last_name}"
+              @input="${(e) => this.handleLastNameChange(e)}"
+            />
+            <div class=" is-flex">
+              ${this.lastNameError
+                ? html`<omni-icon
+                      class="mt-2 ml-2 error-icon"
+                      icon-id="omni:informative:error"
+                      aria-label="icon"
+                      role="img"
+                    ></omni-icon
+                    ><span class="pt-2 pl-1 has-text-grey is-size-6"
+                      >${this.lastNameError}</span
+                    >`
+                : ""}
+            </div>
+          </div>
+          <div class="column is-one-third">
+            <p class="mb-2 ml-2">* Marital Status</p>
+            <omni-dropdown
+              class="pd-4"
+              placeholder="Marital"
+              typeahead
+              error="${this.selectedMaritalError
+                ? this.selectedMaritalError
+                : ""}"
+              searchindropdown
+              .options=${this.marital}
+              .value="${this.userData.personal_details.Marital}"
+              @change="${(e) => this.handleMaritalChange(e)}"
+            >
+            </omni-dropdown>
+          </div>
+        </div>
 
-        ${this.activeTab === 'basicInfo' ? this.renderBasicInfoFields() : ''}
-        ${this.activeTab === 'part2' ? this.renderPart2Fields() : ''}
-        ${this.activeTab === 'part3' ? this.renderPart3Fields() : ''}
+        <div class="columns col-spacing pr-2 pb-4 m-16">
+          <div class="column is-one-third">
+            <p class="mb-2 ml-3">* Gender</p>
+            <div class="control pt-3 pl-4">
+              <label class="radio">
+                <input
+                  type="radio"
+                  name="gender"
+                  value="Male"
+                  @change="${(e) => this.handleGenderChange(e)}"
+                  ?checked="${this.userData.personal_details.gender === "Male"}"
+                />
+                Male
+              </label>
+              <label class="radio">
+                <input
+                  type="radio"
+                  name="gender"
+                  value="Female"
+                  @change="${(e) => this.handleGenderChange(e)}"
+                  ?checked="${this.userData.personal_details.gender ===
+                  "Female"}"
+                />
+                Female
+              </label>
+            </div>
+          </div>
+          <div class="column is-one-third pl-4">
+            <p class="mb-2 ml-2 ">* Date of birth</p>
+            <input
+              id="dobInput"
+              type="date"
+              slot="invoker"
+              class="${this.birthDateError ? "input error-border" : "input"}"
+              placeholder="yyyy-mm-dd"
+              max="2999-12-31"
+              .value="${this.userData.personal_details.dob}"
+              @input="${(e) => this.handleDOBChange(e)}"
+            />
+            <div class=" is-flex">
+              ${this.birthDateError
+                ? html`<omni-icon
+                      class="mt-2 ml-2 error-icon"
+                      icon-id="omni:informative:error"
+                      aria-label="icon"
+                      role="img"
+                    ></omni-icon
+                    ><span class="pt-2 pl-1 has-text-grey is-size-6"
+                      >${this.birthDateError}</span
+                    >`
+                : ""}
+            </div>
+          </div>
+        </div>
+
+        <hr class="g-2" />
+        <p class="is-size-4 has-text-weight-bold has-text-dark ">
+          Contact Details
+        </p>
+        <div class="columns col-spacing pt-3 ">
+          <div class="column is-one-third">
+            <p class="mb-3 ml-3 ">* Personal Mobile No</p>
+            <input
+              class="${this.phoneNumberError ? "input error-border" : "input"}"
+              type="tel"
+              maxlength="10"
+              placeholder="Phone Number"
+              .value="${this.userData.contact_details.phoneNumber}"
+              @input="${(e) => this.handlePhoneNumberChange(e)}"
+            />
+            <div class=" is-flex">
+              ${this.phoneNumberError
+                ? html`<omni-icon
+                      class="mt-2 ml-2 error-icon"
+                      icon-id="omni:informative:error"
+                      aria-label="icon"
+                      role="img"
+                    ></omni-icon
+                    ><span class="pt-2 pl-1 has-text-grey is-size-6"
+                      >${this.phoneNumberError}</span
+                    >`
+                : ""}
+            </div>
+          </div>
+          <div class="column is-one-third">
+            <p class="mb-3 ml-3 ">* Office Mobile No</p>
+            <input
+              class="${this.officephoneNumberError
+                ? "input error-border"
+                : "input"}"
+              type="tel"
+              maxlength="10"
+              placeholder="Office Phone Number"
+              .value="${this.userData.contact_details.officephoneNumber}"
+              @input="${(e) => this.handleOfficePhoneNumberChange(e)}"
+            />
+            <div class=" is-flex">
+              ${this.officephoneNumberError
+                ? html`<omni-icon
+                      class="mt-2 ml-2 error-icon"
+                      icon-id="omni:informative:error"
+                      aria-label="icon"
+                      role="img"
+                    ></omni-icon
+                    ><span class="pt-2 pl-1 has-text-grey is-size-6"
+                      >${this.officephoneNumberError}</span
+                    >`
+                : ""}
+            </div>
+          </div>
+          <div class="column is-one-third">
+            <p class="mb-3 ml-3">* Personal Email ID</p>
+            <input
+              class="${this.personalEmailError
+                ? "input error-border"
+                : "input"}"
+              type="text"
+              placeholder="abc@gmail.com"
+              .value="${this.userData.contact_details.personalEmail}"
+              @input="${(e) => this.handlePersonalEmailChange(e)}"
+            />
+            <div class="is-flex">
+              ${this.personalEmailError
+                ? html`<omni-icon
+                      class="mt-2 ml-2 error-icon"
+                      icon-id="omni:informative:error"
+                      aria-label="icon"
+                      role="img"
+                    ></omni-icon
+                    ><span class="pt-2 pl-1 has-text-grey is-size-6"
+                      >${this.personalEmailError}</span
+                    >`
+                : ""}
+            </div>
+          </div>
+        </div>
+        <hr />
+
+        <p class="is-size-4  pt-4 has-text-weight-bold has-text-dark g-3">
+          Current Address Detail
+        </p>
+        <div class="columns col-spacing pt-3">
+          <div class="column is-one-third">
+            <p class="mb-2 ml-2">* Flat/House/Wing Number</p>
+            <input
+              class="${this.currentAddressError
+                ? "input error-border"
+                : "input"}"
+              type="text"
+              placeholder="Address Detail"
+              .value="${this.userData.address.current_address.flat_house_no}"
+              @input="${(e) => this.handleCurrentAddressChange(e)}"
+            />
+            <div class=" is-flex">
+              ${this.currentAddressError
+                ? html`<omni-icon
+                      class="mt-2 ml-2 error-icon "
+                      icon-id="omni:informative:error"
+                      aria-label="icon"
+                      role="img"
+                    ></omni-icon>
+                    <span class="pt-2 pl-1  has-text-grey is-size-6"
+                      >${this.currentAddressError}</span
+                    >`
+                : ""}
+            </div>
+          </div>
+          <div class="column is-one-third ">
+            <p class="mb-2 ml-2 ">* Street/Locality/Area</p>
+            <input
+              class="${this.currentStreetError
+                ? "input error-border"
+                : "input"}"
+              type="text"
+              placeholder="Address Detail"
+              .value="${this.userData.address.current_address.building_no}"
+              @input="${(e) => this.handleCurrentStreetChange(e)}"
+            />
+            <div class=" is-flex">
+              ${this.currentStreetError
+                ? html`<omni-icon
+                      class="mt-2 ml-2 error-icon"
+                      icon-id="omni:informative:error"
+                      aria-label="icon"
+                      role="img"
+                    ></omni-icon
+                    ><span class="pt-2 pl-1 has-text-grey is-size-6"
+                      >${this.currentStreetError}</span
+                    >`
+                : ""}
+            </div>
+          </div>
+          <div class="column is-one-third">
+            <p class="mb-2 ml-2">* Pincode</p>
+            <input
+              class="${this.currentPincodeError
+                ? "input error-border"
+                : "input"}"
+              type="text"
+              maxlength="6"
+              placeholder="Pincode"
+              .value="${this.userData.address.current_address.pin}"
+              @input="${(e) => this.handleCurrentPincodeChange(e)}"
+            />
+            <div class=" is-flex">
+              ${this.currentPincodeError
+                ? html`<omni-icon
+                      class="mt-2 ml-2 error-icon "
+                      icon-id="omni:informative:error"
+                      aria-label="icon"
+                      role="img"
+                    ></omni-icon>
+                    <span class="pt-2 pl-1  has-text-grey is-size-6"
+                      >${this.currentPincodeError}</span
+                    >`
+                : ""}
+            </div>
+          </div>
+        </div>
+
+        <div class="columns col-spacing ">
+          <div class="column is-one-third">
+            <p class="mb-3 ml-3 ">* District</p>
+            <omni-dropdown
+              part="target "
+              class="pd-4 "
+              placeholder="District"
+              error="${this.selectedCurrentdistrictError
+                ? this.selectedCurrentdistrictError
+                : ""}"
+              typeahead
+              searchindropdown
+              .options=${this.districts}
+              .value=${this.userData.address.current_address.district}
+              @change="${(e) => this.handleDistrictChange(e)}"
+            >
+            </omni-dropdown>
+          </div>
+          <div class="column is-one-third">
+            <p class="mb-3 ml-3">* State</p>
+            <omni-dropdown
+              class="pd-4 "
+              placeholder="State"
+              typeahead
+              error="${this.selectedCurrentstateError
+                ? this.selectedCurrentstateError
+                : ""}"
+              searchindropdown
+              .options=${this.states}
+              .value=${this.userData.address.current_address.state}
+              @change="${(e) => this.handleStateChange(e)}"
+            >
+            </omni-dropdown>
+          </div>
+          <div class="column is-one-third">
+            <p class="mb-3 ml-3 ">* Country</p>
+            <omni-dropdown
+              part="target "
+              class="pd-4 "
+              placeholder="Country"
+              error="${this.selectedCurrentcountryError
+                ? this.selectedCurrentcountryError
+                : ""}"
+              typeahead
+              searchindropdown
+              .options=${this.country}
+              .value=${this.userData.address.current_address.country}
+              @change="${(e) => this.handleCurrentCountryChange(e)}"
+            >
+            </omni-dropdown>
+          </div>
+        </div>
+        <hr class="g-3" />
+        <div class="pb-3">
+          <label class="checkbox gp-12">
+            <input
+              type="checkbox"
+              id="sameAddressCheckbox"
+              @change="${this.handleSameAddressChange}"
+              .checked="${this.sameAddress}"
+            />
+            Same as current address
+          </label>
+          <p class="is-size-4  has-text-weight-bold has-text-dark pt-3">
+            Permanent Address Detail
+          </p>
+        </div>
+
+        <div class="columns col-spacing pt-2">
+          <div class="column is-one-third">
+            <p class="mb-2 ml-2">* Flat/House/Wing Number</p>
+            <input
+              class="${this.permanentAddressError
+                ? "input error-border"
+                : "input"}"
+              type="text"
+              .value="${this.userData.address.permanent_address.flat_house_no}"
+              placeholder="Address Detail"
+              @input="${(e) => this.handlePermanentAddressChange(e)}"
+            />
+            <div class=" is-flex">
+              ${this.permanentAddressError
+                ? html`<omni-icon
+                      class="mt-2 ml-2 error-icon "
+                      icon-id="omni:informative:error"
+                      aria-label="icon"
+                      role="img"
+                    ></omni-icon>
+                    <span class="pt-2 pl-1  has-text-grey is-size-6"
+                      >${this.permanentAddressError}</span
+                    >`
+                : ""}
+            </div>
+          </div>
+          <div class="column is-one-third ">
+            <p class="mb-2 ml-2 ">* Street/Locality/Area</p>
+            <input
+              class="${this.permanentStreetError
+                ? "input error-border"
+                : "input"}"
+              type="text"
+              placeholder="Address"
+              .value="${this.userData.address.permanent_address.building_no}"
+              @input="${(e) => this.handlePermanentStreetChange(e)}"
+            />
+            <div class=" is-flex">
+              ${this.permanentStreetError
+                ? html`<omni-icon
+                      class="mt-2 ml-2 error-icon"
+                      icon-id="omni:informative:error"
+                      aria-label="icon"
+                      role="img"
+                    ></omni-icon
+                    ><span class="pt-2 pl-1 has-text-grey is-size-6"
+                      >${this.permanentStreetError}</span
+                    >`
+                : ""}
+            </div>
+          </div>
+          <div class="column is-one-third">
+            <p class="mb-2 ml-2">* Pincode</p>
+            <input
+              class="${this.permanentPincodeError
+                ? "input error-border"
+                : "input"}"
+              type="text"
+              maxlength="6"
+              placeholder="Pincode"
+              .value="${this.userData.address.permanent_address.pin}"
+              @input="${(e) => this.handlePermanentPincodeChange(e)}"
+            />
+            <div class=" is-flex">
+              ${this.permanentPincodeError
+                ? html`<omni-icon
+                      class="mt-2 ml-2 error-icon "
+                      icon-id="omni:informative:error"
+                      aria-label="icon"
+                      role="img"
+                    ></omni-icon>
+                    <span class="pt-2 pl-1  has-text-grey is-size-6"
+                      >${this.permanentPincodeError}</span
+                    >`
+                : ""}
+            </div>
+          </div>
+        </div>
+        <div class="columns col-spacing pt-2 ">
+          <div class="column is-one-third ">
+            <p class="mb-3 ml-3 ">* District</p>
+            <omni-dropdown
+              part="target "
+              class="pd-4 "
+              placeholder="District"
+              error="${this.selectedpermanentDistrictError
+                ? this.selectedpermanentDistrictError
+                : ""}"
+              typeahead
+              .value="${this.userData.address.permanent_address.district}"
+              searchindropdown
+              .options=${this.districts}
+              @change="${(e) => this.handlePermanentDistrictChange(e)}"
+            >
+            </omni-dropdown>
+          </div>
+          <div class="column is-one-third">
+            <p class="mb-3 ml-3">* State</p>
+            <omni-dropdown
+              class="pd-4 "
+              placeholder="State"
+              typeahead
+              .value="${this.userData.address.permanent_address.state}"
+              error="${this.selectedpermanentStateError
+                ? this.selectedpermanentStateError
+                : ""}"
+              searchindropdown
+              .options=${this.states}
+              @change="${(e) => this.handlePermanentStateChange(e)}"
+            >
+            </omni-dropdown>
+          </div>
+          <div class="column is-one-third">
+            <p class="mb-3 ml-3 ">* Country</p>
+            <omni-dropdown
+              part="target "
+              class="pd-4 "
+              placeholder="Country"
+              error="${this.selectedpermanentcountryError
+                ? this.selectedpermanentcountryError
+                : ""}"
+              typeahead
+              searchindropdown
+              .value="${this.userData.address.permanent_address.country}"
+              .options=${this.country}
+              @change="${(e) => this.handlePermanentCountryChange(e)}"
+            >
+            </omni-dropdown>
+          </div>
+        </div>
+
+        <hr class="g-3" />
+        <p class="is-size-4  has-text-weight-bold has-text-dark pb-4">
+          Account Access Details
+        </p>
+        <div class="columns col-spacing">
+          <div class="column is-one-third">
+            <p class="mb-2 ml-2">* User Name</p>
+            <input
+              class="${this.useridnameError ? "input error-border" : "input"}"
+              type="text"
+              placeholder="Enter a username..."
+              .value="${this.userData.user_login_details.username}"
+              @input="${(e) => this.handleuserNameChange(e)}"
+            />
+            <div class=" is-flex">
+              ${this.useridnameError
+                ? html`<omni-icon
+                      class="mt-2 ml-2 error-icon "
+                      icon-id="omni:informative:error"
+                      aria-label="icon"
+                      role="img"
+                    ></omni-icon>
+                    <span class="pt-2 pl-1  has-text-grey is-size-6"
+                      >${this.useridnameError}</span
+                    >`
+                : ""}
+            </div>
+          </div>
+          <div class="column is-one-third ">
+            <p class="mb-2 ml-2 ">* Office Email ID</p>
+            <input
+              class="${this.officeEmailError ? "input error-border" : "input"}"
+              label="Choose One"
+              type="text"
+              placeholder="abc@annalect.com"
+              .value="${this.userData.user_login_details.officeEmail}"
+              @input="${(e) => this.handleOfficeEmailChange(e)}"
+            />
+            <div class=" is-flex">
+              ${this.officeEmailError
+                ? html`<omni-icon
+                      class="mt-2 ml-2 error-icon"
+                      icon-id="omni:informative:error"
+                      aria-label="icon"
+                      role="img"
+                    ></omni-icon
+                    ><span class="pt-2 pl-1 has-text-grey is-size-6"
+                      >${this.officeEmailError}</span
+                    >`
+                : ""}
+            </div>
+          </div>
+          <div class="column is-one-third">
+            <p class="mb-2 ml-2">* Role</p>
+            <omni-dropdown
+              class="pd-4"
+              placeholder="Role"
+              error="${this.selectedRoleError ? this.selectedRoleError : ""}"
+              .options=${this.roles}
+              .value="${this.userData.user_login_details.role}"
+              @change="${(e) => this.handleRoleChange(e)}"
+            >
+            </omni-dropdown>
+          </div>
+        </div>
 
         <div
-          class="columns is-flex is-align-items-center is-justify-content-space-between mt-6 mb-3 mr-1 pt-4"
+          class="columns is-flex is-align-items-center is-justify-content-space-between  pt-6 "
         >
           <span class="has-text-grey-light is-size-6 pl-3"
             >* Required fields</span
@@ -1014,7 +1098,7 @@ export default class UserForm extends OmniElement {
             <button
               class="button is-size-5 is-link has-text-white bg-image "
               ?disabled="${!isFormValid}"
-              @click="${this.handleSave}"
+              @click="${this.adduserData}"
             >
               Create
             </button>
@@ -1026,7 +1110,7 @@ export default class UserForm extends OmniElement {
   renderNotification() {
     return html`
       <article
-        class="notification is-success"
+        class="notification is-success wt-1"
         ?hidden=${!this.showSuccessMessage}
       >
         <omni-icon
@@ -1039,22 +1123,22 @@ export default class UserForm extends OmniElement {
           aria-label="delete"
           @click="${this.closeUserForm}"
         ></button>
-        Your profile has been successfully created!
+        User profile has been successfully created!
       </article>
     `;
   }
-  
 
   render() {
     console.log(this.showSuccessMessage);
     return html`
       <omni-style>
         <div class="modal is-active">
-          <div class="modal-background"></div>
-          <div class="mt-5 modal-card">
-          ${this.showSuccessMessage ? this.renderNotification() : ""}
-            ${!this.showSuccessMessage ? this.renderData() : ""}
-          </div>
+          <div class="modal-background">
+            <div class="mt-5 modal-card">
+              ${!this.showSuccessMessage ? this.renderData() : ""}
+            </div>
+            </div>
+            ${this.showSuccessMessage ? this.renderNotification() : ""}
         </div>
       </omni-style>
     `;

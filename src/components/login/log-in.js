@@ -1,6 +1,6 @@
 import { OmniElement, OmniStyleElement, css, html, nothing } from "omni-ui";
-import "../navbar/nav-bar.js";
-import "../navbar/test-nab.js";
+import "../navbar/admin-nav-bar.js";
+import "../navbar/user-nav-bar.js";
 
 OmniElement.register();
 OmniStyleElement.register();
@@ -262,13 +262,13 @@ export default class LogIn extends OmniElement {
 
   rendernav() {
     if (this.userRole.includes("Admin")) {
-      return html`<nav-bar
+      return html`<admin-nav-bar
        .userName=${this.loggedInUserName}
-      ></nav-bar>`;
+      ></admin-nav-bar>`;
     } else if (this.userRole.includes("User")) {
-      return html`<test-nab
+      return html`<user-nav-bar
        .userData=${this.loggedInUserdata}
-      ></test-nab>`;
+      ></user-nav-bar>`;
     } else {
       return html``;
     }
