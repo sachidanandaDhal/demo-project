@@ -51,7 +51,7 @@ export default class Hometab extends (OmniElement) {
                 </div>
                 <div slot="center-end" class="pr-4">
                   <button
-                    class="button is-outlined is-small"
+                    class="button is-outlined is-medium"
                     @click="${this.openUserForm}"
                   >
                     Create new

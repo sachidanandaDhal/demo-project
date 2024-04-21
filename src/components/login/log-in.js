@@ -49,6 +49,9 @@ export default class LogIn extends OmniElement {
           height: 400px !important;
           width: 400px !important;
         }
+        .wt-1{
+          width: 550px !important;
+        }
       `,
     ];
   }
@@ -117,7 +120,7 @@ export default class LogIn extends OmniElement {
     <div class="modal is-active">
           <div class="modal-background"></div>
       <article
-        class="notification is-success"
+        class="notification is-success wt-1"
         ?hidden=${!this.showSuccessMessage}
       >
         <omni-icon
@@ -193,6 +196,7 @@ export default class LogIn extends OmniElement {
                       icon-id="omni:informative:user"
                     ></omni-icon>
                   </span>
+                  
                 </p>
                 ${this.logusernameError
                   ? html` <div class="is-flex">

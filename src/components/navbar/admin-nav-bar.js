@@ -121,7 +121,7 @@ export default class AdminNavBar extends OmniElement{
           </div>
           <ul class="menu-list pl-3">  
           <li><a  class="  has-background-almost-black">Dashboard</a></li>
-            <li>
+            <!-- <li>
               <details>
                 <summary>
                     <omni-icon class=is-size-3 icon-id="omni:interactive:right"></omni-icon>
@@ -153,7 +153,7 @@ export default class AdminNavBar extends OmniElement{
                   </li>
                 </ul>
               </details>
-            </li>
+            </li> -->
           </ul>
         </nav>
         </omni-app-layout>

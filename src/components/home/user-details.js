@@ -13,7 +13,7 @@ export default class UserDetails extends OmniStyleElement {
           transition: color 0.25s ease-in-out, background-color 0.25s ease-in-out;
         }
         omni-table::part(table-header-actions) {
-          padding-left: 85px !important;
+          padding-left: 60px !important;
         }
       `,
     ];
@@ -33,6 +33,7 @@ export default class UserDetails extends OmniStyleElement {
     super();
     this.users = JSON.parse(localStorage.getItem("userData")) || [];
     this.columns = [
+      { label: "ID", key: "id", isSortable: true },
       { label: "Name", key: "fullName", isSortable: true },
       { label: "Contact Number", key: "phoneNumber", isSortable: true },
       { label: "Gender", key: "gender", isSortable: true },
@@ -55,20 +56,20 @@ export default class UserDetails extends OmniStyleElement {
         <omni-style>
           <td part="table-body-cell">
             <omni-tooltip>
-              <button slot="invoker" @click="${() => this.deleteUser(user)}">
+              <button class="button is-size-5 is-text" @click="${() => this.deleteUser(user)}">
                 <omni-icon class="is-size-2" icon-id="omni:interactive:delete"></omni-icon>
               </button>
               <div slot="content">Delete</div>
             </omni-tooltip>
             <omni-tooltip>
-              <button slot="invoker" @click="${() => this.viewUser(user)}">
+              <button class="button is-size-5 is-text" @click="${() => this.viewUser(user)}">
                 <omni-icon class="is-size-2" icon-id="omni:interactive:launch"></omni-icon>
               </button>
               <div slot="content">View Data</div>
             </omni-tooltip>
             <omni-tooltip>
-              <button slot="invoker" @click="${() => this.editUser(user)}">
-                <omni-icon class="is-size-2" icon-id="omni:interactive:edit"></omni-icon>
+              <button  class="button is-size-5 is-text" @click="${() => this.editUser(user)}">
+                <omni-icon class="is-size-2 " icon-id="omni:interactive:edit"></omni-icon>
               </button>
               <div slot="content">Edit Data</div>
             </omni-tooltip>
