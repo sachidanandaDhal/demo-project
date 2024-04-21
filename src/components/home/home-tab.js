@@ -1,5 +1,6 @@
 import { OmniElement, OmniStyleElement, css, html, nothing } from 'omni-ui';
 import './user-details.js';
+import  '../form/user-form.js';
 OmniElement.register();
 OmniStyleElement.register();
 export default class Hometab extends (OmniElement) {
@@ -8,6 +9,17 @@ export default class Hometab extends (OmniElement) {
 
     `;
   }
+  constructor() {
+    super();
+    this.reloadData = false; 
+  }
+
+  static get properties() {
+    return {
+      reloadData: { type: Boolean } 
+    };
+  }
+  
   openUserForm() {
     const userForm = document.createElement('user-form');
     document.body.appendChild(userForm);
@@ -18,20 +30,13 @@ export default class Hometab extends (OmniElement) {
     if (userForm) {
       userForm.remove();
       console.log('Close user form, dispatching reload event');
-      this.dispatchEvent(new CustomEvent('reload-user-details'));
+      this.dispatchEvent(new CustomEvent('user-details'));
+      this.reloadData = !this.reloadData;
+      
     }
+    
     this.requestUpdate();
   }
-  // handleReloadUserDetails() {
-  //   // Reload user details here
-  //   // For example:
-  //   const userDetails = this.shadowRoot.querySelector('user-details');
-  //   userDetails.reload(); // Assuming userDetails component has a method to reload data
-  // }
-  // connectedCallback() {
-  //   super.connectedCallback();
-  //   this.addEventListener('reload-user-details', this.handleReloadUserDetails.bind(this));
-  // }
   render() {
     return html`
       <omni-style class="omni">
@@ -64,7 +69,7 @@ export default class Hometab extends (OmniElement) {
             class="card-content pb-1 pt-1 pl-0 pr-0"
             style="background-color: rgb(245, 248, 251) !important;"
           >
-            <user-details></user-details>
+          ${this.reloadData ? html`<user-details></user-details>` : html`<user-details></user-details>`}
           </div>
         </div>
       </omni-style>

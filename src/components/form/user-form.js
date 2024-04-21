@@ -217,6 +217,7 @@ export default class UserForm extends OmniElement {
     
     localStorage.setItem("userData", JSON.stringify(this.users));
     this.showSuccessMessage = true;
+    
     this.requestUpdate();
   }
 
