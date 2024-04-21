@@ -276,6 +276,7 @@ export default class UserForm extends OmniElement {
     } else if (
       this.users.some(
         (user) => user.contact_details.phoneNumber === newPhoneNumber
+        && user.id !== this.userData.id
       )
     ) {
       this.phoneNumberError = "Phone number already exists";
@@ -298,6 +299,7 @@ export default class UserForm extends OmniElement {
     } else if (
       this.users.some(
         (user) => user.contact_details.officephoneNumber === newPhoneNumber
+        && user.id !== this.userData.id
       )
     ) {
       this.officephoneNumberError = "Phone number already exists";
@@ -320,6 +322,7 @@ export default class UserForm extends OmniElement {
       this.personalEmailError = "Invalid email format";
     } else if (
       this.users.some((user) => user.contact_details.personalEmail === email)
+      && user.id !== this.userData.id
     ) {
       // Check if email already exists
       this.personalEmailError = "Personal email already exists";
@@ -454,6 +457,7 @@ export default class UserForm extends OmniElement {
       this.useridnameError = "Username must be at least 5 characters long";
     } else if (
       this.users.some((user) => user.user_login_details.username === username)
+      && user.id !== this.userData.id
     ) {
       // Check if username already exists
       this.useridnameError = "Username already exists";
@@ -483,6 +487,7 @@ export default class UserForm extends OmniElement {
       this.officeEmailError = "Office email must end with @annalect.com";
     } else if (
       this.users.some((user) => user.user_login_details.officeEmail === email)
+      && user.id !== this.userData.id
     ) {
       // Check if email already exists
       this.officeEmailError = "Office email already exists";
