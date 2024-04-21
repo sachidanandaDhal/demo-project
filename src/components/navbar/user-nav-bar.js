@@ -45,10 +45,10 @@ export default class UserNavBar extends OmniElement {
           --omni-app-layout-drawer-width: 180px;
           --omni-app-layout-drawer-closed-width: 4px;
           --omni-app-layout-end-drawer-width: 660px;
-          --omni-app-layout-bg: #f1f5fa;
+          --omni-app-layout-bg: #ffffff;
           --omni-app-layout-header-bg: #ffffff;
-          --omni-app-layout-drawer-bg: #f1f5fa;
-          --omni-app-layout-end-drawer-bg: #f5f0f0;
+          --omni-app-layout-drawer-bg: #ffffff;
+          --omni-app-layout-end-drawer-bg: #ffffff;
 
           /* Variables useful for nesting layouts */
           --omni-app-layout-height: 100vh;
@@ -900,14 +900,6 @@ renderAddresData() {
                     N.A
                   </p>
                 </div>
-              </div>
-              <div class="buttons are-medium is-right pt-5 pr-4">
-                <button
-                  class="button is-size-5 is-link"
-                  @click="${this.closeUserData}"
-                >
-                  Close
-                </button>
               </div>
             </section>
             </div>
