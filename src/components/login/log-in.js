@@ -40,6 +40,9 @@ export default class LogIn extends OmniElement {
     return [
       super.styles,
       css`
+      :host {
+        overflow: hidden;
+      }
         .error-border {
           border: 1px solid var(--color-melon) !important;
         }
