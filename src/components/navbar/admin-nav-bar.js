@@ -78,50 +78,46 @@ export default class AdminNavBar extends OmniElement{
         >
           <header slot="header">
             <omni-toolbar class="">
-            <button  class="button is-text " @click="${this.toggleDrawer}">
-              <omni-icon
-                class="is-size-1"
-                icon-id="${
-                  this.drawerOpen
+              <button class="button is-text " @click="${this.toggleDrawer}">
+                <omni-icon
+                  class="is-size-1"
+                  icon-id="${this.drawerOpen
                     ? "omni:informative:menu"
-                    : "omni:informative:menu"
-                }"
-              ></omni-icon>
-            </button>
+                    : "omni:informative:menu"}"
+                ></omni-icon>
+              </button>
+              <!-- <omni-icon class="is-size-4" icon-id="omni:brand:apple"></omni-icon> -->
               <p class=" title is-2 pt-2 ">User Management</p>
               <div slot="center-end" class="pr-4">
-                <!-- <button class="button is-outlined" @click="${this.openUserForm}">
-                  Create new
-                </button> -->
+                
 
-                <div> ${this.userName}</div>
+                <div class="is-flex pt-2">
+                    
+                    <omni-icon class="is-size-1" icon-id="omni:informative:user"></omni-icon>
+                    <div class="pl-3 pr-6">bubu${this.userName}</div> 
+                </div>
               </div>
-              <!-- <user-profile></user-profile> -->
-              
             </omni-toolbar>
           </header>
-
           <main>
-           
             <home-tab></home-tab>
           </main>
 
           <nav slot="drawer" class="menu">
-          <div class="pl-8 ">
-            <!-- <button  class="button is-text " @click="${this.toggleDrawer}">
+            <div class="pl-8 ">
+              <!-- <button  class="button is-text " @click="${this
+                .toggleDrawer}">
               <omni-icon
                 class="is-size-1"
-                icon-id="${
-                  this.drawerOpen
-                    ? "omni:interactive:left"
-                    : "omni:interactive:right"
-                }"
+                icon-id="${this.drawerOpen
+                ? "omni:interactive:left"
+                : "omni:interactive:right"}"
               ></omni-icon>
             </button> -->
-          </div>
-          <ul class="menu-list pl-3">  
-          <li><a  class="  has-background-almost-black">Dashboard</a></li>
-            <!-- <li>
+            </div>
+            <ul class="menu-list pl-3">
+              <li><a class="  has-background-almost-black">Dashboard</a></li>
+              <!-- <li>
               <details>
                 <summary>
                     <omni-icon class=is-size-3 icon-id="omni:interactive:right"></omni-icon>
@@ -154,8 +150,8 @@ export default class AdminNavBar extends OmniElement{
                 </ul>
               </details>
             </li> -->
-          </ul>
-        </nav>
+            </ul>
+          </nav>
         </omni-app-layout>
       </omni-style>
     `;
