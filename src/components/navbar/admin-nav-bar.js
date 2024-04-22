@@ -76,13 +76,12 @@ export default class AdminNavBar extends OmniElement{
               </button>
               <!-- <omni-icon class="is-size-4" icon-id="omni:brand:apple"></omni-icon> -->
               <p class=" title is-2 pt-2 ">User Management</p>
-              <div slot="center-end" class="pr-4">
-                
-
+              <div slot="center-end" class="pr-6">
                 <div class="is-flex pt-2">
-                  
                     <div class="pl-3 pr-2">${this.userName}</div> 
-                    <omni-icon class="is-size-1" icon-id="omni:informative:user"></omni-icon>
+                    <div><omni-icon class="is-size-1" icon-id="omni:informative:user"></omni-icon>
+                          <label class="columns title is-7 pl-1  pt-2">Admin</label>
+                    </div>
                 </div>
               </div>
             </omni-toolbar>

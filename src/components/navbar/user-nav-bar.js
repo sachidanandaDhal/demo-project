@@ -682,11 +682,14 @@ renderAddresData() {
               <p class=" title is-2 pt-2 ">User Management</p>
                 <div slot="center-end" class="pr-4">
                 <div class="is-flex pt-2">
-                    <omni-icon class="is-size-1" icon-id="omni:informative:user"></omni-icon>
+                    
                     <div class="pl-3 pr-6">${this.userData.personal_details.first_name} ${this.userData.personal_details.last_name}</div>
-                </div>
+                    <div>
+                    <omni-icon class="is-size-1" icon-id="omni:informative:user"></omni-icon>
+                    <label class="columns title is-7 pl-1  pt-2">User</label>
+                  </div>
+                  </div>
               </div>
-              <!-- <user-profile></user-profile> -->
               
             </omni-toolbar>
           </header>
