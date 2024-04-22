@@ -75,7 +75,9 @@ export default class LogIn extends OmniElement {
     if (matchedUser) {
       this.showSuccessMessage = true;
       this.userRole = matchedUser.user_login_details.role || [];
-      this.loggedInUserName = matchedUser.personal_details.first_name;
+      // this.loggedInUserName = matchedUser.personal_details.first_name;
+      this.loggedInUserName = matchedUser.personal_details.first_name + ' ' + matchedUser.personal_details.last_name;
+
       this.loggedInUserdata = matchedUser;
     } else {
       this.showloginErrorMessage = true;
@@ -177,7 +179,7 @@ export default class LogIn extends OmniElement {
           <div class="column is-narrow">
             <div class="box has-text-centered pd-7">
               <header class="title ">
-                <p class="title is-1">Login Account</p>
+                <p class="title is-1">User Management System</p>
               </header>
 
               <div class="field pt-4">

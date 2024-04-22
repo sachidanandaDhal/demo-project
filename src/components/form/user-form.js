@@ -546,7 +546,22 @@ export default class UserForm extends OmniElement {
 
   renderData() {
     console.log("select:", this.selectedState);
-    const isFormValid = !this.birthDateError;
+    const isFormValid = 
+    this.userData.personal_details.first_name && this.userData.personal_details.last_name &&
+    this.userData.personal_details.dob && this.userData.personal_details.gender && 
+    this.userData.personal_details.Marital.length >  0 && this.userData.contact_details.phoneNumber &&
+    this.userData.contact_details.officephoneNumber && this.userData.contact_details.personalEmail &&
+    this.userData.address.current_address.flat_house_no && this.userData.address.current_address.building_no &&
+    this.userData.address.current_address.pin && this.userData.address.current_address.state.length > 0 &&
+    this.userData.address.current_address.district.length > 0 && this.userData.address.current_address.country.length > 0 &&
+    this.userData.address.permanent_address.flat_house_no && this.userData.address.permanent_address.building_no &&
+    this.userData.address.permanent_address.pin && this.userData.address.permanent_address.state.length > 0 &&
+    this.userData.address.permanent_address.district.length > 0 && this.userData.address.permanent_address.country.length > 0 &&
+    this.userData.user_login_details.username && this.userData.user_login_details.officeEmail && this.userData.user_login_details.role.length > 0 &&
+    !this.firstNameError && !this.lastNameError && !this.birthDateError && !this.phoneNumberError && !this.officephoneNumberError &&
+    !this.personalEmailError && !this.currentAddressError && ! this.currentStreetError && !this.currentPincodeError &&
+    !this.permanentAddressError && !this.permanentStreetError && !this.permanentPincodeError && !this.useridnameError && 
+    !this.officeEmailError;
     console.log("disable:", isFormValid);
     return html`
       <header class="modal-card-head header-separator">
@@ -650,7 +665,7 @@ export default class UserForm extends OmniElement {
             </div>
           </div>
           <div class="column is-one-third pl-4">
-            <p class="mb-2 ml-2 ">* Date of birth</p>
+            <p class="mb-2 ml-2 ">* Date of Birth</p>
             <input
               id="dobInput"
               type="date"
@@ -1051,7 +1066,7 @@ export default class UserForm extends OmniElement {
             <input
               class="${this.useridnameError ? "input error-border" : "input"}"
               type="text"
-              placeholder="Enter a username..."
+              placeholder="Enter a username"
               .value="${this.userData.user_login_details.username}"
               @input="${(e) => this.handleuserNameChange(e)}"
             />

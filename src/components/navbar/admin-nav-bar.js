@@ -29,17 +29,6 @@ export default class AdminNavBar extends OmniElement{
   toggleEndDrawer() {
     this.endDrawerOpen = !this.endDrawerOpen;
   }
-  // openUserForm() {
-  //   const userForm = document.createElement('user-form');
-  //   document.body.appendChild(userForm);
-  //   userForm.addEventListener('close-user-form', this.closeUserForm.bind(this));
-  // }
-  // closeUserForm() {
-  //   const userForm = document.querySelector('user-form');
-  //   if (userForm) {
-  //     userForm.remove();
-  //   }
-  // }
 
   static get styles() {
     return [
@@ -92,9 +81,9 @@ export default class AdminNavBar extends OmniElement{
                 
 
                 <div class="is-flex pt-2">
-                    
+                  
+                    <div class="pl-3 pr-2">bubu${this.userName}</div> 
                     <omni-icon class="is-size-1" icon-id="omni:informative:user"></omni-icon>
-                    <div class="pl-3 pr-6">bubu${this.userName}</div> 
                 </div>
               </div>
             </omni-toolbar>
@@ -102,19 +91,7 @@ export default class AdminNavBar extends OmniElement{
           <main>
             <home-tab></home-tab>
           </main>
-
           <nav slot="drawer" class="menu">
-            <div class="pl-8 ">
-              <!-- <button  class="button is-text " @click="${this
-                .toggleDrawer}">
-              <omni-icon
-                class="is-size-1"
-                icon-id="${this.drawerOpen
-                ? "omni:interactive:left"
-                : "omni:interactive:right"}"
-              ></omni-icon>
-            </button> -->
-            </div>
             <ul class="menu-list pl-3">
               <li><a class="  has-background-almost-black">Dashboard</a></li>
               <!-- <li>

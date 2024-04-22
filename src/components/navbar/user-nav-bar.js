@@ -673,7 +673,10 @@ renderAddresData() {
             </button>
               <p class=" title is-2 pt-2 ">User Management</p>
                 <div slot="center-end" class="pr-4">
-                <div>Hello, ${this.userData.personal_details.first_name}</div>
+                <div class="is-flex pt-2">
+                    <omni-icon class="is-size-1" icon-id="omni:informative:user"></omni-icon>
+                    <div class="pl-3 pr-6">${this.userData.personal_details.first_name} ${this.userData.personal_details.last_name}</div>
+                </div>
               </div>
               <!-- <user-profile></user-profile> -->
               

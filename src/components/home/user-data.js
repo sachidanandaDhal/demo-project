@@ -73,7 +73,7 @@ export default class UserData extends OmniElement {
                   <p class="mb-1">${this.userData.personal_details.dob}</p>
                 </div>
                 <div class="column is-one-third">
-                  <p class=" m-0 mb-2 has-text-grey is-size-6">Employee ID *</p>
+                  <p class=" m-0 mb-2 has-text-grey is-size-6">User ID *</p>
                   <p class="mb-1">${this.userData.empId}</p>
                 </div>
               </div>
@@ -185,11 +185,12 @@ export default class UserData extends OmniElement {
                   </p>
                 </div>
                 <div class="column is-one-third">
-                  <p class=" m-0 mb-2 has-text-grey is-size-6">Password *</p>
+                  <p class=" m-0 mb-2 has-text-grey is-size-6">Roll *</p>
                   <p class="mb-1" >
-                  ${this.userData.user_login_details.password}
+                  ${this.userData.user_login_details.role}
                   </p>
                 </div>
+                
                 <div class="column is-one-third">
                   <p class=" m-0 mb-2 has-text-grey is-size-6">Office Email ID *</p>
                   <p class="mb-1" >
@@ -197,17 +198,17 @@ export default class UserData extends OmniElement {
                   </p>
                 </div>
               </div>
-              <div class="columns col-spacing is-flex">
-                <div class="column is-one-third">
-                  <p class=" m-0 mb-2 has-text-grey is-size-6">Roll *</p>
-                  <p class="mb-1" >
-                  ${this.userData.user_login_details.role}
-                  </p>
-                </div>
+              <!-- <div class="columns col-spacing is-flex">
                 <div class="column is-one-third">
                   <p class=" m-0 mb-2 has-text-grey is-size-6">Join Date *</p>
                   <p class="mb-1" >
                   ${this.userData.modified_on}
+                  </p>
+                </div>
+                <div class="column is-one-third">
+                  <p class=" m-0 mb-2 has-text-grey is-size-6">Password *</p>
+                  <p class="mb-1" >
+                  ${this.userData.user_login_details.password}
                   </p>
                 </div>
                 <div class="column is-one-third">
@@ -216,7 +217,7 @@ export default class UserData extends OmniElement {
                     N.A
                   </p>
                 </div>
-              </div>
+              </div> -->
               <div class="buttons are-medium is-right pt-5 pr-4">
                 <button
                   class="button is-size-5 is-link"
@@ -227,7 +228,7 @@ export default class UserData extends OmniElement {
               </div>
             </section>
           </div>
-          <button class="modal-close is-large" aria-label="close"></button>
+          <button class="modal-close is-large" @click="${this.closeUserData}" aria-label="close"></button>
         </div>
       </omni-style>
     `;
