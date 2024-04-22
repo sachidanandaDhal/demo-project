@@ -33,11 +33,11 @@ export default class UserDetails extends OmniStyleElement {
     super();
     this.users = JSON.parse(localStorage.getItem("userData")) || [];
     this.columns = [
-      { label: "ID", key: "id", isSortable: true },
+      { label: "User Name", key: "username", isSortable: true },
       { label: "Name", key: "fullName", isSortable: true },
       { label: "Contact Number", key: "phoneNumber", isSortable: true },
       { label: "Gender", key: "gender", isSortable: true },
-      { label: "Office Email", key: "officeEmail", isSortable: false },
+      { label: "Personal Email", key: "personalEmail", isSortable: false },
       { label: "Role", key: "role", isSortable: false },
       { label: "Actions", key: "actions" },
     ];
@@ -47,10 +47,11 @@ export default class UserDetails extends OmniStyleElement {
   refreshData() {
     this.data = this.users.map(user => ({
       id: user.id,
+      username: `${user.user_login_details.username}`,
       fullName: `${user.personal_details.first_name} ${user.personal_details.last_name}`,
       phoneNumber: `${user.contact_details.phoneNumber}`,
       gender: `${user.personal_details.gender}`,
-      officeEmail: `${user.user_login_details.officeEmail}`,
+      personalEmail: `${user.contact_details.personalEmail}`,
       role: `${user.user_login_details.role}`,
       actions: html`
         <omni-style>

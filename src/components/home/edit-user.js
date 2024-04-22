@@ -566,7 +566,7 @@ export default class UserForm extends OmniElement {
     console.log("disable:", isFormValid);
     return html`
       <header class="modal-card-head header-separator">
-        <p class="modal-card-title has-text-black">Edit User Detail</p>
+        <p class="modal-card-title has-text-black">Edit User Details</p>
       </header>
       <section class="modal-card-body">
         <p class="is-size-4  has-text-weight-bold has-text-dark pb-4">
@@ -777,7 +777,7 @@ export default class UserForm extends OmniElement {
         <hr />
 
         <p class="is-size-4  pt-4 has-text-weight-bold has-text-dark g-3">
-          Current Address Detail
+          Current Address Details
         </p>
         <div class="columns col-spacing pt-3">
           <div class="column is-one-third">
@@ -922,7 +922,7 @@ export default class UserForm extends OmniElement {
             Same as current address
           </label>
           <p class="is-size-4  has-text-weight-bold has-text-dark pt-3">
-            Permanent Address Detail
+            Permanent Address Details
           </p>
         </div>
 
@@ -1164,7 +1164,7 @@ export default class UserForm extends OmniElement {
           aria-label="delete"
           @click="${this.closeUserForm}"
         ></button>
-        User profile has been successfully created!
+        User profile has been successfully Update!
       </article>
     `;
   }

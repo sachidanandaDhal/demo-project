@@ -776,7 +776,7 @@ export default class UserForm extends OmniElement {
         <hr />
 
         <p class="is-size-4  pt-4 has-text-weight-bold has-text-dark g-3">
-          Current Address Detail
+          Current Address Details
         </p>
         <div class="columns col-spacing pt-3">
           <div class="column is-one-third">
@@ -921,7 +921,7 @@ export default class UserForm extends OmniElement {
             Same as current address
           </label>
           <p class="is-size-4  has-text-weight-bold has-text-dark pt-3">
-            Permanent Address Detail
+            Permanent Address Details
           </p>
         </div>
 
