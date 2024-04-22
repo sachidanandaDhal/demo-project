@@ -21,6 +21,14 @@ export default class UserNavBar extends OmniElement {
     this.drawerOpen = false;
     this.endDrawerOpen = false;
     this.endDrawerContent = "";
+    this.marital = [
+      "Single",
+      "Married",
+      "Divorced",
+      "Widowed",
+      "Separated",
+      "Common Law",
+    ];
   }
 
   toggleDrawer() {
@@ -57,6 +65,7 @@ export default class UserNavBar extends OmniElement {
           --omni-app-layout-end-drawer-z-index: 34;
           --omni-app-layout-header-z-index: 36;
         }
+        
         .topright {
           position: absolute;
           top: 80px;
@@ -64,12 +73,12 @@ export default class UserNavBar extends OmniElement {
         }
         .topright1 {
           position: absolute;
-          top: 254px;
+          top: 315px;
           right: 50px;
         }
         .topright2 {
           position: absolute;
-          top: 384px;
+          top: 466px;
           right: 50px;
         }
         .header-separator {
@@ -120,7 +129,7 @@ renderBiographicalData() {
                   }"
                   type="text"
                   placeholder="First Name"
-                  .value=""
+                  .value="${this.userData.personal_details.first_name}"
                   @input="${(e) => this.handleFirstNameChange(e)}"
                 />
                   <div class=" is-flex">
@@ -147,7 +156,7 @@ renderBiographicalData() {
                   }"
                   type="text"
                   placeholder="Last Name"
-                  .value=""
+                  .value="${this.userData.personal_details.last_name}"
                   @input="${(e) => this.handleLastNameChange(e)}"
                 />
                 <div class=" is-flex">
@@ -179,7 +188,7 @@ renderBiographicalData() {
                 }"
                 searchindropdown
                 .options=${this.marital}
-                .value=""
+                .value="${this.userData.personal_details.Marital}"
                 @change="${(e) => this.handleMaritalChange(e)}"
               >
               </omni-dropdown>
@@ -193,7 +202,7 @@ renderBiographicalData() {
                     name="gender"
                     value="Male"
                     @change="${(e) => this.handleGenderChange(e)}"
-                    ?checked=""
+                    ?checked="${this.userData.personal_details.gender === "Male"}"
                   />
                   Male
                 </label>
@@ -203,7 +212,7 @@ renderBiographicalData() {
                     name="gender"
                     value="Female"
                     @change="${(e) => this.handleGenderChange(e)}"
-                    ?checked=""
+                    ?checked="${this.userData.personal_details.gender === "Female"}"
                   />
                   Female
                 </label>
@@ -223,7 +232,7 @@ renderBiographicalData() {
                     }"
                     placeholder="yyyy-mm-dd"
                     max="2999-12-31"
-                    .value=""
+                    .value="${this.userData.personal_details.dob}"
                     @input="${(e) => this.handleDOBChange(e)}"
                   />
                   <div class=" is-flex">
@@ -275,7 +284,7 @@ renderContactData() {
                   }"
                   type="text"
                   placeholder="abc@gmail.com"
-                  .value=""
+                  .value="${this.userData.contact_details.personalEmail}"
                   @input="${(e) => this.handlePersonalEmailChange(e)}"
                 />
                 <div class="is-flex">
@@ -303,7 +312,7 @@ renderContactData() {
                   type="tel"
                   maxlength="10"
                   placeholder="Phone Number"
-                  .value=""
+                  .value="${this.userData.contact_details.phoneNumber}"
                   @input="${(e) => this.handlePhoneNumberChange(e)}"
                 />
                 <div class=" is-flex">
@@ -335,7 +344,7 @@ renderContactData() {
                   type="tel"
                   maxlength="10"
                   placeholder="Office Phone Number"
-                  .value=""
+                  .value="${this.userData.contact_details.officephoneNumber}"
                   @input="${(e) => this.handleOfficePhoneNumberChange(e)}"
                 />
                 <div class=" is-flex">

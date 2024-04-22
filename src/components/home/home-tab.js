@@ -29,8 +29,8 @@ export default class Hometab extends (OmniElement) {
     const userForm = document.querySelector('user-form');
     if (userForm) {
       userForm.remove();
-      console.log('Close user form, dispatching reload event');
-      this.dispatchEvent(new CustomEvent('user-details'));
+      // console.log('Close user form, dispatching reload event');
+      // this.dispatchEvent(new CustomEvent('user-details'));
       this.reloadData = !this.reloadData;
       
     }

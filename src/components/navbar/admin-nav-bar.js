@@ -81,7 +81,7 @@ export default class AdminNavBar extends OmniElement{
 
                 <div class="is-flex pt-2">
                   
-                    <div class="pl-3 pr-2">bubu${this.userName}</div> 
+                    <div class="pl-3 pr-2">${this.userName}</div> 
                     <omni-icon class="is-size-1" icon-id="omni:informative:user"></omni-icon>
                 </div>
               </div>
