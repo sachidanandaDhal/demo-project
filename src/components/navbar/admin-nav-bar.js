@@ -1,5 +1,4 @@
 import { OmniElement, OmniStyleElement, css, html, nothing } from "omni-ui";
-import './nav-bar1.js';
 import '../home/user-data.js';
 import '../form/user-form.js';
 import '../home/home-tab.js';
