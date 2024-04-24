@@ -259,9 +259,9 @@ export default class LogIn extends OmniElement {
         .userName=${this.loggedInUserName}
       ></admin-nav-bar>`;
     } else if (this.userRole.includes("User")) {
-      return html`<test-test-user-nav
+      return html`<user-nav-bar1
         .userData=${this.loggedInUserdata}
-      ></test-test-user-nav>`;
+      ></user-nav-bar1>`;
     } else {
       return html``;
     }

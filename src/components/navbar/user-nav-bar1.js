@@ -12,7 +12,8 @@ export default class UserNavBar extends OmniElement {
       drawerOpen: { type: Boolean },
       endDrawerOpen: { type: Boolean },
       endDrawerContent: { type: String },
-      userData: { type: String },
+      userData: { type: Object },
+      
     };
   }
 
@@ -21,6 +22,48 @@ export default class UserNavBar extends OmniElement {
     this.drawerOpen = false;
     this.endDrawerOpen = false;
     this.endDrawerContent = "";
+    this.userData = {
+      id: "",
+      empId: "",
+      modified_on: new Date().toISOString(),
+      personal_details: {
+        first_name: "",
+        last_name: "",
+        dob: "",
+        gender: "",
+        marital: "",
+      },
+      contact_details: {
+        phoneNumber: "",
+        personalEmail: "",
+        officephoneNumber: "",
+      },
+      address: {
+        current_address: {
+          flat_house_no: "",
+          building_no: "",
+          pin: "",
+          state: "",
+          district: "",
+          country: "",
+        },
+        permanent_address: {
+          flat_house_no: "",
+          building_no: "",
+          pin: "",
+          district: "",
+          state: "",
+          country: "",
+        },
+      },
+      user_login_details: {
+        username: "",
+        password: "OMNI.user",
+        officeEmail: "",
+        role: "",
+        active: true,
+      },
+    };
     this.marital = [
       "Single",
       "Married",
@@ -41,7 +84,49 @@ export default class UserNavBar extends OmniElement {
   }
   closeEndDrawer() {
     this.endDrawerOpen = false;
+    
   }
+  // handleUpdateButtonClick() {
+  //   this.endDrawerOpen = false;
+  //   // Retrieve existing userData from local storage
+  //   const existingUserData = JSON.parse(localStorage.getItem("userData")) || [];
+    
+  //   // Find the index of the userData object in the array (assuming each userData object has a unique identifier like 'id')
+  //   const index = existingUserData.findIndex(item => item.id === this.userData.id);
+    
+  //   if (index !== -1) {
+  //     // If the userData object exists in the array, update its properties
+  //     existingUserData[index] = { ...existingUserData[index], ...this.userData };
+  //   } else {
+  //     // If the userData object doesn't exist in the array, add it
+  //     existingUserData.push(this.userData);
+  //   }
+  
+  //   // Save the modified userData array back to local storage
+  //   localStorage.setItem("userData", JSON.stringify(existingUserData));
+  // }
+
+  handleUpdateButtonClick() {
+    // Retrieve existing userData from local storage
+    const existingUserData = JSON.parse(localStorage.getItem("userData")) || [];
+    
+    // Find the index of the userData object in the array (assuming each userData object has a unique identifier like 'id')
+    const index = existingUserData.findIndex(item => item.id === this.userData.id);
+    
+    if (index !== -1) {
+      // If the userData object exists in the array, update its properties
+      existingUserData[index] = { ...existingUserData[index], ...this.userData };
+      
+      // Save the modified userData array back to local storage
+      localStorage.setItem("userData", JSON.stringify(existingUserData));
+    }
+    
+    // Close the end drawer after updating the data
+    this.endDrawerOpen = false;
+  }
+  
+  
+  
 
   static get styles() {
     return [
@@ -102,6 +187,50 @@ export default class UserNavBar extends OmniElement {
       `,
     ];
   }
+
+
+  handleFirstNameChange(e) {
+    this.userData.personal_details.first_name = e.target.value.trim();
+    if (!this.userData.personal_details.first_name) {
+      this.firstNameError = "First name is required";
+    } else {
+      this.firstNameError = "";
+    }
+    this.requestUpdate();
+  }
+
+  handleLastNameChange(e) {
+    this.userData.personal_details.last_name = e.target.value.trim();
+    if (!this.userData.personal_details.last_name) {
+      this.lastNameError = "Last name is required";
+    } else {
+      this.lastNameError = "";
+    }
+    this.requestUpdate();
+  }
+  handleDOBChange(e) {
+    this.userData.personal_details.dob = e.target.value.trim();
+    const inputDate = e.target.value;
+    const currentDate = new Date();
+    const selectedDate = new Date(inputDate);
+
+    if (selectedDate > currentDate) {
+      this.birthDateError = true;
+      this.birthDateError = "Date of birth cannot be in the future.";
+    } else {
+      this.birthDateError = false;
+      this.birthDateError = "";
+    }
+    this.requestUpdate();
+  }
+  handleMaritalChange(e) {
+    this.userData.personal_details.marital = e.target.value;
+    this.selectedMaritalError =
+      this.userData.personal_details.marital.length === 0
+        ? "Marital is required"
+        : "";
+    this.requestUpdate();
+  }
 //////////
 renderBiographicalData() {
   return html`
@@ -113,7 +242,7 @@ renderBiographicalData() {
               this.closeEndDrawer
             }">Cancel</button>
             <button class="button is-size-5 is-link has-text-white bg-image " @click="${
-              this.closeEndDrawer
+              this.handleUpdateButtonClick
             }">
               Update
             </button>
@@ -188,7 +317,7 @@ renderBiographicalData() {
                 }"
                 searchindropdown
                 .options=${this.marital}
-                .value="${this.userData.personal_details.Marital}"
+                .value="${this.userData.personal_details.marital}"
                 @change="${(e) => this.handleMaritalChange(e)}"
               >
               </omni-dropdown>
@@ -659,239 +788,323 @@ renderAddresData() {
   `;
 }
 ///////////
-  render() {
-    console.log("renderdata:", this.userData);
-    return html`
-     <omni-style>
-        <omni-app-layout
-          .drawerOpen=${this.drawerOpen}
-          .endDrawerOpen=${this.endDrawerOpen}
-        >
-          <header slot="header">
-            <omni-toolbar class="">
-            <button  class="button is-text " @click="${this.toggleDrawer}">
-              <omni-icon
-                class="is-size-1"
-                icon-id="${
-                  this.drawerOpen
-                    ? "omni:informative:menu"
-                    : "omni:informative:menu"
-                }"
-              ></omni-icon>
-            </button>
-              <p class=" title is-2 pt-2 ">User Management</p>
-                <div slot="center-end" class="pr-4">
-                
-              </div>
-              <!-- <user-profile></user-profile> -->
-              
-            </omni-toolbar>
-          </header>
+render() {
+  console.log("renderdata:", this.userData);
+  return html`
+    <omni-style>
+      <omni-app-layout
+        .drawerOpen=${this.drawerOpen}
+        .endDrawerOpen=${this.endDrawerOpen}
+      >
+        <header slot="header">
+          <omni-toolbar class="">
+          <button  class="button is-text " @click="${this.toggleDrawer}">
+            <omni-icon
+              class="is-size-1"
+              icon-id="${
+                this.drawerOpen
+                  ? "omni:informative:menu"
+                  : "omni:informative:menu"
+              }"
+            ></omni-icon>
+          </button>
+            <p class=" title is-2 pt-2 ">User Management</p>
+              <div slot="center-end" class="pr-4">
+              <div class="is-flex pt-2">
+                  
+                  <div class="pl-3 pr-6">${this.userData.personal_details.first_name} ${this.userData.personal_details.last_name}</div>
+                  <div>
+                  <omni-icon class="is-size-1" icon-id="omni:informative:user"></omni-icon>
+                  <label class="columns title is-7 pl-1  pt-2">User</label>
+                </div>
+                </div>
+            </div>
+            
+          </omni-toolbar>
+        </header>
 
-          <div class="pr-4  pt-4">
-            <section class="modal-card-body pl-5 ml-4">
-              <!-- <h1 class="title is-2 pb-3">Personal Details</h1> -->
-              <div class="is-flex ">
-              <h1 class="title is-3 pb-2">Biographical</h1>
-              <button  class=" is-text topright" @click="${() =>
-                this.toggleEndDrawer("biographical")}">
-              <omni-icon class="is-size-2 " icon-id="omni:interactive:edit"></omni-icon>
-              </button>
+        <div class="pr-4  pt-4">
+        <section class="modal-card-body pl-5 ml-4">
+            <!-- <h1 class="title is-2 pb-3">Personal Details</h1> -->
+            <div class="is-flex ">
+            <h1 class="title is-3 pb-2">Biographical</h1>
+            <button  class=" is-text topright" @click="${() =>
+              this.toggleEndDrawer("biographical")}">
+            <omni-icon class="is-size-2 " icon-id="omni:interactive:edit"></omni-icon>
+            </button>
+            </div>
+            <div class="columns col-spacing is-flex">
+              <div class="column is-one-third">
+                <p class=" m-0 mb-2 has-text-grey is-size-6">First Name *</p>
+                <p class="mb-1">${
+                  this.userData.personal_details.first_name
+                }</p>
               </div>
-              
-              <div class="columns col-spacing is-flex">
-                <div class="column is-one-third">
-                  <p class=" m-0 mb-2 has-text-grey is-size-6">First Name *</p>
-                  <p class="mb-1"></p>
-                </div>
-                <div class="column is-one-third">
-                  <p class=" m-0 mb-2 has-text-grey is-size-6">Last Name *</p>
-                  <p class="mb-1"></p>
-                </div>
-                <div class="column is-one-third">
-                  <p class=" m-0 mb-2 has-text-grey is-size-6">
-                    Marital Status *
-                  </p>
-                  <p class="mb-1"></p>
-                </div>
+              <div class="column is-one-third">
+                <p class=" m-0 mb-2 has-text-grey is-size-6">Last Name *</p>
+                <p class="mb-1">${
+                  this.userData.personal_details.last_name
+                }</p>
               </div>
- 
-              <div class="columns col-spacing is-flex">
-                <div class="column is-one-third">
-                  <p class=" m-0 mb-2 has-text-grey is-size-6">Gender *</p>
-                  <p class="mb-1"></p>
-                </div>
-                <div class="column is-one-third">
-                  <p class=" m-0 mb-2 has-text-grey is-size-6">DOB *</p>
-                  <p class="mb-1"></p>
-                </div>
-              
+              <div class="column is-one-third">
+                <p class=" m-0 mb-2 has-text-grey is-size-6">
+                  Marital Status *
+                </p>
+                <p class="mb-1">${this.userData.personal_details.marital}</p>
               </div>
-              <hr />
-              <div class="is-flex ">
-              <h1 class="title is-3 pb-2">Contact Details</h1>
-              <button  class=" is-text topright1" @click="${() =>
-                this.toggleEndDrawer("contact")}">
-              <omni-icon class="is-size-2 " icon-id="omni:interactive:edit"></omni-icon>
-              </button>
-              </div>
-              
-              <div class="columns col-spacing is-flex">
-                <div class="column is-one-third">
-                  <p class=" m-0 mb-2 has-text-grey is-size-6">
-                    Personal Email ID *
-                  </p>
-                  <p class="mb-1"></p>
-                </div>
-                <div class="column is-one-third">
-                  <p class=" m-0 mb-2 has-text-grey is-size-6">
-                    Personal Mobile No *
-                  </p>
-                  <p class="mb-1"></p>
-                </div>
-                <div class="column is-one-third">
-                  <p class=" m-0 mb-2 has-text-grey is-size-6">
-                    Office Mobile No *
-                  </p>
-                  <p class="mb-1"></p>
-                </div>
-              </div>
-              <hr />
- 
-              
-              <div class="is-flex ">
-              <h1 class="title is-3 pb-2">Address</h1>
-              <button  class=" is-text topright2" @click="${() =>
-                this.toggleEndDrawer("address")}">
-              <omni-icon class="is-size-2 " icon-id="omni:interactive:edit"></omni-icon>
-              </button>
-              </div>
-              <div class="columns col-spacing is-flex">
-                <div class="column is-half">
-                  <h1 class="title is-4 pb-2">Current Address Detail</h1>
-                  <div>
-                    <p class="mb-1 has-text-grey is-size-6">Flat/House/Wing Number *</p>
-                    <p class="mb-4"></p>
-                  </div>
- 
-                  <div>
-                    <p class="mb-1 has-text-grey is-size-6">
-                      Street/Locality/Area *
-                    </p>
-                    <p class="mb-4"></p>
-                  </div>
- 
-                  <div>
-                    <p class="mb-1 has-text-grey is-size-6">Pincode *</p>
-                    <p class="mb-4"></p>
-                  </div>
- 
-                  <div>
-                    <p class="mb-1 has-text-grey is-size-6">District *</p>
-                    <p class="mb-4"></p>
-                  </div>
- 
-                  <div>
-                    <p class="mb-1 has-text-grey is-size-6">State *</p>
-                    <p class="mb-4"></p>
-                  </div>
- 
-                  <div>
-                    <p class="mb-1 has-text-grey is-size-6">Country *</p>
-                    <p class="mb-4"></p>
-                  </div>
-                </div>
- 
-                <div class="column is-half">
-                  <h1 class="title is-4 pb-2">Permanent Address Detail</h1>
-                  <div>
-                    <p class="mb-1 has-text-grey is-size-6">
-                      Flat/House/Wing Number *
-                    </p>
-                    <p class="mb-4"></p>
-                  </div>
- 
-                  <div>
-                    <p class="mb-1 has-text-grey is-size-6">
-                      Street/Locality/Area *
-                    </p>
-                    <p class="mb-4"></p>
-                  </div>
- 
-                  <div>
-                    <p class="mb-1 has-text-grey is-size-6">Pincode *</p>
-                    <p class="mb-4"></p>
-                  </div>
-                  <div>
-                    <p class="mb-1 has-text-grey is-size-6">District *</p>
-                    <p class="mb-4"></p>
-                  </div>
- 
-                  <div>
-                    <p class="mb-1 has-text-grey is-size-6">State *</p>
-                    <p class="mb-4"></p>
-                  </div>
- 
-                  <div>
-                    <p class="mb-1 has-text-grey is-size-6">Country *</p>
-                    <p class="mb-4"></p>
-                  </div>
-                </div>
-              </div>
-                <hr>
-              
-            </section>
             </div>
 
+            <div class="columns col-spacing is-flex">
+              <div class="column is-one-third">
+                <p class=" m-0 mb-2 has-text-grey is-size-6">Gender *</p>
+                <p class="mb-1">${this.userData.personal_details.gender}</p>
+              </div>
+              <div class="column is-one-third">
+                <p class=" m-0 mb-2 has-text-grey is-size-6">DOB *</p>
+                <p class="mb-1">${this.userData.personal_details.dob}</p>
+              </div>
+            </div>
+            <hr />
 
-          <nav slot="drawer" class="menu">
-          <div class="pl-8 ">
+            <div class="is-flex ">
+            <h1 class="title is-3 pb-2">Contact Details</h1>
+            <button  class=" is-text topright1" @click="${() =>
+              this.toggleEndDrawer("contact")}">
+            <omni-icon class="is-size-2 " icon-id="omni:interactive:edit"></omni-icon>
+            </button>
+            </div>
+            <div class="columns col-spacing is-flex">
+              <div class="column is-one-third">
+                <p class=" m-0 mb-2 has-text-grey is-size-6">
+                  Personal Email ID *
+                </p>
+                <p class="mb-1">${
+                  this.userData.contact_details.personalEmail
+                }</p>
+              </div>
+              <div class="column is-one-third">
+                <p class=" m-0 mb-2 has-text-grey is-size-6">
+                  Personal Mobile No *
+                </p>
+                <p class="mb-1">${
+                  this.userData.contact_details.phoneNumber
+                }</p>
+              </div>
+              <div class="column is-one-third">
+                <p class=" m-0 mb-2 has-text-grey is-size-6">
+                  Office Mobile No *
+                </p>
+                <p class="mb-1">${
+                  this.userData.contact_details.officephoneNumber
+                }</p>
+              </div>
+            </div>
+            <hr />
+
+            <div class="is-flex ">
+            <h1 class="title is-3 pb-2">Address</h1>
+            <button  class=" is-text topright2" @click="${() =>
+              this.toggleEndDrawer("address")}">
+            <omni-icon class="is-size-2 " icon-id="omni:interactive:edit"></omni-icon>
+            </button>
+            </div>
+            <div class="columns col-spacing is-flex">
+              <div class="column is-half">
+                <h1 class="title is-4 pb-2">Current Address Detail</h1>
+                <div>
+                  <p class="mb-1 c">Flat/House/Wing Number *</p>
+                  <p class="mb-4">${
+                    this.userData.address.current_address.flat_house_no
+                  }</p>
+                </div>
+
+                <div>
+                  <p class="mb-1 has-text-grey is-size-6">
+                    Street/Locality/Area *
+                  </p>
+                  <p class="mb-4">${
+                    this.userData.address.current_address.building_no
+                  }</p>
+                </div>
+
+                <div>
+                  <p class="mb-1 has-text-grey is-size-6">Pincode *</p>
+                  <p class="mb-4">${
+                    this.userData.address.current_address.pin
+                  }</p>
+                </div>
+
+                <div>
+                  <p class="mb-1 has-text-grey is-size-6">District *</p>
+                  <p class="mb-4">${
+                    this.userData.address.current_address.district
+                  }</p>
+                </div>
+
+                <div>
+                  <p class="mb-1 has-text-grey is-size-6">State *</p>
+                  <p class="mb-4">${
+                    this.userData.address.current_address.state
+                  }</p>
+                </div>
+
+                <div>
+                  <p class="mb-1 has-text-grey is-size-6">Country *</p>
+                  <p class="mb-4">${
+                    this.userData.address.current_address.country
+                  }</p>
+                </div>
+              </div>
+
+              <div class="column is-half">
+                <h1 class="title is-4 pb-2">Permanent Address Detail</h1>
+                <div>
+                  <p class="mb-1 has-text-grey is-size-6">
+                    Flat/House/Wing Number *
+                  </p>
+                  <p class="mb-4">${
+                    this.userData.address.permanent_address.flat_house_no
+                  }</p>
+                </div>
+
+                <div>
+                  <p class="mb-1 has-text-grey is-size-6">
+                    Street/Locality/Area *
+                  </p>
+                  <p class="mb-4">${
+                    this.userData.address.permanent_address.building_no
+                  }</p>
+                </div>
+
+                <div>
+                  <p class="mb-1 has-text-grey is-size-6">Pincode *</p>
+                  <p class="mb-4">${
+                    this.userData.address.permanent_address.pin
+                  }</p>
+                </div>
+                <div>
+                  <p class="mb-1 has-text-grey is-size-6">District *</p>
+                  <p class="mb-4">${
+                    this.userData.address.permanent_address.district
+                  }</p>
+                </div>
+
+                <div>
+                  <p class="mb-1 has-text-grey is-size-6">State *</p>
+                  <p class="mb-4">${
+                    this.userData.address.permanent_address.state
+                  }</p>
+                </div>
+
+                <div>
+                  <p class="mb-1 has-text-grey is-size-6">Country *</p>
+                  <p class="mb-4">${
+                    this.userData.address.permanent_address.country
+                  }</p>
+                </div>
+              </div>
+            </div>
+              <hr>
+            <h1 class="title is-3 pb-2">Account Access Details</h1>
+            <div class="columns col-spacing is-flex">
+              <div class="column is-one-third">
+                <p class=" m-0 mb-2 has-text-grey is-size-6">User Name *</p>
+                <p class="mb-1" >
+                ${this.userData.user_login_details.username}
+                </p>
+              </div>
+              <div class="column is-one-third">
+                <p class=" m-0 mb-2 has-text-grey is-size-6">Password *</p>
+                <p class="mb-1" >
+                ${this.userData.user_login_details.password}
+                </p>
+              </div>
+              <div class="column is-one-third">
+                <p class=" m-0 mb-2 has-text-grey is-size-6">Office Email ID *</p>
+                <p class="mb-1" >
+                ${this.userData.user_login_details.officeEmail}
+                </p>
+              </div>
+            </div>
+            <div class="columns col-spacing is-flex">
+            <div class="column is-one-third">
+                <p class=" m-0 mb-2 has-text-grey is-size-6">Employee ID *</p>
+                <p class="mb-1">${this.userData.empId}</p>
+              </div>
+              <div class="column is-one-third">
+                <p class=" m-0 mb-2 has-text-grey is-size-6">Join Date *</p>
+                <p class="mb-1" >
+                ${this.userData.modified_on}
+                </p>
+              </div>
+              <div class="column is-one-third">
+                <p class=" m-0 mb-2 has-text-grey is-size-6">Last Modified Date *</p>
+                <p class="mb-1" >
+                  N.A
+                </p>
+              </div>
+            </div>
+          </section>
           </div>
-          <ul class="menu-list pl-3">  
-          <li><a  class="  has-background-almost-black">Dashboard</a></li>
-            <li>
-              <details>
-                <summary>
-                    <omni-icon class=is-size-3 icon-id="omni:interactive:right"></omni-icon>
-                    <omni-icon class=is-size-1 icon-id="omni:informative:learn"></omni-icon>
-                    <span>Role</span>
-                  </div>
-                </summary>
-                <ul class="menu-list">
-                  <li>
-                    <a class="pg-1" style="padding: 0px 0px 0px 4px;">
-                      <span>Nested Menu Item</span>
-                    </a>
-                  </li>
-                </ul>
-              </details>
-            </li>
-            <li>
-            <details>
-                <summary>
-                    <omni-icon class=is-size-3 icon-id="omni:interactive:right"></omni-icon>
-                    <omni-icon class=is-size-1 icon-id="omni:informative:learn"></omni-icon>
-                    <span>User</span>
-                </summary>
-                <ul class="menu-list">
-                  <li>
-                    <a class="pg-1" style="padding: 0px 0px 0px 4px;">
-                      <span>Nested Menu Item</span>
-                    </a>
-                  </li>
-                </ul>
-              </details>
-            </li>
-          </ul>
-        </nav>
-          <aside slot="end-drawer">
-            ${this.endDrawerContent === "biographical"? this.renderBiographicalData(): ""}
-            ${this.endDrawerContent === "contact" ? this.renderContactData() : ""}
-            ${this.endDrawerContent === "address" ? this.renderAddresData() : ""}
-          </aside>
 
-        </omni-app-layout>
-      </omni-style>
+
+        <nav slot="drawer" class="menu">
+        <div class="pl-8 ">
+          <!-- <button  class="button is-text " @click="${this.toggleDrawer}">
+            <omni-icon
+              class="is-size-1"
+              icon-id="${
+                this.drawerOpen
+                  ? "omni:interactive:left"
+                  : "omni:interactive:right"
+              }"
+            ></omni-icon>
+          </button> -->
+        </div>
+        <ul class="menu-list pl-3">  
+        <li><a  class="  has-background-almost-black">Dashboard</a></li>
+          <li>
+            <details>
+              <summary>
+                  <omni-icon class=is-size-3 icon-id="omni:interactive:right"></omni-icon>
+                  <omni-icon class=is-size-1 icon-id="omni:informative:learn"></omni-icon>
+                  <span>Role</span>
+                </div>
+              </summary>
+              <ul class="menu-list">
+                <li>
+                  <a class="pg-1" style="padding: 0px 0px 0px 4px;">
+                    <span>Nested Menu Item</span>
+                  </a>
+                </li>
+              </ul>
+            </details>
+          </li>
+          <li>
+          <details>
+              <summary>
+                  <omni-icon class=is-size-3 icon-id="omni:interactive:right"></omni-icon>
+                  <omni-icon class=is-size-1 icon-id="omni:informative:learn"></omni-icon>
+                  <span>User</span>
+              </summary>
+              <ul class="menu-list">
+                <li>
+                  <a class="pg-1" style="padding: 0px 0px 0px 4px;">
+                    <span>Nested Menu Item</span>
+                  </a>
+                </li>
+              </ul>
+            </details>
+          </li>
+        </ul>
+      </nav>
+      <aside slot="end-drawer">
+          ${this.endDrawerContent === "biographical"? this.renderBiographicalData(): ""}
+          ${this.endDrawerContent === "contact" ? this.renderContactData() : ""}
+          ${this.endDrawerContent === "address" ? this.renderAddresData() : ""}
+        </aside>
+      </omni-app-layout>
+    </omni-style>
     `;
   }
 }
