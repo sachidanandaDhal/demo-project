@@ -76,7 +76,7 @@ export default class UserForm extends OmniElement {
         last_name: "",
         dob: "",
         gender: "",
-        Marital: "",
+        marital: "",
       },
       contact_details: {
         phoneNumber: "",
@@ -214,10 +214,8 @@ export default class UserForm extends OmniElement {
       this.userData.empId = empId;
       this.users.push(JSON.parse(JSON.stringify(this.userData)));
     }
-    
     localStorage.setItem("userData", JSON.stringify(this.users));
     this.showSuccessMessage = true;
-    
     this.requestUpdate();
   }
 
@@ -257,9 +255,9 @@ export default class UserForm extends OmniElement {
     this.requestUpdate();
   }
   handleMaritalChange(e) {
-    this.userData.personal_details.Marital = e.target.value;
+    this.userData.personal_details.marital = e.target.value;
     this.selectedMaritalError =
-      this.userData.personal_details.Marital.length === 0
+      this.userData.personal_details.marital.length === 0
         ? "Marital is required"
         : "";
     this.requestUpdate();
@@ -547,20 +545,20 @@ export default class UserForm extends OmniElement {
   renderData() {
     console.log("select:", this.selectedState);
     const isFormValid = 
-    this.userData.personal_details.first_name && this.userData.personal_details.last_name &&
-    this.userData.personal_details.dob && this.userData.personal_details.gender && 
-    this.userData.personal_details.Marital.length >  0 && this.userData.contact_details.phoneNumber &&
-    this.userData.contact_details.officephoneNumber && this.userData.contact_details.personalEmail &&
-    this.userData.address.current_address.flat_house_no && this.userData.address.current_address.building_no &&
-    this.userData.address.current_address.pin && this.userData.address.current_address.state.length > 0 &&
-    this.userData.address.current_address.district.length > 0 && this.userData.address.current_address.country.length > 0 &&
-    this.userData.address.permanent_address.flat_house_no && this.userData.address.permanent_address.building_no &&
-    this.userData.address.permanent_address.pin && this.userData.address.permanent_address.state.length > 0 &&
-    this.userData.address.permanent_address.district.length > 0 && this.userData.address.permanent_address.country.length > 0 &&
-    this.userData.user_login_details.username && this.userData.user_login_details.officeEmail && this.userData.user_login_details.role.length > 0 &&
-    !this.firstNameError && !this.lastNameError && !this.birthDateError && !this.phoneNumberError && !this.officephoneNumberError &&
-    !this.personalEmailError && !this.currentAddressError && ! this.currentStreetError && !this.currentPincodeError &&
-    !this.permanentAddressError && !this.permanentStreetError && !this.permanentPincodeError && !this.useridnameError && 
+    // this.userData.personal_details.first_name && this.userData.personal_details.last_name &&
+    // this.userData.personal_details.dob && this.userData.personal_details.gender && 
+    // this.userData.personal_details.marital.length >  0 && this.userData.contact_details.phoneNumber &&
+    // this.userData.contact_details.officephoneNumber && this.userData.contact_details.personalEmail &&
+    // this.userData.address.current_address.flat_house_no && this.userData.address.current_address.building_no &&
+    // this.userData.address.current_address.pin && this.userData.address.current_address.state.length > 0 &&
+    // this.userData.address.current_address.district.length > 0 && this.userData.address.current_address.country.length > 0 &&
+    // this.userData.address.permanent_address.flat_house_no && this.userData.address.permanent_address.building_no &&
+    // this.userData.address.permanent_address.pin && this.userData.address.permanent_address.state.length > 0 &&
+    // this.userData.address.permanent_address.district.length > 0 && this.userData.address.permanent_address.country.length > 0 &&
+    // this.userData.user_login_details.username && this.userData.user_login_details.officeEmail && this.userData.user_login_details.role.length > 0 &&
+    // !this.firstNameError && !this.lastNameError && !this.birthDateError && !this.phoneNumberError && !this.officephoneNumberError &&
+    // !this.personalEmailError && !this.currentAddressError && ! this.currentStreetError && !this.currentPincodeError &&
+    // !this.permanentAddressError && !this.permanentStreetError && !this.permanentPincodeError && !this.useridnameError && 
     !this.officeEmailError;
     console.log("disable:", isFormValid);
     return html`
@@ -630,7 +628,7 @@ export default class UserForm extends OmniElement {
                 : ""}"
               searchindropdown
               .options=${this.marital}
-              .value="${this.userData.personal_details.Marital}"
+              .value="${this.userData.personal_details.marital}"
               @change="${(e) => this.handleMaritalChange(e)}"
             >
             </omni-dropdown>

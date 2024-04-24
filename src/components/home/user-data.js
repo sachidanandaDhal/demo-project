@@ -59,7 +59,7 @@ export default class UserData extends OmniElement {
                   <p class=" m-0 mb-2 has-text-grey is-size-6">
                     Marital Status *
                   </p>
-                  <p class="mb-1">${this.userData.personal_details.Marital}</p>
+                  <p class="mb-1">${this.userData.personal_details.marital}</p>
                 </div>
               </div>
 

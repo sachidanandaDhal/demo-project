@@ -77,7 +77,7 @@ export default class UserForm extends OmniElement {
         last_name: "",
         dob: "",
         gender: "",
-        Marital: "",
+        marital: "",
       },
       contact_details: {
         phoneNumber: "",
@@ -237,9 +237,9 @@ export default class UserForm extends OmniElement {
     this.requestUpdate();
   }
   handleMaritalChange(e) {
-    this.userData.personal_details.Marital = e.target.value;
+    this.userData.personal_details.marital = e.target.value;
     this.selectedMaritalError =
-      this.userData.personal_details.Marital.length === 0
+      this.userData.personal_details.marital.length === 0
         ? "Marital is required"
         : "";
     this.requestUpdate();
@@ -590,7 +590,7 @@ export default class UserForm extends OmniElement {
                 : ""}"
               searchindropdown
               .options=${this.marital}
-              .value="${this.userData.personal_details.Marital}"
+              .value="${this.userData.personal_details.marital}"
               @change="${(e) => this.handleMaritalChange(e)}"
             >
             </omni-dropdown>

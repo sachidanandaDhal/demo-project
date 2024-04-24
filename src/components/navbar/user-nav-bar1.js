@@ -188,7 +188,7 @@ renderBiographicalData() {
                 }"
                 searchindropdown
                 .options=${this.marital}
-                .value="${this.userData.personal_details.marital}"
+                .value="${this.userData.personal_details.Marital}"
                 @change="${(e) => this.handleMaritalChange(e)}"
               >
               </omni-dropdown>
@@ -662,7 +662,7 @@ renderAddresData() {
   render() {
     console.log("renderdata:", this.userData);
     return html`
-      <omni-style>
+     <omni-style>
         <omni-app-layout
           .drawerOpen=${this.drawerOpen}
           .endDrawerOpen=${this.endDrawerOpen}
@@ -681,21 +681,15 @@ renderAddresData() {
             </button>
               <p class=" title is-2 pt-2 ">User Management</p>
                 <div slot="center-end" class="pr-4">
-                <div class="is-flex pt-2">
-                    
-                    <div class="pl-3 pr-6">${this.userData.personal_details.first_name} ${this.userData.personal_details.last_name}</div>
-                    <div>
-                    <omni-icon class="is-size-1" icon-id="omni:informative:user"></omni-icon>
-                    <label class="columns title is-7 pl-1  pt-2">User</label>
-                  </div>
-                  </div>
+                
               </div>
+              <!-- <user-profile></user-profile> -->
               
             </omni-toolbar>
           </header>
 
           <div class="pr-4  pt-4">
-          <section class="modal-card-body pl-5 ml-4">
+            <section class="modal-card-body pl-5 ml-4">
               <!-- <h1 class="title is-2 pb-3">Personal Details</h1> -->
               <div class="is-flex ">
               <h1 class="title is-3 pb-2">Biographical</h1>
@@ -704,39 +698,36 @@ renderAddresData() {
               <omni-icon class="is-size-2 " icon-id="omni:interactive:edit"></omni-icon>
               </button>
               </div>
+              
               <div class="columns col-spacing is-flex">
                 <div class="column is-one-third">
                   <p class=" m-0 mb-2 has-text-grey is-size-6">First Name *</p>
-                  <p class="mb-1">${
-                    this.userData.personal_details.first_name
-                  }</p>
+                  <p class="mb-1"></p>
                 </div>
                 <div class="column is-one-third">
                   <p class=" m-0 mb-2 has-text-grey is-size-6">Last Name *</p>
-                  <p class="mb-1">${
-                    this.userData.personal_details.last_name
-                  }</p>
+                  <p class="mb-1"></p>
                 </div>
                 <div class="column is-one-third">
                   <p class=" m-0 mb-2 has-text-grey is-size-6">
                     Marital Status *
                   </p>
-                  <p class="mb-1">${this.userData.personal_details.marital}</p>
+                  <p class="mb-1"></p>
                 </div>
               </div>
-
+ 
               <div class="columns col-spacing is-flex">
                 <div class="column is-one-third">
                   <p class=" m-0 mb-2 has-text-grey is-size-6">Gender *</p>
-                  <p class="mb-1">${this.userData.personal_details.gender}</p>
+                  <p class="mb-1"></p>
                 </div>
                 <div class="column is-one-third">
                   <p class=" m-0 mb-2 has-text-grey is-size-6">DOB *</p>
-                  <p class="mb-1">${this.userData.personal_details.dob}</p>
+                  <p class="mb-1"></p>
                 </div>
+              
               </div>
               <hr />
-
               <div class="is-flex ">
               <h1 class="title is-3 pb-2">Contact Details</h1>
               <button  class=" is-text topright1" @click="${() =>
@@ -744,34 +735,30 @@ renderAddresData() {
               <omni-icon class="is-size-2 " icon-id="omni:interactive:edit"></omni-icon>
               </button>
               </div>
+              
               <div class="columns col-spacing is-flex">
                 <div class="column is-one-third">
                   <p class=" m-0 mb-2 has-text-grey is-size-6">
                     Personal Email ID *
                   </p>
-                  <p class="mb-1">${
-                    this.userData.contact_details.personalEmail
-                  }</p>
+                  <p class="mb-1"></p>
                 </div>
                 <div class="column is-one-third">
                   <p class=" m-0 mb-2 has-text-grey is-size-6">
                     Personal Mobile No *
                   </p>
-                  <p class="mb-1">${
-                    this.userData.contact_details.phoneNumber
-                  }</p>
+                  <p class="mb-1"></p>
                 </div>
                 <div class="column is-one-third">
                   <p class=" m-0 mb-2 has-text-grey is-size-6">
                     Office Mobile No *
                   </p>
-                  <p class="mb-1">${
-                    this.userData.contact_details.officephoneNumber
-                  }</p>
+                  <p class="mb-1"></p>
                 </div>
               </div>
               <hr />
-
+ 
+              
               <div class="is-flex ">
               <h1 class="title is-3 pb-2">Address</h1>
               <button  class=" is-text topright2" @click="${() =>
@@ -783,154 +770,82 @@ renderAddresData() {
                 <div class="column is-half">
                   <h1 class="title is-4 pb-2">Current Address Detail</h1>
                   <div>
-                    <p class="mb-1 c">Flat/House/Wing Number *</p>
-                    <p class="mb-4">${
-                      this.userData.address.current_address.flat_house_no
-                    }</p>
+                    <p class="mb-1 has-text-grey is-size-6">Flat/House/Wing Number *</p>
+                    <p class="mb-4"></p>
                   </div>
-
+ 
                   <div>
                     <p class="mb-1 has-text-grey is-size-6">
                       Street/Locality/Area *
                     </p>
-                    <p class="mb-4">${
-                      this.userData.address.current_address.building_no
-                    }</p>
+                    <p class="mb-4"></p>
                   </div>
-
+ 
                   <div>
                     <p class="mb-1 has-text-grey is-size-6">Pincode *</p>
-                    <p class="mb-4">${
-                      this.userData.address.current_address.pin
-                    }</p>
+                    <p class="mb-4"></p>
                   </div>
-
+ 
                   <div>
                     <p class="mb-1 has-text-grey is-size-6">District *</p>
-                    <p class="mb-4">${
-                      this.userData.address.current_address.district
-                    }</p>
+                    <p class="mb-4"></p>
                   </div>
-
+ 
                   <div>
                     <p class="mb-1 has-text-grey is-size-6">State *</p>
-                    <p class="mb-4">${
-                      this.userData.address.current_address.state
-                    }</p>
+                    <p class="mb-4"></p>
                   </div>
-
+ 
                   <div>
                     <p class="mb-1 has-text-grey is-size-6">Country *</p>
-                    <p class="mb-4">${
-                      this.userData.address.current_address.country
-                    }</p>
+                    <p class="mb-4"></p>
                   </div>
                 </div>
-
+ 
                 <div class="column is-half">
                   <h1 class="title is-4 pb-2">Permanent Address Detail</h1>
                   <div>
                     <p class="mb-1 has-text-grey is-size-6">
                       Flat/House/Wing Number *
                     </p>
-                    <p class="mb-4">${
-                      this.userData.address.permanent_address.flat_house_no
-                    }</p>
+                    <p class="mb-4"></p>
                   </div>
-
+ 
                   <div>
                     <p class="mb-1 has-text-grey is-size-6">
                       Street/Locality/Area *
                     </p>
-                    <p class="mb-4">${
-                      this.userData.address.permanent_address.building_no
-                    }</p>
+                    <p class="mb-4"></p>
                   </div>
-
+ 
                   <div>
                     <p class="mb-1 has-text-grey is-size-6">Pincode *</p>
-                    <p class="mb-4">${
-                      this.userData.address.permanent_address.pin
-                    }</p>
+                    <p class="mb-4"></p>
                   </div>
                   <div>
                     <p class="mb-1 has-text-grey is-size-6">District *</p>
-                    <p class="mb-4">${
-                      this.userData.address.permanent_address.district
-                    }</p>
+                    <p class="mb-4"></p>
                   </div>
-
+ 
                   <div>
                     <p class="mb-1 has-text-grey is-size-6">State *</p>
-                    <p class="mb-4">${
-                      this.userData.address.permanent_address.state
-                    }</p>
+                    <p class="mb-4"></p>
                   </div>
-
+ 
                   <div>
                     <p class="mb-1 has-text-grey is-size-6">Country *</p>
-                    <p class="mb-4">${
-                      this.userData.address.permanent_address.country
-                    }</p>
+                    <p class="mb-4"></p>
                   </div>
                 </div>
               </div>
                 <hr>
-              <h1 class="title is-3 pb-2">Account Access Details</h1>
-              <div class="columns col-spacing is-flex">
-                <div class="column is-one-third">
-                  <p class=" m-0 mb-2 has-text-grey is-size-6">User Name *</p>
-                  <p class="mb-1" >
-                  ${this.userData.user_login_details.username}
-                  </p>
-                </div>
-                <div class="column is-one-third">
-                  <p class=" m-0 mb-2 has-text-grey is-size-6">Password *</p>
-                  <p class="mb-1" >
-                  ${this.userData.user_login_details.password}
-                  </p>
-                </div>
-                <div class="column is-one-third">
-                  <p class=" m-0 mb-2 has-text-grey is-size-6">Office Email ID *</p>
-                  <p class="mb-1" >
-                  ${this.userData.user_login_details.officeEmail}
-                  </p>
-                </div>
-              </div>
-              <div class="columns col-spacing is-flex">
-              <div class="column is-one-third">
-                  <p class=" m-0 mb-2 has-text-grey is-size-6">Employee ID *</p>
-                  <p class="mb-1">${this.userData.empId}</p>
-                </div>
-                <div class="column is-one-third">
-                  <p class=" m-0 mb-2 has-text-grey is-size-6">Join Date *</p>
-                  <p class="mb-1" >
-                  ${this.userData.modified_on}
-                  </p>
-                </div>
-                <div class="column is-one-third">
-                  <p class=" m-0 mb-2 has-text-grey is-size-6">Last Modified Date *</p>
-                  <p class="mb-1" >
-                    N.A
-                  </p>
-                </div>
-              </div>
+              
             </section>
             </div>
 
 
           <nav slot="drawer" class="menu">
           <div class="pl-8 ">
-            <!-- <button  class="button is-text " @click="${this.toggleDrawer}">
-              <omni-icon
-                class="is-size-1"
-                icon-id="${
-                  this.drawerOpen
-                    ? "omni:interactive:left"
-                    : "omni:interactive:right"
-                }"
-              ></omni-icon>
-            </button> -->
           </div>
           <ul class="menu-list pl-3">  
           <li><a  class="  has-background-almost-black">Dashboard</a></li>
@@ -969,14 +884,15 @@ renderAddresData() {
             </li>
           </ul>
         </nav>
-        <aside slot="end-drawer">
+          <aside slot="end-drawer">
             ${this.endDrawerContent === "biographical"? this.renderBiographicalData(): ""}
             ${this.endDrawerContent === "contact" ? this.renderContactData() : ""}
             ${this.endDrawerContent === "address" ? this.renderAddresData() : ""}
           </aside>
+
         </omni-app-layout>
       </omni-style>
     `;
   }
 }
-customElements.define("user-nav-bar", UserNavBar);
+customElements.define("user-nav-bar1", UserNavBar);
