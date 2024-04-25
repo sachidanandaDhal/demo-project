@@ -35,9 +35,11 @@ export default class UserDetails extends OmniStyleElement {
     this.columns = [
       { label: "User Name", key: "username", isSortable: true },
       { label: "Name", key: "fullName", isSortable: true },
-      { label: "Contact Number", key: "phoneNumber", isSortable: true },
+      // { label: "Contact Number", key: "phoneNumber", isSortable: true },
       { label: "Gender", key: "gender", isSortable: true },
-      { label: "Personal Email", key: "personalEmail", isSortable: false },
+      // { label: "Personal Email", key: "personalEmail", isSortable: false },
+      { label: "Status", key: "status" },
+      { label: "Join Date", key: "joinDate" },
       { label: "Role", key: "role", isSortable: false },
       { label: "Actions", key: "actions" },
     ];
@@ -53,6 +55,8 @@ export default class UserDetails extends OmniStyleElement {
       gender: `${user.personal_details.gender}`,
       personalEmail: `${user.contact_details.personalEmail}`,
       role: `${user.user_login_details.role}`,
+      status: user.user_login_details.active ? "Active" : "Inactive",
+      joinDate: `${user.modified_on}`,
       actions: html`
         <omni-style>
           <td part="table-body-cell">
