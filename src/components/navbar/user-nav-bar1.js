@@ -184,10 +184,22 @@ export default class UserNavBar extends OmniElement {
         .g-4 {
           margin-block-start: -6px !important;
         }
+        .dropdown-content {
+          width: 260px;
+          margin-right: 35px !important;
+
+          
+    }
+    .text{
+      text-align: center;
+    }
       `,
     ];
   }
-
+  openDropdown() {
+    const dropdown = this.shadowRoot.querySelector('.dropdown');
+    dropdown.classList.toggle('is-active');
+  }
 
   handleFirstNameChange(e) {
     this.userData.personal_details.first_name = e.target.value.trim();
@@ -809,14 +821,54 @@ render() {
             ></omni-icon>
           </button>
             <p class=" title is-2 pt-2 ">User Management</p>
-              <div slot="center-end" class="pr-4">
+              <div slot="center-end" class="pr-6">
               <div class="is-flex pt-2">
                   
-                  <div class="pl-3 pr-6">${this.userData.personal_details.first_name} ${this.userData.personal_details.last_name}</div>
+                  <!-- <div class="pl-3 pr-6">${this.userData.personal_details.first_name} ${this.userData.personal_details.last_name}</div>
                   <div>
                   <omni-icon class="is-size-1" icon-id="omni:informative:user"></omni-icon>
                   <label class="columns title is-7 pl-1  pt-2">User</label>
-                </div>
+                </div> -->
+                <div class="dropdown is-right">
+                                <div class="dropdown-trigger">
+                                  <button class="button is-text" aria-haspopup="true" aria-controls="dropdown-menu" @click="${
+                                    this.openDropdown
+                                  }">
+
+                                    <span>${this.userData.personal_details.first_name} ${this.userData.personal_details.last_name}</span>
+                                    <omni-icon class="is-size-1" icon-id="omni:informative:user"></omni-icon>
+                                  </button>
+                                </div>
+                                <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                                  <div class="dropdown-content">
+                                    
+                                    <div class="dropdown-item text">
+                                    <!-- <omni-icon class="is-size-1" icon-id="omni:informative:user"></omni-icon> -->
+                                      <p>
+                                      ${this.userData.personal_details.first_name} ${this.userData.personal_details.last_name}
+                                      </p>
+                                      <p>
+                                        Sachidananda.dhal@annalect.com
+                                      </p>
+                                    </div>
+                                    <hr class="dropdown-divider" />
+                                    <div class="dropdown-item">
+                                      <p>Contact</p>
+                                      <div class="is-flex pt-2">
+                                      <omni-icon class="is-size-3" icon-id="omni:informative:mobile"></omni-icon>
+                                      <p class="pl-3">8018199406</p>
+                                      </div>
+                                    </div>
+                                    <hr class="dropdown-divider" />
+                                    <a tabindex="0">
+                                      <div class="dropdown-item">
+                                        <omni-icon class="is-size-3" icon-id="omni:interactive:exit" aria-label="icon" role="img"></omni-icon>
+                                        <p>Sign Out</p>
+                                      </div>
+                                    </a>
+                                  </div>
+                                </div>
+                              </div>
                 </div>
             </div>
             

@@ -34,6 +34,10 @@ export default class NavBar extends OmniElement {
   closeEndDrawer() {
     this.endDrawerOpen = false;
   }
+  openDropdown() {
+    const dropdown = this.shadowRoot.querySelector('.dropdown');
+    dropdown.classList.toggle('is-active');
+  }
 
   static get styles() {
     return [
@@ -89,6 +93,16 @@ export default class NavBar extends OmniElement {
         }
         .g-4 {
           margin-block-start: -6px !important;
+        }
+
+        .dropdown-content {
+              width: 260px;
+              margin-right: 30px;
+
+              
+        }
+        .text{
+          text-align: center;
         }
       `,
     ];
@@ -670,10 +684,51 @@ export default class NavBar extends OmniElement {
               ></omni-icon>
             </button>
               <p class=" title is-2 pt-2 ">User Management</p>
-                <div slot="center-end" class="pr-4">
-                
-              </div>
-              <!-- <user-profile></user-profile> -->
+                 <div slot="center-end" class="pr-6">
+
+
+                            <div class="dropdown is-right ">
+                                <div class="dropdown-trigger">
+                                  <button class="button is-text" aria-haspopup="true" aria-controls="dropdown-menu" @click="${
+                                    this.openDropdown
+                                  }">
+
+                                    <span>Sachidananda Dhal</span>
+                                    <omni-icon class="is-size-1" icon-id="omni:informative:user"></omni-icon>
+                                  </button>
+                                </div>
+                                <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                                  <div class="dropdown-content">
+                                    
+                                    <div class="dropdown-item text">
+                                    <!-- <omni-icon class="is-size-1" icon-id="omni:informative:user"></omni-icon> -->
+                                      <p>
+                                        Sachidananda Dhal
+                                      </p>
+                                      <p>
+                                        Sachidananda.dhal@annalect.com
+                                      </p>
+                                    </div>
+                                    <hr class="dropdown-divider" />
+                                    <div class="dropdown-item">
+                                      <p>Contact</p>
+                                      <div class="is-flex pt-2">
+                                      <omni-icon class="is-size-3" icon-id="omni:informative:mobile"></omni-icon>
+                                      <p class="pl-3">8018199406</p>
+                                      </div>
+                                    </div>
+                                    <hr class="dropdown-divider" />
+                                    <a tabindex="0">
+                                      <div class="dropdown-item">
+                                        <omni-icon class="is-size-3" icon-id="omni:interactive:exit" aria-label="icon" role="img"></omni-icon>
+                                        <p>Sign Out</p>
+                                      </div>
+                                    </a>
+                                  </div>
+                                </div>
+                              </div>
+                    </div>
+                 </div>
               
             </omni-toolbar>
           </header>
@@ -875,9 +930,19 @@ export default class NavBar extends OmniElement {
           </ul>
         </nav>
           <aside slot="end-drawer">
-            ${this.endDrawerContent === "biographical"? this.renderBiographicalData(): ""}
-            ${this.endDrawerContent === "contact" ? this.renderContactData() : ""}
-            ${this.endDrawerContent === "address" ? this.renderAddresData() : ""}
+            ${
+              this.endDrawerContent === "biographical"
+                ? this.renderBiographicalData()
+                : ""
+            }
+            ${
+              this.endDrawerContent === "contact"
+                ? this.renderContactData()
+                : ""
+            }
+            ${
+              this.endDrawerContent === "address" ? this.renderAddresData() : ""
+            }
           </aside>
 
         </omni-app-layout>
