@@ -409,7 +409,7 @@ renderContactData() {
               this.closeEndDrawer
             }">Cancel</button>
             <button class="button is-size-5 is-link has-text-white bg-image " @click="${
-              this.closeEndDrawer
+              this.handleUpdateButtonClick
             }">
               Update
             </button>
