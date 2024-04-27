@@ -3,7 +3,6 @@ import "../navbar/admin-nav-bar.js";
 import "../navbar/user-nav-bar.js";
 import "../navbar/user-nav-bar1.js";
 import "../navbar/test-test-user-nav.js";
-
 OmniElement.register();
 OmniStyleElement.register();
 
@@ -26,7 +25,6 @@ export default class LogIn extends OmniElement {
 
   constructor() {
     super();
-
     this.username = "";
     this.password = "";
     this.rePassword = "";
@@ -43,9 +41,11 @@ export default class LogIn extends OmniElement {
     return [
       super.styles,
       css`
-        :host {
-          overflow: hidden;
-        }
+      .omni {
+        background-color: #80b0ff;
+        overflow: hidden !important; 
+    }
+        
         .error-border {
           border: 1px solid var(--color-melon) !important;
         }
@@ -153,7 +153,7 @@ export default class LogIn extends OmniElement {
   renderlogin() {
     return html`
       <omni-style>
-        <div class="columns is-centered is-vcentered" style="height:102vh;">
+        <div class="columns is-centered is-vcentered" style="height:103vh;">
           <div class="column is-narrow">
             <div class="box has-text-centered pd-7">
               
