@@ -84,13 +84,37 @@ export default class UserDetails extends OmniStyleElement {
     }));
   }
 
+  // deleteUser(user) {
+  //   const index = this.users.findIndex(u => u.id === user.id);
+  //   if (index !== -1) {
+  //     this.users.splice(index, 1);
+  //     localStorage.setItem("userData", JSON.stringify(this.users));
+  //     this.refreshData();
+  //     this.requestUpdate();
+  //   }
+  // }
   deleteUser(user) {
-    const index = this.users.findIndex(u => u.id === user.id);
-    if (index !== -1) {
-      this.users.splice(index, 1);
-      localStorage.setItem("userData", JSON.stringify(this.users));
-      this.refreshData();
-      this.requestUpdate();
+    this.openOmniDialogElModal();
+    this.userToDelete = user;
+  }
+  openOmniDialogElModal(){
+    const modal = this.shadowRoot.querySelector('#modal');
+    modal.openModal();
+  }
+  
+  onSubmit() {
+    const modal = this.shadowRoot.querySelector('#modal');
+    modal.closeModal();
+    // Delete the user
+    if (this.userToDelete) {
+      const index = this.users.findIndex(u => u.id === this.userToDelete.id);
+      if (index !== -1) {
+        this.users.splice(index, 1);
+        localStorage.setItem("userData", JSON.stringify(this.users));
+        this.refreshData();
+        this.requestUpdate();
+      }
+      this.userToDelete = null; // Reset the userToDelete property
     }
   }
   
@@ -122,6 +146,19 @@ export default class UserDetails extends OmniStyleElement {
           .data="${this.data}"
           @sort="${(e) => this.sortData(e.detail.key)}"
         ></omni-table>
+        <omni-dialog
+        id="modal"
+        modalType="modal"
+        modalStyle="alert"
+        modalTitle="Delete User Confirmation">
+        <p slot="content">Are you sure you want to delete this user?</p>
+        <button
+          class="button is-outlined is-medium is-danger"
+          slot="button"
+          @click=${this.onSubmit}>
+          Yes, Delete
+        </button>
+      </omni-dialog>
       </omni-style>
     `;
   }
