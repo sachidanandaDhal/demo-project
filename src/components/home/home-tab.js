@@ -1,6 +1,7 @@
 import { OmniElement, OmniStyleElement, css, html, nothing } from 'omni-ui';
 import './user-details.js';
 import  '../form/user-form.js';
+import { Router } from '@vaadin/router';
 OmniElement.register();
 OmniStyleElement.register();
 export default class Hometab extends (OmniElement) {
@@ -19,24 +20,18 @@ export default class Hometab extends (OmniElement) {
       reloadData: { type: Boolean } 
     };
   }
-  
   openUserForm() {
-    const userForm = document.createElement('user-form');
-    document.body.appendChild(userForm);
-    userForm.addEventListener('close-user-form', this.closeUserForm.bind(this));
+    Router.go('/admin-home/create');
   }
   closeUserForm() {
     const userForm = document.querySelector('user-form');
     if (userForm) {
       userForm.remove();
-      // console.log('Close user form, dispatching reload event');
-      // this.dispatchEvent(new CustomEvent('user-details'));
       this.reloadData = !this.reloadData;
-      
     }
-    
     this.requestUpdate();
   }
+  
   render() {
     return html`
       <omni-style class="omni">

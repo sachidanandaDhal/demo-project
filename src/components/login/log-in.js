@@ -36,9 +36,10 @@ export default class LogIn extends OmniElement {
     return [
       super.styles,
       css`
-      :host {
-        overflow: hidden;
-      }
+        :host {
+          overflow: hidden;
+          background-color: #9dc1fa;
+        }
         .error-border {
           border: 1px solid var(--color-melon) !important;
         }
@@ -48,8 +49,11 @@ export default class LogIn extends OmniElement {
           height: 400px !important;
           width: 400px !important;
         }
-        .wt-1{
+        .wt-1 {
           width: 550px !important;
+        }
+        .hg {
+          height: 103.2vh;
         }
       `,
     ];
@@ -69,18 +73,27 @@ export default class LogIn extends OmniElement {
         user.user_login_details.password === inputPassword
     );
     if (matchedUser) {
+      localStorage.setItem("currentUser", JSON.stringify(matchedUser));
       this.openSuccesstoast();
-      this.userRole = matchedUser.user_login_details.role || [];
-      // this.loggedInUserName = matchedUser.personal_details.first_name;
-      this.loggedInUserName = matchedUser.personal_details.first_name + ' ' + matchedUser.personal_details.last_name;
-
-      this.loggedInUserdata = matchedUser;
+      if (matchedUser.user_login_details.role.includes("Admin")) {
+        Router.go("/admin-home");
+      } else if (matchedUser.user_login_details.role.includes("User")) {
+        Router.go("/user-home");
+      }
     } else {
       this.openErrortoast();
     }
     usernameInput.value = "";
     passwordInput.value = "";
   }
+
+
+  connectedCallback() {
+    super.connectedCallback();
+    // Retrieve user data from localStorage
+    this.userData = JSON.parse(localStorage.getItem("currentUser")) || {};
+    this.requestUpdate();
+}
 
   handlelogUsernameChange(e) {
     this.username = e.target.value.trim();
@@ -102,16 +115,16 @@ export default class LogIn extends OmniElement {
     this.requestUpdate();
   }
 
-  openErrortoast(){
-    const toast = this.shadowRoot.querySelector('#toast');
+  openErrortoast() {
+    const toast = this.shadowRoot.querySelector("#toast");
     toast.openModal();
   }
-  openSuccesstoast(){
-    const toast = this.shadowRoot.querySelector('#toast-success');
+  openSuccesstoast() {
+    const toast = this.shadowRoot.querySelector("#toast-success");
     toast.openModal();
     setTimeout(() => {
-        this.openNav = true;
-      }, 3000);
+      this.openNav = true;
+    }, 3000);
   }
 
   resetSignInForm() {
@@ -125,7 +138,7 @@ export default class LogIn extends OmniElement {
   renderlogin() {
     return html`
       <omni-style>
-        <div class="columns is-centered is-vcentered " style="height:102vh; ">
+        <div class="columns is-centered is-vcentered hg">
           <div class="column is-narrow">
             <div class="box has-text-centered pd-7">
               <header class="title ">
@@ -151,7 +164,6 @@ export default class LogIn extends OmniElement {
                       icon-id="omni:informative:user"
                     ></omni-icon>
                   </span>
-                  
                 </p>
                 ${this.logusernameError
                   ? html` <div class="is-flex">
@@ -217,40 +229,31 @@ export default class LogIn extends OmniElement {
     `;
   }
 
-  rendernav() {
-    if (this.userRole.includes("Admin")) {
-      return html`<admin-nav-bar
-       .userName=${this.loggedInUserName}
-      ></admin-nav-bar>`;
-    } else if (this.userRole.includes("User")) {
-      return html`<user-nav-bar
-       .userData=${this.loggedInUserdata}
-      ></user-nav-bar>`;
-    } else {
-      return html``;
-    }
-  }
-
   render() {
     return html`
-    <omni-style>
-      ${!this.openNav ? this.renderlogin() : ""}
-      ${this.openNav ? this.rendernav() : ""}
-      <omni-dialog
-      id="toast"
-      modalType="toast"
-      modalStyle="error"
-      toastTimeOut="5000">
-      <p  slot="content">Invalid username or password. Please check your credentials and try again.</p>
-    </omni-dialog>
-    <omni-dialog
-      id="toast-success"
-      modalType="toast"
-      modalStyle="success"
-      toastTimeOut="3000">
-      <p  slot="content">Welcome back! You have successfully logged in.</p>
-    </omni-dialog>
-    </omni-style>
+      <omni-style>
+        ${!this.openNav ? this.renderlogin() : ""}
+        ${this.openNav ? this.rendernav() : ""}
+        <omni-dialog
+          id="toast"
+          modalType="toast"
+          modalStyle="error"
+          toastTimeOut="5000"
+        >
+          <p slot="content">
+            Invalid username or password. Please check your credentials and try
+            again.
+          </p>
+        </omni-dialog>
+        <omni-dialog
+          id="toast-success"
+          modalType="toast"
+          modalStyle="success"
+          toastTimeOut="3000"
+        >
+          <p slot="content">Welcome back! You have successfully logged in.</p>
+        </omni-dialog>
+      </omni-style>
     `;
   }
 }

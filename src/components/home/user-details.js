@@ -3,7 +3,7 @@ import { OmniStyleElement, html, css } from 'omni-ui';
 import './user-data.js';
 import './edit-user.js'; 
 import '../form/user-form.js';
-
+import { Router } from '@vaadin/router';
 export default class UserDetails extends OmniStyleElement {
   static get styles() {
     return [
@@ -96,6 +96,7 @@ export default class UserDetails extends OmniStyleElement {
   
   viewUser(user) {
     this.selectedUser = user;
+    Router.go(`/admin-home/view?userId=${user.id}`);
   }
 
   closeUserData() {
@@ -104,6 +105,7 @@ export default class UserDetails extends OmniStyleElement {
 
   editUser(user) {
     this.editdUser = user;
+    Router.go(`/admin-home/edit?userId=${user.id}`);
   }
 
   closeEditUser() {
@@ -120,20 +122,6 @@ export default class UserDetails extends OmniStyleElement {
           .data="${this.data}"
           @sort="${(e) => this.sortData(e.detail.key)}"
         ></omni-table>
-        ${this.selectedUser
-          ? html`<user-data
-              .userData="${this.selectedUser}"
-              @close-user-data="${this.closeUserData}"
-            ></user-data>`
-          : ""}
-        ${this.editdUser
-          ? html`
-              <edit-user
-                .userData="${ this.editdUser }"
-                @close-edit-user="${this.closeEditUser}"
-              ></edit-user>
-            `
-          : ""}
       </omni-style>
     `;
   }

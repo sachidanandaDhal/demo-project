@@ -1,5 +1,5 @@
 import { OmniElement, OmniStyleElement, css, html, nothing } from "omni-ui";
-// import "../alerts/my-alerts.js";
+import { Router } from '@vaadin/router';
 OmniElement.register();
 OmniStyleElement.register();
 
@@ -153,6 +153,14 @@ export default class UserForm extends OmniElement {
     this.generateUniqueId();
     this.generateUniqueempId();
   }
+  connectedCallback() {
+    super.connectedCallback();
+    const params = new URLSearchParams(window.location.search);
+    this.userId = params.get('userId');
+    const users = JSON.parse(localStorage.getItem("userData")) || [];
+    this.userData = users.find(user => user.id === this.userId) || {};
+  }
+
 
   generateUniqueempId() {
     const userData = JSON.parse(localStorage.getItem("userData")) || [];
@@ -189,16 +197,6 @@ export default class UserForm extends OmniElement {
       this.users = JSON.parse(storedData);
     }
   }
-  // adduserData() {
-  //   const empId = this.generateUniqueempId();
-  //   const Id = this.generateUniqueId();
-  //   this.userData.id = Id;
-  //   this.userData.empId = empId;
-  //   this.users.push(JSON.parse(JSON.stringify(this.userData)));
-  //   localStorage.setItem("userData", JSON.stringify(this.users));
-  //   this.showSuccessMessage = true;
-  //   this.requestUpdate();
-  // }
   adduserData() {
     if (this.userData.id) {
       // If userData contains an ID, it means we're updating an existing user
@@ -315,23 +313,18 @@ export default class UserForm extends OmniElement {
     const email = e.target.value.trim();
     const emailRegex =
       /^[\w-]+(\.[\w-]+)*@(yahoo\.com|outlook\.com|gmail\.com|gmail\.uk|gmail\.us)$/;
-
-    // Check if email is empty
     if (!email) {
       this.personalEmailError = "Personal email is required";
     } else if (!emailRegex.test(email)) {
-      // Check if email format is valid
       this.personalEmailError = "Invalid email format";
     } else if (
       this.users.some((user) => user.contact_details.personalEmail === email
       && user.id !== this.userData.id)
     ) {
-      // Check if email already exists
       this.personalEmailError = "Personal email already exists";
     } else {
-      this.personalEmailError = ""; // Clear error if all validations pass
+      this.personalEmailError = "";
     }
-
     this.userData.contact_details.personalEmail = email;
     this.requestUpdate();
   }
@@ -485,18 +478,15 @@ export default class UserForm extends OmniElement {
     if (!email) {
       this.officeEmailError = "Office email is required";
     } else if (!emailRegex.test(email)) {
-      // Check if email format is valid
       this.officeEmailError = "Office email must end with @annalect.com";
     } else if (
       this.users.some((user) => user.user_login_details.officeEmail === email
       && user.id !== this.userData.id)
     ) {
-      // Check if email already exists
       this.officeEmailError = "Office email already exists";
     } else {
       this.officeEmailError = "";
     }
-
     this.userData.user_login_details.officeEmail = email;
     this.requestUpdate();
   }
@@ -537,7 +527,7 @@ export default class UserForm extends OmniElement {
   }
 
   closeUserForm() {
-    this.dispatchEvent(new CustomEvent("close-edit-user"));
+    Router.go('/admin-home');
   }
 
   handleGenderChange(e) {

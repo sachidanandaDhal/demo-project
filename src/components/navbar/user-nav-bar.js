@@ -2,47 +2,15 @@ import { OmniElement, OmniStyleElement, css, html, nothing } from "omni-ui";
 import "../home/user-data.js";
 import "../form/user-form.js";
 import "../home/home-tab.js";
+import { Router } from "@vaadin/router";
+import "./edit-1.js";
+import "./edit-2.js";
+import "./edit-3.js";
 
 OmniElement.register();
 OmniStyleElement.register();
 
 export default class UserNavBar extends OmniElement {
-  static get properties() {
-    return {
-      drawerOpen: { type: Boolean },
-      endDrawerOpen: { type: Boolean },
-      endDrawerContent: { type: String },
-      userData: { type: String },
-    };
-  }
-
-  constructor() {
-    super();
-    this.drawerOpen = false;
-    this.endDrawerOpen = false;
-    this.endDrawerContent = "";
-    this.marital = [
-      "Single",
-      "Married",
-      "Divorced",
-      "Widowed",
-      "Separated",
-      "Common Law",
-    ];
-  }
-
-  toggleDrawer() {
-    this.drawerOpen = !this.drawerOpen;
-  }
-
-  toggleEndDrawer(content) {
-    this.endDrawerContent = content;
-    this.endDrawerOpen = true;
-  }
-  closeEndDrawer() {
-    this.endDrawerOpen = false;
-  }
-
   static get styles() {
     return [
       super.styles,
@@ -65,7 +33,7 @@ export default class UserNavBar extends OmniElement {
           --omni-app-layout-end-drawer-z-index: 34;
           --omni-app-layout-header-z-index: 36;
         }
-        
+
         .topright {
           position: absolute;
           top: 80px;
@@ -85,8 +53,7 @@ export default class UserNavBar extends OmniElement {
           border-bottom: 1px solid rgb(241, 245, 250) !important;
           height: 43px;
         }
-       
-        
+
         .g-2 {
           margin-block-start: -28px !important;
         }
@@ -102,563 +69,70 @@ export default class UserNavBar extends OmniElement {
       `,
     ];
   }
-//////////
-renderBiographicalData() {
-  return html`
-      <div class="card-content">
-        <header class="modal-card-head header-separator">
-          <p class="modal-card-title is-size-1">Edit Biographical</p>
-          <div class="buttons are-medium">
-            <button class="button is-size-5 is-text" @click="${
-              this.closeEndDrawer
-            }">Cancel</button>
-            <button class="button is-size-5 is-link has-text-white bg-image " @click="${
-              this.closeEndDrawer
-            }">
-              Update
-            </button>
-          </div>
-        </header>
-        <div class="content pt-6">
-          <div class="columns col-spacing">
-              <div class="column is-half">
-                <p class="mb-2 ml-2">* First Name</p>
-                <input
-                  class="${
-                    this.firstNameError ? "input error-border" : "input"
-                  }"
-                  type="text"
-                  placeholder="First Name"
-                  .value="${this.userData.personal_details.first_name}"
-                  @input="${(e) => this.handleFirstNameChange(e)}"
-                />
-                  <div class=" is-flex">
-                    ${
-                      this.firstNameError
-                        ? html`<omni-icon
-                              class="mt-2 ml-2 error-icon "
-                              icon-id="omni:informative:error"
-                              aria-label="icon"
-                              role="img"
-                            ></omni-icon>
-                            <span class="pt-2 pl-1  has-text-grey is-size-6"
-                              >${this.firstNameError}</span
-                            >`
-                        : ""
-                    }
-                  </div>
-              </div>
-              <div class="column is-half ">
-                <p class="mb-2 ml-2 ">* Last Name</p>
-                <input
-                  class="${
-                    this.lastNameError ? "input error-border" : "input"
-                  }"
-                  type="text"
-                  placeholder="Last Name"
-                  .value="${this.userData.personal_details.last_name}"
-                  @input="${(e) => this.handleLastNameChange(e)}"
-                />
-                <div class=" is-flex">
-                  ${
-                    this.lastNameError
-                      ? html`<omni-icon
-                            class="mt-2 ml-2 error-icon"
-                            icon-id="omni:informative:error"
-                            aria-label="icon"
-                            role="img"
-                          ></omni-icon
-                          ><span class="pt-2 pl-1 has-text-grey is-size-6"
-                            >${this.lastNameError}</span
-                          >`
-                      : ""
-                  }
-                </div>
-              </div>
-          </div>
-          <div class="columns col-spacing">
-              <div class="column is-half">
-              <p class="mb-2 ml-2">* Marital Status</p>
-              <omni-dropdown
-                class="pr-1"
-                placeholder="Marital"
-                typeahead
-                error="${
-                  this.selectedMaritalError ? this.selectedMaritalError : ""
-                }"
-                searchindropdown
-                .options=${this.marital}
-                .value="${this.userData.personal_details.marital}"
-                @change="${(e) => this.handleMaritalChange(e)}"
-              >
-              </omni-dropdown>
-            </div>
-            <div class="column is-half">
-              <p class="mb-2 ml-3">* Gender</p>
-              <div class="control pt-3 pl-4">
-                <label class="radio">
-                  <input
-                    type="radio"
-                    name="gender"
-                    value="Male"
-                    @change="${(e) => this.handleGenderChange(e)}"
-                    ?checked="${this.userData.personal_details.gender === "Male"}"
-                  />
-                  Male
-                </label>
-                <label class="radio">
-                  <input
-                    type="radio"
-                    name="gender"
-                    value="Female"
-                    @change="${(e) => this.handleGenderChange(e)}"
-                    ?checked="${this.userData.personal_details.gender === "Female"}"
-                  />
-                  Female
-                </label>
-              </div>
-            </div>
-              
-          </div>
-          <div class="columns col-spacing">
-          <div class="column is-half g-2">
-                <p class="mb-2 ml-2 ">* Date of birth</p>
-                  <input
-                    id="dobInput"
-                    type="date"
-                    slot="invoker"
-                    class="${
-                      this.birthDateError ? "input error-border" : "input"
-                    }"
-                    placeholder="yyyy-mm-dd"
-                    max="2999-12-31"
-                    .value="${this.userData.personal_details.dob}"
-                    @input="${(e) => this.handleDOBChange(e)}"
-                  />
-                  <div class=" is-flex">
-                    ${
-                      this.birthDateError
-                        ? html`<omni-icon
-                              class="mt-2 ml-2 error-icon"
-                              icon-id="omni:informative:error"
-                              aria-label="icon"
-                              role="img"
-                            ></omni-icon
-                            ><span class="pt-2 pl-1 has-text-grey is-size-6"
-                              >${this.birthDateError}</span
-                            >`
-                        : ""
-                    }
-                  </div>
-              </div>
-          </div>
-        </div>
-      </div>
-      </div>
-    
-  `;
-}
-renderContactData() {
-  return html`
-      <div class="card-content">
-        <header class="modal-card-head header-separator">
-          <p class="modal-card-title is-size-1">Edit Contact Details</p>
-          <div class="buttons are-medium">
-            <button class="button is-size-5 is-text" @click="${
-              this.closeEndDrawer
-            }">Cancel</button>
-            <button class="button is-size-5 is-link has-text-white bg-image " @click="${
-              this.closeEndDrawer
-            }">
-              Update
-            </button>
-          </div>
-        </header>
-        <div class="content pt-6">
-          <div class="columns col-spacing">
-                <div class="column is-half">
-                <p class="mb-3 ml-3">* Personal Email ID</p>
-                <input
-                  class="${
-                    this.personalEmailError ? "input error-border" : "input"
-                  }"
-                  type="text"
-                  placeholder="abc@gmail.com"
-                  .value="${this.userData.contact_details.personalEmail}"
-                  @input="${(e) => this.handlePersonalEmailChange(e)}"
-                />
-                <div class="is-flex">
-                  ${
-                    this.personalEmailError
-                      ? html`<omni-icon
-                            class="mt-2 ml-2 error-icon"
-                            icon-id="omni:informative:error"
-                            aria-label="icon"
-                            role="img"
-                          ></omni-icon
-                          ><span class="pt-2 pl-1 has-text-grey is-size-6"
-                            >${this.personalEmailError}</span
-                          >`
-                      : ""
-                  }
-                </div>
-              </div>
-              <div class="column is-half">
-              <p class="mb-3 ml-3 ">* Personal Mobile No</p>
-                <input
-                  class="${
-                    this.phoneNumberError ? "input error-border" : "input"
-                  }"
-                  type="tel"
-                  maxlength="10"
-                  placeholder="Phone Number"
-                  .value="${this.userData.contact_details.phoneNumber}"
-                  @input="${(e) => this.handlePhoneNumberChange(e)}"
-                />
-                <div class=" is-flex">
-                  ${
-                    this.phoneNumberError
-                      ? html`<omni-icon
-                            class="mt-2 ml-2 error-icon"
-                            icon-id="omni:informative:error"
-                            aria-label="icon"
-                            role="img"
-                          ></omni-icon
-                          ><span class="pt-2 pl-1 has-text-grey is-size-6"
-                            >${this.phoneNumberError}</span
-                          >`
-                      : ""
-                  }
-                </div>
-              </div>
-          </div>
-          <div class="columns col-spacing">
-              <div class="column is-half">
-                <p class="mb-3 ml-3 ">* Office Mobile No</p>
-                <input
-                  class="${
-                    this.officephoneNumberError
-                      ? "input error-border"
-                      : "input"
-                  }"
-                  type="tel"
-                  maxlength="10"
-                  placeholder="Office Phone Number"
-                  .value="${this.userData.contact_details.officephoneNumber}"
-                  @input="${(e) => this.handleOfficePhoneNumberChange(e)}"
-                />
-                <div class=" is-flex">
-                  ${
-                    this.officephoneNumberError
-                      ? html`<omni-icon
-                            class="mt-2 ml-2 error-icon"
-                            icon-id="omni:informative:error"
-                            aria-label="icon"
-                            role="img"
-                          ></omni-icon
-                          ><span class="pt-2 pl-1 has-text-grey is-size-6"
-                            >${this.officephoneNumberError}</span
-                          >`
-                      : ""
-                  }
-                </div>
-              </div>
-          </div>
-        </div>
-      </div>
-      </div>
-  `;
-}
-renderAddresData() {
-  return html`
-    <div class="card-content pb-6">
-      <header class="modal-card-head header-separator">
-        <p class="modal-card-title is-size-1">Edit Address</p>
-        <div class="buttons are-medium">
-          <button
-            class="button is-size-5 is-text"
-            @click="${this.closeEndDrawer}"
-          >
-            Cancel
-          </button>
-          <button
-            class="button is-size-5 is-link has-text-white bg-image "
-            @click="${this.closeEndDrawer}"
-          >
-            Update
-          </button>
-        </div>
-      </header>
 
-      <div class="content pt-5 pb-6">
-        <div class="columns col-spacing abc ">
-          <div class="column is-half pt-6">
-            <p class="is-size-4 has-text-weight-bold has-text-dark pt-3">
-              Current Address
-            </p>
-            <p class="mb-2 ml-2">* Flat/House/Wing Number</p>
-            <input
-              class="${this.currentAddressError
-                ? "input error-border"
-                : "input"}"
-              type="text"
-              placeholder="Address Detail"
-              .value=""
-              @input="${(e) => this.handleCurrentAddressChange(e)}"
-            />
-            <div class=" is-flex">
-              ${this.currentAddressError
-                ? html`<omni-icon
-                      class="mt-2 ml-2 error-icon "
-                      icon-id="omni:informative:error"
-                      aria-label="icon"
-                      role="img"
-                    ></omni-icon>
-                    <span class="pt-2 pl-1  has-text-grey is-size-6"
-                      >${this.currentAddressError}</span
-                    >`
-                : ""}
-            </div>
-            <div>
-              <p class="mb-2 ml-2 mt-5">* Street/Locality/Area</p>
-              <input
-                class="${this.currentStreetError
-                  ? "input error-border"
-                  : "input"}"
-                type="text"
-                placeholder="Address Detail"
-                .value=""
-                @input="${(e) => this.handleCurrentStreetChange(e)}"
-              />
-              <div class=" is-flex">
-                ${this.currentStreetError
-                  ? html`<omni-icon
-                        class="mt-2 ml-2 error-icon"
-                        icon-id="omni:informative:error"
-                        aria-label="icon"
-                        role="img"
-                      ></omni-icon
-                      ><span class="pt-2 pl-1 has-text-grey is-size-6"
-                        >${this.currentStreetError}</span
-                      >`
-                  : ""}
-              </div>
-            </div>
+  static get properties() {
+    return {
+      drawerOpen: { type: Boolean },
+      endDrawerOpen: { type: Boolean },
+      endDrawerContent: { type: String },
+      userData: { type: String },
+    };
+  }
 
-            <p class="mb-2 ml-2 mt-5">* Pincode</p>
-            <input
-              class="${this.currentPincodeError
-                ? "input error-border"
-                : "input"}"
-              type="text"
-              maxlength="6"
-              placeholder="Pincode"
-              .value=""
-              @input="${(e) => this.handleCurrentPincodeChange(e)}"
-            />
-            <div class=" is-flex">
-              ${this.currentPincodeError
-                ? html`<omni-icon
-                      class="mt-2 ml-2 error-icon "
-                      icon-id="omni:informative:error"
-                      aria-label="icon"
-                      role="img"
-                    ></omni-icon>
-                    <span class="pt-2 pl-1  has-text-grey is-size-6"
-                      >${this.currentPincodeError}</span
-                    >`
-                : ""}
-            </div>
+  constructor() {
+    super();
+    this.drawerOpen = false;
+    this.endDrawerOpen = false;
+    this.endDrawerContent = "";
+    this.userData = {};
+  }
 
-            <p class="mb-2 ml-3 mt-5">* District</p>
-            <omni-dropdown
-              part="target "
-              class="pr-4"
-              placeholder="District"
-              error="${this.selectedCurrentdistrictError
-                ? this.selectedCurrentdistrictError
-                : ""}"
-              typeahead
-              searchindropdown
-              .options=${this.districts}
-              .value=""
-              @change="${(e) => this.handleDistrictChange(e)}"
-            >
-            </omni-dropdown>
+  toggleDrawer() {
+    this.drawerOpen = !this.drawerOpen;
+  }
 
-            <p class="mb-3 ml-3 g-4">* State</p>
-            <omni-dropdown
-              class="pr-4 "
-              placeholder="State"
-              typeahead
-              error="${this.selectedCurrentstateError
-                ? this.selectedCurrentstateError
-                : ""}"
-              searchindropdown
-              .options=${this.states}
-              .value=""
-              @change="${(e) => this.handleStateChange(e)}"
-            >
-            </omni-dropdown>
+  toggleEndDrawer(content) {
+    this.endDrawerContent = content;
+    this.endDrawerOpen = true;
+  }
+  closeEndDrawer() {
+    this.endDrawerOpen = false;
+    this.endDrawerContent = "";
+    this.userData = JSON.parse(localStorage.getItem("currentUser")) || {};
+  }
 
-            <p class="mb-3 ml-3 g-4">* Country</p>
-            <omni-dropdown
-              part="target "
-              class="pr-4 "
-              placeholder="Country"
-              error="${this.selectedCurrentcountryError
-                ? this.selectedCurrentcountryError
-                : ""}"
-              typeahead
-              searchindropdown
-              .options=${this.country}
-              .value=""
-              @change="${(e) => this.handleCurrentCountryChange(e)}"
-            >
-            </omni-dropdown>
-          </div>
-          <!-- abcd -->
+  connectedCallback() {
+    super.connectedCallback();
+    this.userData = JSON.parse(localStorage.getItem("currentUser")) || {};
+    this.requestUpdate();
+  }
 
-          <div class="column is-half">
-            <label class="checkbox">
-              <input
-                type="checkbox"
-                id="sameAddressCheckbox"
-                @change="${this.handleSameAddressChange}"
-                .checked="${this.sameAddress}"
-              />
-              Same as current address
-            </label>
-            <p class="is-size-4  has-text-weight-bold has-text-dark pt-3">
-              Permanent Address Detail
-            </p>
-            <p class="mb-2 ml-2">* Flat/House/Wing Number</p>
-            <input
-              class="${this.permanentAddressError
-                ? "input error-border"
-                : "input"}"
-              type="text"
-              .value=""
-              placeholder="Address Detail"
-              @input="${(e) => this.handlePermanentAddressChange(e)}"
-            />
-            <div class=" is-flex">
-              ${this.permanentAddressError
-                ? html`<omni-icon
-                      class="mt-2 ml-2 error-icon "
-                      icon-id="omni:informative:error"
-                      aria-label="icon"
-                      role="img"
-                    ></omni-icon>
-                    <span class="pt-2 pl-1  has-text-grey is-size-6"
-                      >${this.permanentAddressError}</span
-                    >`
-                : ""}
-            </div>
-            <div>
-              <p class="mb-2 ml-2 mt-5">* Street/Locality/Area</p>
-              <input
-                class="${this.permanentStreetError
-                  ? "input error-border"
-                  : "input"}"
-                type="text"
-                placeholder="Address"
-                .value=""
-                @input="${(e) => this.handlePermanentStreetChange(e)}"
-              />
-              <div class=" is-flex">
-                ${this.permanentStreetError
-                  ? html`<omni-icon
-                        class="mt-2 ml-2 error-icon"
-                        icon-id="omni:informative:error"
-                        aria-label="icon"
-                        role="img"
-                      ></omni-icon
-                      ><span class="pt-2 pl-1 has-text-grey is-size-6"
-                        >${this.permanentStreetError}</span
-                      >`
-                  : ""}
-              </div>
-            </div>
+  renderBiographicalData() {
+    return html`
+      <edit-1
+        .userData="${this.userData}"
+        @close-edit-user="${this.closeEndDrawer}"
+      ></edit-1>
+    `;
+  }
+  renderContactData() {
+    return html`
+      <edit-2
+        .userData="${this.userData}"
+        @close-edit-user="${this.closeEndDrawer}"
+      ></edit-2>
+    `;
+  }
 
-            <p class="mb-2 ml-2 mt-5">* Pincode</p>
-            <input
-              class="${this.permanentPincodeError
-                ? "input error-border"
-                : "input"}"
-              type="text"
-              maxlength="6"
-              placeholder="Pincode"
-              .value=""
-              @input="${(e) => this.handlePermanentPincodeChange(e)}"
-            />
-            <div class=" is-flex">
-              ${this.permanentPincodeError
-                ? html`<omni-icon
-                      class="mt-2 ml-2 error-icon "
-                      icon-id="omni:informative:error"
-                      aria-label="icon"
-                      role="img"
-                    ></omni-icon>
-                    <span class="pt-2 pl-1  has-text-grey is-size-6"
-                      >${this.permanentPincodeError}</span
-                    >`
-                : ""}
-            </div>
+  renderAddresData() {
+    return html`
+      <edit-3
+        .userData="${this.userData}"
+        @close-edit-user="${this.closeEndDrawer}"
+      ></edit-3>
+    `;
+  }
 
-            <p class="mb-3 ml-3 mt-5">* District</p>
-            <omni-dropdown
-              part="target "
-              class="pr-4 "
-              placeholder="District"
-              error="${this.selectedpermanentDistrictError
-                ? this.selectedpermanentDistrictError
-                : ""}"
-              typeahead
-              .value=""
-              searchindropdown
-              .options=${this.districts}
-              @change="${(e) => this.handlePermanentDistrictChange(e)}"
-            >
-            </omni-dropdown>
-
-            <p class="mb-3 ml-3 g-4">* State</p>
-            <omni-dropdown
-              class="pr-4 "
-              placeholder="State"
-              typeahead
-              .value=""
-              error="${this.selectedpermanentStateError
-                ? this.selectedpermanentStateError
-                : ""}"
-              searchindropdown
-              .options=${this.states}
-              @change="${(e) => this.handlePermanentStateChange(e)}"
-            >
-            </omni-dropdown>
-
-            <p class="mb-3 ml-3 g-4">* Country</p>
-            <omni-dropdown
-              part="target "
-              class="pr-4 "
-              placeholder="Country"
-              error="${this.selectedpermanentcountryError
-                ? this.selectedpermanentcountryError
-                : ""}"
-              typeahead
-              searchindropdown
-              .value=""
-              .options=${this.country}
-              @change="${(e) => this.handlePermanentCountryChange(e)}"
-            >
-            </omni-dropdown>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
-}
-///////////
   render() {
     console.log("renderdata:", this.userData);
     return html`
@@ -679,17 +153,66 @@ renderAddresData() {
                 }"
               ></omni-icon>
             </button>
-              <p class=" title is-2 pt-2 ">User Management</p>
-                <div slot="center-end" class="pr-4">
-                <div class="is-flex pt-2">
-                    
-                    <div class="pl-3 pr-6">${this.userData.personal_details.first_name} ${this.userData.personal_details.last_name}</div>
-                    <div>
-                    <omni-icon class="is-size-1" icon-id="omni:informative:user"></omni-icon>
-                    <label class="columns title is-7 pl-1  pt-2">User</label>
-                  </div>
-                  </div>
-              </div>
+            <p class=" title is-2 pt-2 ">User Management</p>
+              <div slot="center-end" class="pr-6">
+              <div class="is-flex pt-2">
+                <div class="dropdown is-right">
+                                <div class="dropdown-trigger">
+                                  <button class="button is-text" aria-haspopup="true" aria-controls="dropdown-menu" @click="${
+                                    this.openDropdown
+                                  }">
+
+                                    <span>${
+                                      this.userData.personal_details.first_name
+                                    } ${
+      this.userData.personal_details.last_name
+    }</span>
+                                    <omni-icon class="is-size-1" icon-id="omni:informative:user"></omni-icon>
+                                  </button>
+                                </div>
+                                <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                                  <div class="dropdown-content">
+                                    
+                                    <div class="dropdown-item text">
+                                    <!-- <omni-icon class="is-size-1" icon-id="omni:informative:user"></omni-icon> -->
+                                      <p>
+                                      ${
+                                        this.userData.personal_details
+                                          .first_name
+                                      } ${
+      this.userData.personal_details.last_name
+    }
+                                      </p>
+                                      <p>
+                                      ${
+                                        this.userData.user_login_details
+                                          .officeEmail
+                                      }
+                                      </p>
+                                    </div>
+                                    <hr class="dropdown-divider" />
+                                    <div class="dropdown-item">
+                                      <p>Contact</p>
+                                      <div class="is-flex pt-2">
+                                      <omni-icon class="is-size-3" icon-id="omni:informative:mobile"></omni-icon>
+                                      <p class="pl-3"> ${
+                                        this.userData.contact_details
+                                          .phoneNumber
+                                      }</p>
+                                      </div>
+                                    </div>
+                                    <hr class="dropdown-divider" />
+                                    <a>
+                                      <div class="dropdown-item is-flex">
+                                        <omni-icon class="is-size-3" icon-id="omni:interactive:exit" aria-label="icon" role="img"></omni-icon>
+                                        <p class="pl-2">Sign Out</p>
+                                      </div>
+                                    </a>
+                                  </div>
+                                </div>
+                              </div>
+                </div>
+            </div>
               
             </omni-toolbar>
           </header>
@@ -970,9 +493,21 @@ renderAddresData() {
           </ul>
         </nav>
         <aside slot="end-drawer">
-            ${this.endDrawerContent === "biographical"? this.renderBiographicalData(): ""}
-            ${this.endDrawerContent === "contact" ? this.renderContactData() : ""}
-            ${this.endDrawerContent === "address" ? this.renderAddresData() : ""}
+            ${
+              this.endDrawerContent === "biographical"
+                ? this.renderBiographicalData()
+                : ""
+            }
+            ${
+              this.endDrawerContent === "contact"
+                ? this.renderContactData()
+                : ""
+            }
+            ${
+              this.endDrawerContent === "address"
+              ? this.renderAddresData()
+              : ""
+            }
           </aside>
         </omni-app-layout>
       </omni-style>

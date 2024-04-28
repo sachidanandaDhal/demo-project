@@ -1,5 +1,5 @@
 import { OmniElement, OmniStyleElement, css, html, nothing } from "omni-ui";
-
+import { Router } from '@vaadin/router';
 OmniElement.register();
 OmniStyleElement.register();
 
@@ -29,9 +29,15 @@ export default class UserData extends OmniElement {
 
     this.userData = {}; 
   }
-
+  connectedCallback() {
+    super.connectedCallback();
+    const params = new URLSearchParams(window.location.search);
+    this.userId = params.get('userId');
+    const users = JSON.parse(localStorage.getItem("userData")) || [];
+    this.userData = users.find(user => user.id === this.userId) || {};
+  }
   closeUserData() {
-    this.dispatchEvent(new CustomEvent("close-user-data"));
+    Router.go("/admin-home");
   }
 
   render() {
