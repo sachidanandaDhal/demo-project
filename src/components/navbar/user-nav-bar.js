@@ -33,6 +33,13 @@ export default class UserNavBar extends OmniElement {
           --omni-app-layout-end-drawer-z-index: 34;
           --omni-app-layout-header-z-index: 36;
         }
+        .dropdown-content {
+          width: 260px;
+          margin-right: 35px !important;    
+        }
+        .text{
+          text-align: center;
+        }
 
         .topright {
           position: absolute;
@@ -106,6 +113,15 @@ export default class UserNavBar extends OmniElement {
     this.userData = JSON.parse(localStorage.getItem("currentUser")) || {};
     this.requestUpdate();
   }
+  handleSignOut() {
+    // Navigate to the home route ("/") using Router.go()
+    Router.go('/');
+  }
+  openDropdown() {
+    const dropdown = this.shadowRoot.querySelector('.dropdown');
+    dropdown.classList.toggle('is-active');
+    this.requestUpdate();
+  }
 
   renderBiographicalData() {
     return html`
@@ -132,6 +148,9 @@ export default class UserNavBar extends OmniElement {
       ></edit-3>
     `;
   }
+  handleSignOut() {
+    Router.go('/');
+  }
 
   render() {
     console.log("renderdata:", this.userData);
@@ -156,17 +175,13 @@ export default class UserNavBar extends OmniElement {
             <p class=" title is-2 pt-2 ">User Management</p>
               <div slot="center-end" class="pr-6">
               <div class="is-flex pt-2">
-                <div class="dropdown is-right">
+              <div class="dropdown is-right">
                                 <div class="dropdown-trigger">
                                   <button class="button is-text" aria-haspopup="true" aria-controls="dropdown-menu" @click="${
                                     this.openDropdown
                                   }">
 
-                                    <span>${
-                                      this.userData.personal_details.first_name
-                                    } ${
-      this.userData.personal_details.last_name
-    }</span>
+                                    <span>${this.userData.personal_details.first_name} ${this.userData.personal_details.last_name}</span>
                                     <omni-icon class="is-size-1" icon-id="omni:informative:user"></omni-icon>
                                   </button>
                                 </div>
@@ -176,18 +191,10 @@ export default class UserNavBar extends OmniElement {
                                     <div class="dropdown-item text">
                                     <!-- <omni-icon class="is-size-1" icon-id="omni:informative:user"></omni-icon> -->
                                       <p>
-                                      ${
-                                        this.userData.personal_details
-                                          .first_name
-                                      } ${
-      this.userData.personal_details.last_name
-    }
+                                      ${this.userData.personal_details.first_name} ${this.userData.personal_details.last_name}
                                       </p>
                                       <p>
-                                      ${
-                                        this.userData.user_login_details
-                                          .officeEmail
-                                      }
+                                      ${this.userData.user_login_details.officeEmail}
                                       </p>
                                     </div>
                                     <hr class="dropdown-divider" />
@@ -195,14 +202,11 @@ export default class UserNavBar extends OmniElement {
                                       <p>Contact</p>
                                       <div class="is-flex pt-2">
                                       <omni-icon class="is-size-3" icon-id="omni:informative:mobile"></omni-icon>
-                                      <p class="pl-3"> ${
-                                        this.userData.contact_details
-                                          .phoneNumber
-                                      }</p>
+                                      <p class="pl-3"> ${this.userData.contact_details.phoneNumber}</p>
                                       </div>
                                     </div>
                                     <hr class="dropdown-divider" />
-                                    <a>
+                                    <a @click=${this.handleSignOut}>
                                       <div class="dropdown-item is-flex">
                                         <omni-icon class="is-size-3" icon-id="omni:interactive:exit" aria-label="icon" role="img"></omni-icon>
                                         <p class="pl-2">Sign Out</p>
@@ -213,7 +217,6 @@ export default class UserNavBar extends OmniElement {
                               </div>
                 </div>
             </div>
-              
             </omni-toolbar>
           </header>
 

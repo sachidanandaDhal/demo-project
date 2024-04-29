@@ -1,6 +1,5 @@
 import { OmniElement, OmniStyleElement, css, html, nothing } from 'omni-ui';
 import './user-details.js';
-import  '../form/user-form.js';
 import { Router } from '@vaadin/router';
 OmniElement.register();
 OmniStyleElement.register();
@@ -34,7 +33,7 @@ export default class Hometab extends (OmniElement) {
   
   render() {
     return html`
-      <omni-style class="omni">
+      <omni-style >
         <div class="card m-5">
           <header class="card-header">
             <div class="card-header-title">

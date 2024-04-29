@@ -1,6 +1,4 @@
 import { OmniElement, OmniStyleElement, css, html, nothing } from "omni-ui";
-import "../navbar/admin-nav-bar.js";
-import "../navbar/user-nav-bar.js";
 import { Router } from '@vaadin/router';
 OmniElement.register();
 OmniStyleElement.register();
@@ -36,10 +34,7 @@ export default class LogIn extends OmniElement {
     return [
       super.styles,
       css`
-        :host {
-          overflow: hidden;
-          background-color: #9dc1fa;
-        }
+       
         .error-border {
           border: 1px solid var(--color-melon) !important;
         }
@@ -52,9 +47,17 @@ export default class LogIn extends OmniElement {
         .wt-1 {
           width: 550px !important;
         }
-        .hg {
-          height: 103.2vh;
-        }
+        .hg{
+          background-image: url(./../assets/background.jpg);
+          background-size: cover;
+          background-position: center;
+          overflow: hidden !important;
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          min-height: 101.6vh;
+      }
       `,
     ];
   }
@@ -74,7 +77,6 @@ export default class LogIn extends OmniElement {
     );
     if (matchedUser) {
       localStorage.setItem("currentUser", JSON.stringify(matchedUser));
-      this.openSuccesstoast();
       if (matchedUser.user_login_details.role.includes("Admin")) {
         Router.go("/admin-home");
       } else if (matchedUser.user_login_details.role.includes("User")) {
@@ -118,13 +120,6 @@ export default class LogIn extends OmniElement {
   openErrortoast() {
     const toast = this.shadowRoot.querySelector("#toast");
     toast.openModal();
-  }
-  openSuccesstoast() {
-    const toast = this.shadowRoot.querySelector("#toast-success");
-    toast.openModal();
-    setTimeout(() => {
-      this.openNav = true;
-    }, 3000);
   }
 
   resetSignInForm() {
@@ -233,7 +228,6 @@ export default class LogIn extends OmniElement {
     return html`
       <omni-style>
         ${!this.openNav ? this.renderlogin() : ""}
-        ${this.openNav ? this.rendernav() : ""}
         <omni-dialog
           id="toast"
           modalType="toast"
@@ -245,14 +239,7 @@ export default class LogIn extends OmniElement {
             again.
           </p>
         </omni-dialog>
-        <omni-dialog
-          id="toast-success"
-          modalType="toast"
-          modalStyle="success"
-          toastTimeOut="3000"
-        >
-          <p slot="content">Welcome back! You have successfully logged in.</p>
-        </omni-dialog>
+       
       </omni-style>
     `;
   }

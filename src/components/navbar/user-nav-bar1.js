@@ -199,6 +199,8 @@ export default class UserNavBar extends OmniElement {
   openDropdown() {
     const dropdown = this.shadowRoot.querySelector('.dropdown');
     dropdown.classList.toggle('is-active');
+    this.requestUpdate();
+    alert("Dropdown is opened");
   }
 
   handleFirstNameChange(e) {

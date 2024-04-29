@@ -57,7 +57,6 @@ export default class UserForm extends OmniElement {
     `,
   ];
   static properties = {
-    showSuccessMessage: { type: Boolean },
     sameAddress: { type: Boolean },
     userData: { type: Object },
     users: { type: Array },
@@ -149,7 +148,6 @@ export default class UserForm extends OmniElement {
     this.roles = ["User", "Super Admin", "Admin"];
     this.loadUserData();
     this.sameAddress = false;
-    this.showSuccessMessage = false;
     this.generateUniqueId();
     this.generateUniqueempId();
   }
@@ -206,7 +204,7 @@ export default class UserForm extends OmniElement {
       this.users.push(JSON.parse(JSON.stringify(this.userData)));
     }
     localStorage.setItem("userData", JSON.stringify(this.users));
-    this.showSuccessMessage = true;
+    this.openOmniToastElModal();
     this.requestUpdate();
   }
 
@@ -530,6 +528,15 @@ export default class UserForm extends OmniElement {
     );
   }
 
+  openOmniToastElModal(){
+    const toast = this.shadowRoot.querySelector('#toast');
+    toast.openModal();
+    setTimeout(() => {
+      this.closeUserForm();
+    }, 3000);
+    this.requestUpdate();
+  }
+  
   closeUserForm() {
     Router.go('/admin-home');
   }
@@ -573,7 +580,7 @@ export default class UserForm extends OmniElement {
             <input
               class="${this.firstNameError ? "input error-border" : "input"}"
               type="text"
-              placeholder="First Name"
+              placeholder="Enter First Name"
               .value="${this.userData.personal_details.first_name}"
               @input="${(e) => this.handleFirstNameChange(e)}"
             />
@@ -596,7 +603,7 @@ export default class UserForm extends OmniElement {
             <input
               class="${this.lastNameError ? "input error-border" : "input"}"
               type="text"
-              placeholder="Last Name"
+              placeholder="Enter Last Name"
               .value="${this.userData.personal_details.last_name}"
               @input="${(e) => this.handleLastNameChange(e)}"
             />
@@ -618,7 +625,7 @@ export default class UserForm extends OmniElement {
             <p class="mb-2 ml-2">* Marital Status</p>
             <omni-dropdown
               class="pd-4"
-              placeholder="Marital"
+              placeholder="Select Marital"
               typeahead
               error="${this.selectedMaritalError
                 ? this.selectedMaritalError
@@ -698,7 +705,7 @@ export default class UserForm extends OmniElement {
               class="${this.phoneNumberError ? "input error-border" : "input"}"
               type="tel"
               maxlength="10"
-              placeholder="Phone Number"
+              placeholder="Personal Mobile Number"
               .value="${this.userData.contact_details.phoneNumber}"
               @input="${(e) => this.handlePhoneNumberChange(e)}"
             />
@@ -724,7 +731,7 @@ export default class UserForm extends OmniElement {
                 : "input"}"
               type="tel"
               maxlength="10"
-              placeholder="Office Phone Number"
+              placeholder="Office Mobile Number"
               .value="${this.userData.contact_details.officephoneNumber}"
               @input="${(e) => this.handleOfficePhoneNumberChange(e)}"
             />
@@ -781,7 +788,7 @@ export default class UserForm extends OmniElement {
                 ? "input error-border"
                 : "input"}"
               type="text"
-              placeholder="Address Detail"
+              placeholder="Enter Flat/House"
               .value="${this.userData.address.current_address.flat_house_no}"
               @input="${(e) => this.handleCurrentAddressChange(e)}"
             />
@@ -806,7 +813,7 @@ export default class UserForm extends OmniElement {
                 ? "input error-border"
                 : "input"}"
               type="text"
-              placeholder="Address Detail"
+              placeholder="Enter Street/Locality"
               .value="${this.userData.address.current_address.building_no}"
               @input="${(e) => this.handleCurrentStreetChange(e)}"
             />
@@ -832,7 +839,7 @@ export default class UserForm extends OmniElement {
                 : "input"}"
               type="text"
               maxlength="6"
-              placeholder="Pincode"
+              placeholder="Enter Pincode"
               .value="${this.userData.address.current_address.pin}"
               @input="${(e) => this.handleCurrentPincodeChange(e)}"
             />
@@ -858,7 +865,7 @@ export default class UserForm extends OmniElement {
             <omni-dropdown
               part="target "
               class="pd-4 "
-              placeholder="District"
+              placeholder="Select District"
               error="${this.selectedCurrentdistrictError
                 ? this.selectedCurrentdistrictError
                 : ""}"
@@ -874,7 +881,7 @@ export default class UserForm extends OmniElement {
             <p class="mb-3 ml-3">* State</p>
             <omni-dropdown
               class="pd-4 "
-              placeholder="State"
+              placeholder="Select State"
               typeahead
               error="${this.selectedCurrentstateError
                 ? this.selectedCurrentstateError
@@ -891,7 +898,7 @@ export default class UserForm extends OmniElement {
             <omni-dropdown
               part="target "
               class="pd-4 "
-              placeholder="Country"
+              placeholder="Select Country"
               error="${this.selectedCurrentcountryError
                 ? this.selectedCurrentcountryError
                 : ""}"
@@ -929,7 +936,7 @@ export default class UserForm extends OmniElement {
                 : "input"}"
               type="text"
               .value="${this.userData.address.permanent_address.flat_house_no}"
-              placeholder="Address Detail"
+              placeholder="Enter Flat/House"
               @input="${(e) => this.handlePermanentAddressChange(e)}"
             />
             <div class=" is-flex">
@@ -953,7 +960,7 @@ export default class UserForm extends OmniElement {
                 ? "input error-border"
                 : "input"}"
               type="text"
-              placeholder="Address"
+              placeholder="Enter Street/Locality"
               .value="${this.userData.address.permanent_address.building_no}"
               @input="${(e) => this.handlePermanentStreetChange(e)}"
             />
@@ -979,7 +986,7 @@ export default class UserForm extends OmniElement {
                 : "input"}"
               type="text"
               maxlength="6"
-              placeholder="Pincode"
+              placeholder="Enter Pincode"
               .value="${this.userData.address.permanent_address.pin}"
               @input="${(e) => this.handlePermanentPincodeChange(e)}"
             />
@@ -1004,7 +1011,7 @@ export default class UserForm extends OmniElement {
             <omni-dropdown
               part="target "
               class="pd-4 "
-              placeholder="District"
+              placeholder="Select District"
               error="${this.selectedpermanentDistrictError
                 ? this.selectedpermanentDistrictError
                 : ""}"
@@ -1020,7 +1027,7 @@ export default class UserForm extends OmniElement {
             <p class="mb-3 ml-3">* State</p>
             <omni-dropdown
               class="pd-4 "
-              placeholder="State"
+              placeholder="Select State"
               typeahead
               .value="${this.userData.address.permanent_address.state}"
               error="${this.selectedpermanentStateError
@@ -1037,7 +1044,7 @@ export default class UserForm extends OmniElement {
             <omni-dropdown
               part="target "
               class="pd-4 "
-              placeholder="Country"
+              placeholder="Select Country"
               error="${this.selectedpermanentcountryError
                 ? this.selectedpermanentcountryError
                 : ""}"
@@ -1061,7 +1068,7 @@ export default class UserForm extends OmniElement {
             <input
               class="${this.useridnameError ? "input error-border" : "input"}"
               type="text"
-              placeholder="Enter a username"
+              placeholder="Enter username"
               .value="${this.userData.user_login_details.username}"
               @input="${(e) => this.handleuserNameChange(e)}"
             />
@@ -1142,26 +1149,7 @@ export default class UserForm extends OmniElement {
       </section>
     `;
   }
-  renderNotification() {
-    return html`
-      <article
-        class="notification is-success wt-1"
-        ?hidden=${!this.showSuccessMessage}
-      >
-        <omni-icon
-          icon-id="omni:informative:success"
-          aria-label="icon"
-          role="img"
-        ></omni-icon>
-        <button
-          class="delete"
-          aria-label="delete"
-          @click="${this.closeUserForm}"
-        ></button>
-        User profile has been successfully created!
-      </article>
-    `;
-  }
+  
 
   render() {
     console.log(this.showSuccessMessage);
@@ -1170,11 +1158,17 @@ export default class UserForm extends OmniElement {
         <div class="modal is-active">
           <div class="modal-background">
             <div class="mt-5 modal-card">
-              ${!this.showSuccessMessage ? this.renderData() : ""}
+              ${this.renderData()}
             </div>
-          </div>
-          ${this.showSuccessMessage ? this.renderNotification() : ""}
+            </div>
         </div>
+        <omni-dialog
+        id="toast"
+        modalType="toast"
+        modalStyle="success"
+        toastTimeOut="2000">
+        <p slot="content">User profile has been successfully created!</p>
+      </omni-dialog>
       </omni-style>
     `;
   }

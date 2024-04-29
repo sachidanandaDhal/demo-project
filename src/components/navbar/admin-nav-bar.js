@@ -71,11 +71,19 @@ export default class AdminNavBar extends OmniElement{
         .text{
           text-align: center;
         }
+        .omni{
+          overflow: hidden;
+        }
         
       `,
     ];
   }
-
+  
+  handleSignOut() {
+    // Navigate to the home route ("/") using Router.go()
+    Router.go('/');
+  }
+  
   render() {
     return html`
       <omni-style>
@@ -134,7 +142,7 @@ export default class AdminNavBar extends OmniElement{
                                       </div>
                                     </div>
                                     <hr class="dropdown-divider" />
-                                    <a>
+                                    <a @click=${this.handleSignOut}>
                                       <div class="dropdown-item is-flex">
                                         <omni-icon class="is-size-3" icon-id="omni:interactive:exit" aria-label="icon" role="img"></omni-icon>
                                         <p class="pl-2">Sign Out</p>

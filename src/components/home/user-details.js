@@ -38,9 +38,10 @@ export default class UserDetails extends OmniStyleElement {
       // { label: "Contact Number", key: "phoneNumber", isSortable: true },
       { label: "Gender", key: "gender", isSortable: true },
       // { label: "Personal Email", key: "personalEmail", isSortable: false },
-      { label: "Status", key: "status" },
+      
       { label: "Join Date", key: "joinDate" },
       { label: "Role", key: "role", isSortable: false },
+      { label: "Status", key: "status" },
       { label: "Actions", key: "actions" },
     ];
     this.refreshData();
@@ -156,7 +157,7 @@ export default class UserDetails extends OmniStyleElement {
           class="button is-outlined is-medium is-danger"
           slot="button"
           @click=${this.onSubmit}>
-          Yes, Delete
+          Delete
         </button>
       </omni-dialog>
       </omni-style>
