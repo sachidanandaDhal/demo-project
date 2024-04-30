@@ -90,19 +90,41 @@ export default class LogIn extends OmniElement {
           user.user_login_details.officeEmail === inputPassword) &&
         user.user_login_details.password === inputPassword
     );
-    const superAdminUsername = "bubu";
-    const superAdminPassword = "bubu";
-
-    if (inputUsername === superAdminUsername && inputPassword === superAdminPassword) {
-        // Redirect to the super admin page
-        Router.go("/super-admin");
-        return;
+    const superAdminData = {
+      id: "superadmin123",
+      empId: "SADMIN001",
+      personal_details: {
+        first_name: "Super",
+        last_name: "Admin",
+      },
+      contact_details: {
+        phoneNumber: "1234567890",
+        personalEmail: "superadmin@gmail.com",
+        officephoneNumber: "9987654321",
+      },
+      user_login_details: {
+        username: "omni",
+        password: "omni",
+        officeEmail: "superadmin@annalect.com",
+        role: ["Super Admin"],
+        active: true,
+      },
+    };
+    const superAdminUsername = superAdminData.user_login_details.username;
+    const superAdminPassword = superAdminData.user_login_details.password;
+    if (
+      inputUsername === superAdminUsername &&
+      inputPassword === superAdminPassword
+    ) {
+      Router.go("/home");
+      localStorage.setItem("currentUser", JSON.stringify(superAdminData));
+      return;
     }
    
     if (matchedUser) {
       localStorage.setItem("currentUser", JSON.stringify(matchedUser));
       if (matchedUser.user_login_details.role.includes("Admin")) {
-        Router.go("/admin-home");
+        Router.go("/home");
       } else if (matchedUser.user_login_details.role.includes("User")) {
         Router.go("/user-home");
       }

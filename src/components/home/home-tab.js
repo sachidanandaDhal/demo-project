@@ -20,7 +20,7 @@ export default class Hometab extends (OmniElement) {
     };
   }
   openUserForm() {
-    Router.go('/admin-home/create');
+    Router.go('/home/create');
   }
   closeUserForm() {
     const userForm = document.querySelector('user-form');

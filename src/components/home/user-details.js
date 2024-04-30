@@ -84,16 +84,6 @@ export default class UserDetails extends OmniStyleElement {
       `
     }));
   }
-
-  // deleteUser(user) {
-  //   const index = this.users.findIndex(u => u.id === user.id);
-  //   if (index !== -1) {
-  //     this.users.splice(index, 1);
-  //     localStorage.setItem("userData", JSON.stringify(this.users));
-  //     this.refreshData();
-  //     this.requestUpdate();
-  //   }
-  // }
   deleteUser(user) {
     this.openOmniDialogElModal();
     this.userToDelete = user;
@@ -121,7 +111,7 @@ export default class UserDetails extends OmniStyleElement {
   
   viewUser(user) {
     this.selectedUser = user;
-    Router.go(`/admin-home/view?userId=${user.id}`);
+    Router.go(`/home/view?userId=${user.id}`);
   }
 
   closeUserData() {
@@ -130,7 +120,7 @@ export default class UserDetails extends OmniStyleElement {
 
   editUser(user) {
     this.editdUser = user;
-    Router.go(`/admin-home/edit?userId=${user.id}`);
+    Router.go(`/home/edit?userId=${user.id}`);
   }
 
   closeEditUser() {

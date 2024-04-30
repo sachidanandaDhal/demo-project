@@ -37,7 +37,7 @@ export default class UserData extends OmniElement {
     this.userData = users.find(user => user.id === this.userId) || {};
   }
   closeUserData() {
-    Router.go("/admin-home");
+    Router.go("/home");
   }
 
   render() {
@@ -48,6 +48,9 @@ export default class UserData extends OmniElement {
           <div class="modal-card ">
             <header class="modal-card-head header-seperator">
               <p class="modal-card-title">User Details</p>
+              <button class="button is-outlined " @click="${this.closeUserData}">
+          <omni-icon class="is-size-1" icon-id="omni:interactive:close"></omni-icon>
+        </button>
             </header>
             <section class="modal-card-body pl-5 ml-4">
               <!-- <h1 class="title is-2 pb-3">Personal Details</h1> -->
@@ -234,7 +237,7 @@ export default class UserData extends OmniElement {
               </div>
             </section>
           </div>
-          <button class="modal-close is-large" @click="${this.closeUserData}" aria-label="close"></button>
+          
         </div>
       </omni-style>
     `;

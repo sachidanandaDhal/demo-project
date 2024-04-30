@@ -152,6 +152,17 @@ export default class UserForm extends OmniElement {
     this.generateUniqueempId();
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+    const params = new URLSearchParams(window.location.search);
+    this.userId = params.get('userId');
+    if (this.userId) {
+        const users = JSON.parse(localStorage.getItem("userData")) || [];
+        this.userData = users.find(user => user.id === this.userId) || {};
+    } 
+}
+
+  
   generateUniqueempId() {
     const userData = JSON.parse(localStorage.getItem("userData")) || [];
     // Find the maximum ID currently in use
@@ -162,11 +173,12 @@ export default class UserForm extends OmniElement {
         maxId = id;
       }
     });
+
     // Generate the new ID
     const newId = (maxId + 1).toString().padStart(4, "0");
+
     return `OMNI_${newId}`;
   }
-
   generateUniqueId() {
     const userData = JSON.parse(localStorage.getItem("userData")) || [];
     let maxId = 0;
@@ -189,9 +201,7 @@ export default class UserForm extends OmniElement {
   adduserData() {
     if (this.userData.id) {
       // If userData contains an ID, it means we're updating an existing user
-      const index = this.users.findIndex(
-        (user) => user.id === this.userData.id
-      );
+      const index = this.users.findIndex(user => user.id === this.userData.id);
       if (index !== -1) {
         this.users[index] = JSON.parse(JSON.stringify(this.userData));
       }
@@ -203,8 +213,9 @@ export default class UserForm extends OmniElement {
       this.userData.empId = empId;
       this.users.push(JSON.parse(JSON.stringify(this.userData)));
     }
+    
     localStorage.setItem("userData", JSON.stringify(this.users));
-    this.openOmniToastElModal();
+    this.showSuccessMessage = true;
     this.requestUpdate();
   }
 
@@ -262,11 +273,11 @@ export default class UserForm extends OmniElement {
     } else if (newPhoneNumber.length !== 10) {
       this.phoneNumberError = "Phone number must be exactly 10 digits";
     } else if (
-      this.users.some(
-        (user) =>
-          user.contact_details.phoneNumber === newPhoneNumber &&
-          user.id !== this.userData.id
-      )
+       this.users.some(
+      (user) =>
+        user.contact_details.phoneNumber === newPhoneNumber &&
+        user.id !== this.userData.id // Exclude the current user being edited from the check
+    )
     ) {
       this.phoneNumberError = "Phone number already exists";
     } else {
@@ -288,9 +299,9 @@ export default class UserForm extends OmniElement {
     } else if (
       this.users.some(
         (user) =>
-          user.contact_details.officephoneNumber === newPhoneNumber &&
-          user.id !== this.userData.id
-      )
+        user.contact_details.officephoneNumber === newPhoneNumber 
+        && user.id !== this.userData.id // Exclude the current user being edited from the check
+    )
     ) {
       this.officephoneNumberError = "Phone number already exists";
     } else {
@@ -311,8 +322,8 @@ export default class UserForm extends OmniElement {
       // Check if email format is valid
       this.personalEmailError = "Invalid email format";
     } else if (
-      this.users.some((user) => user.contact_details.personalEmail === email) &&
-      user.id !== this.userData.id
+      this.users.some((user) => user.contact_details.personalEmail === email
+      && user.id !== this.userData.id)
     ) {
       // Check if email already exists
       this.personalEmailError = "Personal email already exists";
@@ -446,10 +457,8 @@ export default class UserForm extends OmniElement {
       // Check if username has at least 5 characters
       this.useridnameError = "Username must be at least 5 characters long";
     } else if (
-      this.users.some(
-        (user) => user.user_login_details.username === username
-      ) &&
-      user.id !== this.userData.id
+      this.users.some((user) => user.user_login_details.username === username
+      && user.id !== this.userData.id)
     ) {
       // Check if username already exists
       this.useridnameError = "Username already exists";
@@ -478,10 +487,8 @@ export default class UserForm extends OmniElement {
       // Check if email format is valid
       this.officeEmailError = "Office email must end with @annalect.com";
     } else if (
-      this.users.some(
-        (user) => user.user_login_details.officeEmail === email
-      ) &&
-      user.id !== this.userData.id
+      this.users.some((user) => user.user_login_details.officeEmail === email
+      && user.id !== this.userData.id)
     ) {
       // Check if email already exists
       this.officeEmailError = "Office email already exists";
@@ -538,7 +545,7 @@ export default class UserForm extends OmniElement {
   }
   
   closeUserForm() {
-    Router.go('/admin-home');
+    Router.go('/home');
   }
 
   handleGenderChange(e) {
@@ -547,27 +554,28 @@ export default class UserForm extends OmniElement {
   }
 
   renderData() {
-    console.log("select:", this.selectedState);
+    const title = this.userId ? 'Edit User Details' : 'Create New User';
+    const buttonText = this.userId ? 'Update' : 'Create';
     const isFormValid =
-      // this.userData.personal_details.first_name && this.userData.personal_details.last_name &&
-      // this.userData.personal_details.dob && this.userData.personal_details.gender &&
-      // this.userData.personal_details.marital.length >  0 && this.userData.contact_details.phoneNumber &&
-      // this.userData.contact_details.officephoneNumber && this.userData.contact_details.personalEmail &&
-      // this.userData.address.current_address.flat_house_no && this.userData.address.current_address.building_no &&
-      // this.userData.address.current_address.pin && this.userData.address.current_address.state.length > 0 &&
-      // this.userData.address.current_address.district.length > 0 && this.userData.address.current_address.country.length > 0 &&
-      // this.userData.address.permanent_address.flat_house_no && this.userData.address.permanent_address.building_no &&
-      // this.userData.address.permanent_address.pin && this.userData.address.permanent_address.state.length > 0 &&
-      // this.userData.address.permanent_address.district.length > 0 && this.userData.address.permanent_address.country.length > 0 &&
-      // this.userData.user_login_details.username && this.userData.user_login_details.officeEmail && this.userData.user_login_details.role.length > 0 &&
-      // !this.firstNameError && !this.lastNameError && !this.birthDateError && !this.phoneNumberError && !this.officephoneNumberError &&
-      // !this.personalEmailError && !this.currentAddressError && ! this.currentStreetError && !this.currentPincodeError &&
-      // !this.permanentAddressError && !this.permanentStreetError && !this.permanentPincodeError && !this.useridnameError &&
+      this.userData.personal_details.first_name && this.userData.personal_details.last_name &&
+      this.userData.personal_details.dob && this.userData.personal_details.gender &&
+      this.userData.personal_details.marital.length >  0 && this.userData.contact_details.phoneNumber &&
+      this.userData.contact_details.officephoneNumber && this.userData.contact_details.personalEmail &&
+      this.userData.address.current_address.flat_house_no && this.userData.address.current_address.building_no &&
+      this.userData.address.current_address.pin && this.userData.address.current_address.state.length > 0 &&
+      this.userData.address.current_address.district.length > 0 && this.userData.address.current_address.country.length > 0 &&
+      this.userData.address.permanent_address.flat_house_no && this.userData.address.permanent_address.building_no &&
+      this.userData.address.permanent_address.pin && this.userData.address.permanent_address.state.length > 0 &&
+      this.userData.address.permanent_address.district.length > 0 && this.userData.address.permanent_address.country.length > 0 &&
+      this.userData.user_login_details.username && this.userData.user_login_details.officeEmail && this.userData.user_login_details.role.length > 0 &&
+      !this.firstNameError && !this.lastNameError && !this.birthDateError && !this.phoneNumberError && !this.officephoneNumberError &&
+      !this.personalEmailError && !this.currentAddressError && ! this.currentStreetError && !this.currentPincodeError &&
+      !this.permanentAddressError && !this.permanentStreetError && !this.permanentPincodeError && !this.useridnameError &&
       !this.officeEmailError;
     console.log("disable:", isFormValid);
     return html`
       <header class="modal-card-head header-separator">
-        <p class="modal-card-title has-text-black">Create New User</p>
+      <p class="modal-card-title has-text-black">${title}</p>
       </header>
       <section class="modal-card-body">
         <p class="is-size-4  has-text-weight-bold has-text-dark pb-4">
@@ -1142,7 +1150,7 @@ export default class UserForm extends OmniElement {
               ?disabled="${!isFormValid}"
               @click="${this.adduserData}"
             >
-              Create
+            ${buttonText}
             </button>
           </div>
         </div>
@@ -1152,7 +1160,7 @@ export default class UserForm extends OmniElement {
   
 
   render() {
-    console.log(this.showSuccessMessage);
+    const Message = this.userId ? 'User profile has been successfully updated!' : 'User profile has been successfully created!';
     return html`
       <omni-style>
         <div class="modal is-active">
@@ -1167,10 +1175,11 @@ export default class UserForm extends OmniElement {
         modalType="toast"
         modalStyle="success"
         toastTimeOut="2000">
-        <p slot="content">User profile has been successfully created!</p>
+        <p slot="content">${Message}</p>
       </omni-dialog>
       </omni-style>
     `;
   }
 }
 customElements.define("user-form", UserForm);
+

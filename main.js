@@ -8,8 +8,16 @@ import "./src/components/login/log-in.js";
 import "./src/components/login/test-login.js";
 import "./src/components/navbar/test-test-user-nav.js";
 
-import "./src/components/super-admin/super-admin-nav.js";
 
+///navbar/////////
+
+import "./src/components/nav-bar/nav-bar.js";
+
+
+////////
+
+
+import "./src/components/super-admin/super-admin-nav.js";
 import './src/components/super-admin/user-page.js';
 import './src/components/super-admin/dashboard-page.js';
 import './src/components/super-admin/admin-page.js';
@@ -31,21 +39,27 @@ export default class Main extends OmniElement {
         component: "log-in",
       },
       {
-        path: "/admin-home",
-        component: "admin-nav-bar",
+        path: "/home",
+        component: "nav-bar",
       },
+      // {
+      //   path: "/admin-home",
+      //   component: "admin-nav-bar",
+      // },
       {
-        path: "/admin-home/create",
+        path: "/home/create",
         component: "user-form",
       },
       {
-        path: "/admin-home/edit",
-        component: "edit-user",
+        path: "/home/edit",
+        component: "user-form",
       },
       {
-        path: "/admin-home/view",
+        path: "/home/view",
         component: "user-data",
       },
+
+      /////////////////////
       {
         path: "/user-home",
         component: "user-nav-bar",
