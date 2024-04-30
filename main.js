@@ -7,6 +7,12 @@ import "./src/components/home/user-data.js";
 import "./src/components/login/log-in.js";
 import "./src/components/login/test-login.js";
 import "./src/components/navbar/test-test-user-nav.js";
+
+import "./src/components/super-admin/super-admin-nav.js";
+
+import './src/components/super-admin/user-page.js';
+import './src/components/super-admin/dashboard-page.js';
+import './src/components/super-admin/admin-page.js';
 import { OmniElement, html } from "omni-ui";
 export default class Main extends OmniElement {
   connectedCallback() {
@@ -47,6 +53,24 @@ export default class Main extends OmniElement {
       {
         path: "/user-home/edit",
         component: "edit-1",
+      },
+      {
+        path: "/super-admin",
+        component: "super-admin-nav",
+        children: [
+          {
+            path: "/dashboard",
+            component: "dashboard-page",
+          },
+          {
+            path: "/user",
+            component: "user-page",
+          },
+          {
+            path: "/admin",
+            component: "admin-page",
+          },
+        ],
       },
     ];
 

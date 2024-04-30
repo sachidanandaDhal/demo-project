@@ -38,15 +38,21 @@ export default class LogIn extends OmniElement {
         .error-border {
           border: 1px solid var(--color-melon) !important;
         }
+        .error-icon {
+          --color-icon-lines: #eb0465 !important;
+          fill: var(--color-icon-lines) !important;
+        }
         .pd-7 {
-          padding: 64px !important;
+          padding: 4rem !important;
           border-radius: 20px;
           height: 400px !important;
           width: 400px !important;
+         
         }
-        .wt-1 {
-          width: 550px !important;
+        .font-size{
+          font-size: 1.5rem;
         }
+
         .hg{
           background-image: url(./../assets/background.jpg);
           background-size: cover;
@@ -57,6 +63,15 @@ export default class LogIn extends OmniElement {
           justify-content: center;
           align-items: center;
           min-height: 101.6vh;
+      }
+      .omni .box {
+        background-color: rgb(0 140 255 / 45%);
+      }
+      .white {
+        color: white;
+      }
+      .width {
+        width: 9rem;
       }
       `,
     ];
@@ -75,6 +90,15 @@ export default class LogIn extends OmniElement {
           user.user_login_details.officeEmail === inputPassword) &&
         user.user_login_details.password === inputPassword
     );
+    const superAdminUsername = "bubu";
+    const superAdminPassword = "bubu";
+
+    if (inputUsername === superAdminUsername && inputPassword === superAdminPassword) {
+        // Redirect to the super admin page
+        Router.go("/super-admin");
+        return;
+    }
+   
     if (matchedUser) {
       localStorage.setItem("currentUser", JSON.stringify(matchedUser));
       if (matchedUser.user_login_details.role.includes("Admin")) {
@@ -135,13 +159,14 @@ export default class LogIn extends OmniElement {
       <omni-style>
         <div class="columns is-centered is-vcentered hg">
           <div class="column is-narrow">
-            <div class="box has-text-centered pd-7">
+            <div class="box has-text-centered is-flex is-justify-content-space-between is-flex-direction-column pd-7">
               <header class="title ">
-                <p class="title is-1">User Management System</p>
+                <p class="font-size white">User Management System</p>
               </header>
 
-              <div class="field pt-4">
+              <div class="field ">
                 <p class="control has-icons-left ">
+                
                   <input
                     id="signin-username"
                     class="${this.logusernameError
@@ -149,6 +174,7 @@ export default class LogIn extends OmniElement {
                       : "input"}"
                     name="signin-username"
                     type="text"
+                    label="User Name:"
                     placeholder="Username"
                     @input="${(e) => this.handlelogUsernameChange(e)}"
                   />
@@ -163,7 +189,7 @@ export default class LogIn extends OmniElement {
                 ${this.logusernameError
                   ? html` <div class="is-flex">
                       <omni-icon
-                        class="mt-2 ml-2"
+                        class="mt-2 ml-2  error-icon "
                         icon-id="omni:informative:error"
                         aria-label="icon"
                         role="img"
@@ -174,7 +200,7 @@ export default class LogIn extends OmniElement {
                     </div>`
                   : ""}
               </div>
-              <div class="field pt-3">
+              <div class="field ">
                 <p class="control has-icons-left">
                   <input
                     id="signin-password"
@@ -197,7 +223,7 @@ export default class LogIn extends OmniElement {
                 ${this.logpasswordError
                   ? html` <div class="is-flex">
                       <omni-icon
-                        class="mt-2 ml-2"
+                        class="mt-2 ml-2  error-icon "
                         icon-id="omni:informative:error"
                         aria-label="icon"
                         role="img"
@@ -211,7 +237,7 @@ export default class LogIn extends OmniElement {
               <div class="pt-5">
                 <button
                   id="signin-submit"
-                  class="button is-link"
+                  class="button is-link width"
                   @click=${this.doSignIn}
                 >
                   LogIn

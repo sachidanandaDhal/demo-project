@@ -1131,7 +1131,7 @@ export default class UserForm extends OmniElement {
               ?disabled="${!isFormValid}"
               @click="${this.adduserData}"
             >
-              Create
+              Update
             </button>
           </div>
         </div>
@@ -1154,7 +1154,7 @@ export default class UserForm extends OmniElement {
           aria-label="delete"
           @click="${this.closeUserForm}"
         ></button>
-        User profile has been successfully Update!
+        User profile has been successfully updated!
       </article>
     `;
   }
