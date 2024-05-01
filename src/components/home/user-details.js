@@ -31,6 +31,7 @@ export default class UserDetails extends OmniStyleElement {
 
   constructor() {
     super();
+    this.userData = JSON.parse(localStorage.getItem("currentUser")) || {};
     this.users = JSON.parse(localStorage.getItem("userData")) || [];
     this.columns = [
       { label: "User Name", key: "username", isSortable: true },
@@ -61,12 +62,16 @@ export default class UserDetails extends OmniStyleElement {
       actions: html`
         <omni-style>
           <td part="table-body-cell">
-            <omni-tooltip>
-              <button class="button is-size-5 is-text" @click="${() => this.deleteUser(user)}">
-                <omni-icon class="is-size-2" icon-id="omni:interactive:delete"></omni-icon>
-              </button>
-              <div slot="content">Delete</div>
-            </omni-tooltip>
+          ${(this.userData.user_login_details.role.includes('Super Admin') || this.userData.user_login_details.role.includes('Admin')) ? html`
+  <omni-tooltip>
+    <button class="button is-size-5 is-text" @click="${() => this.deleteUser(user)}" ?disabled="${this.userData.user_login_details.role.includes('Admin')}">
+      <omni-icon class="is-size-2" icon-id="omni:interactive:delete"></omni-icon>
+    </button>
+    <div slot="content">Delete</div>
+  </omni-tooltip>` : ''}
+
+
+
             <omni-tooltip>
               <button class="button is-size-5 is-text" @click="${() => this.viewUser(user)}">
                 <omni-icon class="is-size-2" icon-id="omni:interactive:launch"></omni-icon>

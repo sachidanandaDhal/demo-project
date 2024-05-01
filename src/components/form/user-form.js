@@ -215,7 +215,7 @@ export default class UserForm extends OmniElement {
     }
     
     localStorage.setItem("userData", JSON.stringify(this.users));
-    this.showSuccessMessage = true;
+    this.openOmniToastElModal();
     this.requestUpdate();
   }
 
@@ -540,7 +540,7 @@ export default class UserForm extends OmniElement {
     toast.openModal();
     setTimeout(() => {
       this.closeUserForm();
-    }, 3000);
+    }, 1500);
     this.requestUpdate();
   }
   
