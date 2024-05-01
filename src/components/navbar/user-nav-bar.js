@@ -41,21 +41,7 @@ export default class UserNavBar extends OmniElement {
           text-align: center;
         }
 
-        .topright {
-          position: absolute;
-          top: 80px;
-          right: 50px;
-        }
-        .topright1 {
-          position: absolute;
-          top: 315px;
-          right: 50px;
-        }
-        .topright2 {
-          position: absolute;
-          top: 466px;
-          right: 50px;
-        }
+        
         .header-separator {
           border-bottom: 1px solid rgb(241, 245, 250) !important;
           height: 43px;
@@ -223,9 +209,9 @@ export default class UserNavBar extends OmniElement {
           <div class="pr-4  pt-4">
           <section class="modal-card-body pl-5 ml-4">
               <!-- <h1 class="title is-2 pb-3">Personal Details</h1> -->
-              <div class="is-flex ">
+              <div class="is-flex is-justify-content-space-between">
               <h1 class="title is-3 pb-2">Biographical</h1>
-              <button  class=" is-text topright" @click="${() =>
+              <button  class=" button is-text" @click="${() =>
                 this.toggleEndDrawer("biographical")}">
               <omni-icon class="is-size-2 " icon-id="omni:interactive:edit"></omni-icon>
               </button>
@@ -263,9 +249,9 @@ export default class UserNavBar extends OmniElement {
               </div>
               <hr />
 
-              <div class="is-flex ">
+              <div class="is-flex is-justify-content-space-between">
               <h1 class="title is-3 pb-2">Contact Details</h1>
-              <button  class=" is-text topright1" @click="${() =>
+              <button  class=" button is-text" @click="${() =>
                 this.toggleEndDrawer("contact")}">
               <omni-icon class="is-size-2 " icon-id="omni:interactive:edit"></omni-icon>
               </button>
@@ -298,9 +284,9 @@ export default class UserNavBar extends OmniElement {
               </div>
               <hr />
 
-              <div class="is-flex ">
+              <div class="is-flex is-justify-content-space-between">
               <h1 class="title is-3 pb-2">Address</h1>
-              <button  class=" is-text topright2" @click="${() =>
+              <button  class="button is-text" @click="${() =>
                 this.toggleEndDrawer("address")}">
               <omni-icon class="is-size-2 " icon-id="omni:interactive:edit"></omni-icon>
               </button>

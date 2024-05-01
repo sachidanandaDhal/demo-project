@@ -1,8 +1,5 @@
 
 import { OmniStyleElement, html, css } from 'omni-ui';
-import './user-data.js';
-import './edit-user.js'; 
-import '../form/user-form.js';
 import { Router } from '@vaadin/router';
 export default class UserDetails extends OmniStyleElement {
   static get styles() {
@@ -69,9 +66,6 @@ export default class UserDetails extends OmniStyleElement {
     </button>
     <div slot="content">Delete</div>
   </omni-tooltip>` : ''}
-
-
-
             <omni-tooltip>
               <button class="button is-size-5 is-text" @click="${() => this.viewUser(user)}">
                 <omni-icon class="is-size-2" icon-id="omni:interactive:launch"></omni-icon>
@@ -137,11 +131,22 @@ export default class UserDetails extends OmniStyleElement {
   render() {
     return html`
       <omni-style>
-        <omni-table
-          .columns="${this.columns}"
-          .data="${this.data}"
-          @sort="${(e) => this.sortData(e.detail.key)}"
-        ></omni-table>
+      ${this.data && this.data.length > 0 ?
+          html`
+            <omni-table
+              .columns="${this.columns}"
+              .data="${this.data}"
+              @sort="${(e) => this.sortData(e.detail.key)}"
+            ></omni-table>`
+          :
+          html`
+          <omni-table
+              .columns="${this.columns}"
+              .data="${this.data}"
+              @sort="${(e) => this.sortData(e.detail.key)}"
+            ></omni-table>
+            <p class="is-flex is-justify-content-center py-5">No User data available</p>`
+        }
         <omni-dialog
         id="modal"
         modalType="modal"
