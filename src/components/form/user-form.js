@@ -65,7 +65,7 @@ export default class UserForm extends OmniElement {
   constructor() {
     super();
     const currentDate = new Date();
-    const formattedDate = currentDate.toISOString().split("T")[0];
+    const formattedDate = `${currentDate.getDate().toString().padStart(2, '0')}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getFullYear()}`;
     this.users = [];
     this.userData = {
       id: "",
@@ -205,11 +205,13 @@ export default class UserForm extends OmniElement {
   }
   adduserData() {
     if (this.userData.id) {
-      const currentTime = new Date();
+      const currentTime= new Date();
+  
       // If userData contains an ID, it means we're updating an existing user
       const index = this.users.findIndex(user => user.id === this.userData.id);
       if (index !== -1) {
-        this.userData.modified_on = currentTime.toISOString();
+        const modifiedDate = `${currentTime.getDate().toString().padStart(2, '0')}-${(currentTime.getMonth() + 1).toString().padStart(2, '0')}-${currentTime.getFullYear()}`;
+        this.userData.modified_on = modifiedDate;
         this.users[index] = JSON.parse(JSON.stringify(this.userData));
       }
     } else {

@@ -5,11 +5,19 @@ OmniStyleElement.register();
 export default class Hometab extends (OmniElement) {
   static get styles() {
     return css`
-    omni-table::part(table-body-cell) {
-      transition: color 0.25s ease-in-out, background-color 0.25s ease-in-out;
-    }
-    omni-table::part(table-header-actions) {
-      padding-left: 60px !important;
+   
+    omni-table {
+      &::part(table-container){
+        overflow: auto;
+        height: calc(100vh - 150px);
+      }
+      &::part(table-body-cell) {
+        transition: color 0.25s ease-in-out, background-color 0.25s ease-in-out;
+      }
+      &::part(table-header-actions) {
+        padding-left: 60px !important;
+      }
+
     }
     `;
   }

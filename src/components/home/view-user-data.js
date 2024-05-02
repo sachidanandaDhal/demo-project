@@ -244,4 +244,4 @@ export default class UserData extends OmniElement {
   }
 }
 
-customElements.define("user-data", UserData);
+customElements.define("view-user-data", UserData);

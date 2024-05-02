@@ -115,6 +115,7 @@ export default class LogIn extends OmniElement {
         active: true,
       },
     };
+
     const superAdminUsername = superAdminData.user_login_details.username;
     const superAdminPassword = superAdminData.user_login_details.password;
     if (
@@ -126,7 +127,13 @@ export default class LogIn extends OmniElement {
       return;
     }
    
+   
     if (matchedUser) {
+      if (!matchedUser.user_login_details.active) {
+        // User is inactive, show error message
+        this.showInactiveUserError();
+        return;
+    }
       localStorage.setItem("currentUser", JSON.stringify(matchedUser));
       if (matchedUser.user_login_details.role.includes("Admin")) {
         Router.go("/home");
@@ -136,14 +143,21 @@ export default class LogIn extends OmniElement {
     } else {
       this.openErrortoast();
     }
-    usernameInput.value = "";
-    passwordInput.value = "";
+    // usernameInput.value = "";
+    // passwordInput.value = "";
   }
-
+  showInactiveUserError() {
+    const toast = this.shadowRoot.querySelector("#toast");
+    const errorMessage = this.shadowRoot.querySelector("#error-message");
+    errorMessage.textContent = "User is inactive. Please contact the administrator.";
+    toast.openModal();
+    this.errorToastOpen = true;
+    this.logusernameError = "User is inactive";
+    this.logpasswordError = "";
+}
 
   connectedCallback() {
     super.connectedCallback();
-    // Retrieve user data from localStorage
     this.userData = JSON.parse(localStorage.getItem("currentUser")) || {};
     this.requestUpdate();
 }
@@ -174,6 +188,8 @@ export default class LogIn extends OmniElement {
     const toast = this.shadowRoot.querySelector("#toast");
     toast.openModal();
     this.errorToastOpen = true;
+    this.logusernameError = "Invalid Username";
+    this.logpasswordError = "Invalid Password";
   }
 
   renderlogin() {
@@ -282,7 +298,7 @@ export default class LogIn extends OmniElement {
           modalStyle="error"
           toastTimeOut="5000"
         >
-          <p slot="content">
+          <p slot="content" id="error-message">
             Invalid username or password. Please check your credentials and try
             again.
           </p>

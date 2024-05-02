@@ -1,11 +1,6 @@
 import { OmniElement, OmniStyleElement, css, html, nothing } from "omni-ui";
-import "../home/user-data.js";
-import "../form/user-form.js";
-import "../home/home-tab.js";
 import { Router } from "@vaadin/router";
-import "./edit-1.js";
-import "./edit-2.js";
-import "./edit-3.js";
+import "../home/edit-user.js";
 
 OmniElement.register();
 OmniStyleElement.register();
@@ -16,14 +11,13 @@ export default class UserNavBar extends OmniElement {
       super.styles,
       css`
         :host {
-          --omni-app-layout-header-height: 50px;
+          --omni-app-layout-header-height: 0px;
           --omni-app-layout-drawer-width: 180px;
           --omni-app-layout-drawer-closed-width: 4px;
           --omni-app-layout-end-drawer-width: 660px;
-          --omni-app-layout-bg: #ffffff;
-          --omni-app-layout-header-bg: #ffffff;
-          --omni-app-layout-drawer-bg: #ffffff;
-          --omni-app-layout-end-drawer-bg: #ffffff;
+          
+          --omni-app-layout-drawer-bg: var(--color-white);
+          --omni-app-layout-end-drawer-bg: var(--color-white);
 
           /* Variables useful for nesting layouts */
           --omni-app-layout-height: 100vh;
@@ -33,6 +27,19 @@ export default class UserNavBar extends OmniElement {
           --omni-app-layout-end-drawer-z-index: 34;
           --omni-app-layout-header-z-index: 36;
         }
+        omni-app-layout::part(content) {
+          padding: 2.5rem;
+        }
+        omni-tile::part(body-scroller) {
+          overflow: auto;
+        height: calc(100vh - 150px);
+        }
+        .ph{
+          height: calc(100vh - 50px);
+          overflow-y: auto;
+          overflow-x: hidden;
+        }
+
         .dropdown-content {
           width: 260px;
           margin-right: 35px !important;    
@@ -124,106 +131,22 @@ export default class UserNavBar extends OmniElement {
     this.requestUpdate();
   }
 
-  renderBiographicalData() {
-    return html`
-      <edit-1
-        .userData="${this.userData}"
-        @close-edit-user="${this.closeEndDrawer}"
-      ></edit-1>
-    `;
-  }
-  renderContactData() {
-    return html`
-      <edit-2
-        .userData="${this.userData}"
-        @close-edit-user="${this.closeEndDrawer}"
-      ></edit-2>
-    `;
-  }
-
-  renderAddresData() {
-    return html`
-      <edit-3
-        .userData="${this.userData}"
-        @close-edit-user="${this.closeEndDrawer}"
-      ></edit-3>
-    `;
-  }
   handleSignOut() {
     Router.go('/');
   }
 
   render() {
-    console.log("renderdata:", this.userData);
     return html`
       <omni-style>
-        <omni-app-layout
+        <omni-app-layout class="ph"
           .drawerOpen=${this.drawerOpen}
           .endDrawerOpen=${this.endDrawerOpen}
         >
-          <header slot="header">
-            <omni-toolbar class="">
-            <button  class="button is-text " @click="${this.toggleDrawer}">
-              <omni-icon
-                class="is-size-1"
-                icon-id="${
-                  this.drawerOpen
-                    ? "omni:informative:menu"
-                    : "omni:informative:menu"
-                }"
-              ></omni-icon>
-            </button>
-            <P class="hg"></P> 
-            <p class=" title is-2 pt-2 ">User Management</p>
-              <div slot="center-end" class="pr-5">
-              <div class="is-flex pt-2">
-              <div class="dropdown is-right">
-                                <div class="dropdown-trigger">
-                                  <button class="button is-text" aria-haspopup="true" aria-controls="dropdown-menu" @click="${
-                                    this.openDropdown
-                                  }">
-
-                                    <span>${this.userData.personal_details.first_name} ${this.userData.personal_details.last_name}</span>
-                                    <omni-icon class="is-size-1" icon-id="omni:informative:user"></omni-icon>
-                                  </button>
-                                </div>
-                                <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                                  <div class="dropdown-content">
-                                    
-                                    <div class="dropdown-item text">
-                                    <p class="is-flex is-justify-content-center pb-3"><omni-icon class="fontsize" icon-id="omni:informative:user"></omni-icon></p>
-                                      <p>
-                                      ${this.userData.personal_details.first_name} ${this.userData.personal_details.last_name}
-                                      </p>
-                                      <p>
-                                      ${this.userData.user_login_details.officeEmail}
-                                      </p>
-                                    </div>
-                                    <hr class="dropdown-divider" />
-                                    <div class="dropdown-item">
-                                      <p>Contact</p>
-                                      <div class="is-flex pt-2">
-                                      <omni-icon class="is-size-3" icon-id="omni:informative:mobile"></omni-icon>
-                                      <p class="pl-3"> ${this.userData.contact_details.phoneNumber}</p>
-                                      </div>
-                                    </div>
-                                    <hr class="dropdown-divider" />
-                                    <a @click=${this.handleSignOut}>
-                                      <div class="dropdown-item is-flex">
-                                        <omni-icon class="is-size-3" icon-id="omni:interactive:exit" aria-label="icon" role="img"></omni-icon>
-                                        <p class="pl-2">Sign Out</p>
-                                      </div>
-                                    </a>
-                                  </div>
-                                </div>
-                              </div>
-                </div>
-            </div>
+          <omni-tile>
+            <omni-toolbar slot="header">
+            <h1 slot="start" class="titel is-size-2">User Profile</h1>
             </omni-toolbar>
-          </header>
-
-          <div class="pr-4  pt-4">
-          <section class="modal-card-body pl-5 ml-4">
+          <section>
               <!-- <h1 class="title is-2 pb-3">Personal Details</h1> -->
               <div class="is-flex is-justify-content-space-between">
               <h1 class="title is-3 pb-2">Biographical</h1>
@@ -404,7 +327,13 @@ export default class UserNavBar extends OmniElement {
                 </div>
               </div>
                 <hr>
+                <div class="is-flex is-justify-content-space-between">
               <h1 class="title is-3 pb-2">Account Access Details</h1>
+              <button  class="button is-text" @click="${() =>
+                this.toggleEndDrawer("login")}">
+              <omni-icon class="is-size-2 " icon-id="omni:interactive:edit"></omni-icon>
+              </button>
+              </div>
               <div class="columns col-spacing is-flex">
                 <div class="column is-one-third">
                   <p class=" m-0 mb-2 has-text-grey is-size-6">User Name *</p>
@@ -433,33 +362,21 @@ export default class UserNavBar extends OmniElement {
                 <div class="column is-one-third">
                   <p class=" m-0 mb-2 has-text-grey is-size-6">Join Date *</p>
                   <p class="mb-1" >
-                  ${this.userData.modified_on}
+                  ${this.userData.registered_on}
                   </p>
                 </div>
                 <div class="column is-one-third">
                   <p class=" m-0 mb-2 has-text-grey is-size-6">Last Modified Date *</p>
                   <p class="mb-1" >
-                  N.A
+                  ${this.userData.modified_on}
                   </p>
                 </div>
               </div>
             </section>
-            </div>
+            </omni-tile>
 
 
-          <nav slot="drawer" class="menu">
-          <div class="pl-8 ">
-            <!-- <button  class="button is-text " @click="${this.toggleDrawer}">
-              <omni-icon
-                class="is-size-1"
-                icon-id="${
-                  this.drawerOpen
-                    ? "omni:interactive:left"
-                    : "omni:interactive:right"
-                }"
-              ></omni-icon>
-            </button> -->
-          </div>
+          <nav slot="drawer" class="menu">         
           <ul class="menu-list pl-3">  
           <li><a  class="  has-background-almost-black">Dashboard</a></li>
             <li>
@@ -498,22 +415,18 @@ export default class UserNavBar extends OmniElement {
           </ul>
         </nav>
         <aside slot="end-drawer">
-            ${
-              this.endDrawerContent === "biographical"
-                ? this.renderBiographicalData()
-                : ""
-            }
-            ${
-              this.endDrawerContent === "contact"
-                ? this.renderContactData()
-                : ""
-            }
-            ${
-              this.endDrawerContent === "address"
-              ? this.renderAddresData()
-              : ""
-            }
-          </aside>
+        ${
+    ['biographical', 'contact', 'address','login',].includes(this.endDrawerContent)
+      ? html`
+          <edit-user
+            .userData="${this.userData}"
+            .editSection="${this.endDrawerContent}" 
+            @close-edit-user="${this.closeEndDrawer}"
+          ></edit-user>
+        `
+      : ""
+  }
+</aside>
         </omni-app-layout>
       </omni-style>
     `;

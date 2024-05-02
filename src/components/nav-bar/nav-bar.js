@@ -1,6 +1,6 @@
 import { OmniElement, OmniStyleElement, css, html, nothing } from "omni-ui";
 import '../home/home-tab.js';
-import '../navbar/user-nav-bar.js';
+import '../home/user-nav-bar.js';
 import { Router } from '@vaadin/router';
 OmniElement.register();
 OmniStyleElement.register();
@@ -49,11 +49,11 @@ export default class NavBar extends OmniElement{
           /* Customizable CSS Variables and their defaults */
           --omni-app-layout-header-height: 50px;
           --omni-app-layout-drawer-width: 180px;
-          --omni-app-layout-drawer-closed-width: 4px;
+          --omni-app-layout-drawer-closed-width: 0px;
           --omni-app-layout-end-drawer-width: 300px;
           --omni-app-layout-bg: #f1f5fa;
           --omni-app-layout-header-bg: #fff;
-          --omni-app-layout-drawer-bg: var(--color-pale-grey-two);
+          --omni-app-layout-drawer-bg: #fff;
           --omni-app-layout-end-drawer-bg: #fff;
 
           /* Variables useful for nesting layouts */
@@ -66,14 +66,12 @@ export default class NavBar extends OmniElement{
         }
         .dropdown-content {
           width: 260px;
-          margin-right: 35px !important;    
+          margin-right: 20px !important;    
         }
         .text{
           text-align: center;
         }
-        .omni{
-          overflow: hidden;
-        }
+       
         .hg{
           background-image: url(./../assets/image.png);
           background-size: cover;
@@ -107,23 +105,23 @@ export default class NavBar extends OmniElement{
         >
           <header slot="header">
             <omni-toolbar class="">
+            ${this.user_role !== 'User' ? html`
               <button class="button is-text " @click="${this.toggleDrawer}">
                 <omni-icon
                   class="is-size-1"
-                  icon-id="${this.drawerOpen
-                    ? "omni:informative:menu"
-                    : "omni:informative:menu"}"
+                  icon-id="${this.drawerOpen ? "omni:informative:menu" : "omni:informative:menu"}"
                 ></omni-icon>
               </button>
+            ` : nothing }
               <P class="hg"></P> 
               <p class=" title is-2 pt-2 ">User Management</p>
-              <div slot="center-end" class="pr-5">
+              <div slot="center-end" class="pr-1">
               <div class="is-flex pt-2">
                   
                 
                 <div class="dropdown is-right">
                                 <div class="dropdown-trigger">
-                                  <button class="button is-text" aria-haspopup="true" aria-controls="dropdown-menu" @click="${
+                                  <button class="button is-text is-shadowless" aria-haspopup="true" aria-controls="dropdown-menu" @click="${
                                     this.openDropdown
                                   }">
 
@@ -142,14 +140,6 @@ export default class NavBar extends OmniElement{
                                       <p>
                                       ${this.userData.user_login_details.officeEmail}
                                       </p>
-                                    </div>
-                                    <hr class="dropdown-divider" />
-                                    <div class="dropdown-item">
-                                      <p>Contact</p>
-                                      <div class="is-flex pt-2">
-                                      <omni-icon class="is-size-3" icon-id="omni:informative:mobile"></omni-icon>
-                                      <p class="pl-3"> ${this.userData.contact_details.phoneNumber}</p>
-                                      </div>
                                     </div>
                                     <hr class="dropdown-divider" />
                                     <a @click=${this.handleSignOut}>
@@ -171,7 +161,7 @@ export default class NavBar extends OmniElement{
           </main>
           <nav slot="drawer" class="menu">
             <ul class="menu-list pl-3">
-              <li><a class="  has-background-almost-black">Dashboard</a></li>
+              <li><a class="is-active  has-background-almost-black">Users</a></li>
             </ul>
           </nav>
         </omni-app-layout>
