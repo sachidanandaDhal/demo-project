@@ -5,6 +5,7 @@ import "./src/components/nav-bar/nav-bar.js";
 import "./src/components/home/user-nav-bar.js";
 import "./src/components/form/user-form.js";
 import "./src/components/home/view-user-data.js";
+import "./src/components/nav-bar/dash-board.js";
 
 import { OmniElement, html } from "omni-ui";
 export default class Main extends OmniElement {
@@ -43,6 +44,7 @@ export default class Main extends OmniElement {
         path: "/user-home",
         component: "user-nav-bar",
       },
+
     ];
 
     const outlet = this.shadowRoot.getElementById("outlet");

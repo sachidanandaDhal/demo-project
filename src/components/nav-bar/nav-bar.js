@@ -1,16 +1,19 @@
 import { OmniElement, OmniStyleElement, css, html, nothing } from "omni-ui";
-import '../home/home-tab.js';
-import '../home/user-nav-bar.js';
-import { Router } from '@vaadin/router';
+import "../home/home-tab.js";
+import "../nav-bar/dash-board.js";
+import "../home/user-nav-bar.js";
+import { Router } from "@vaadin/router";
 OmniElement.register();
 OmniStyleElement.register();
 
-export default class NavBar extends OmniElement{
+export default class NavBar extends OmniElement {
   static get properties() {
     return {
       drawerOpen: { type: Boolean },
       endDrawerOpen: { type: Boolean },
       user_role: { type: String },
+      selectedTab: { type: String },
+      activeTab: { type: String },
     };
   }
 
@@ -18,6 +21,8 @@ export default class NavBar extends OmniElement{
     super();
     this.drawerOpen = false;
     this.endDrawerOpen = false;
+    this.selectedTab = "home"; // Default tab is home
+    this.activeTab = "home";
   }
 
   connectedCallback() {
@@ -25,7 +30,6 @@ export default class NavBar extends OmniElement{
     this.userData = JSON.parse(localStorage.getItem("currentUser")) || {};
     this.user_role = this.userData.user_login_details.role[0];
     this.requestUpdate();
-
   }
 
   toggleDrawer() {
@@ -37,8 +41,8 @@ export default class NavBar extends OmniElement{
   }
 
   openDropdown() {
-    const dropdown = this.shadowRoot.querySelector('.dropdown');
-    dropdown.classList.toggle('is-active');
+    const dropdown = this.shadowRoot.querySelector(".dropdown");
+    dropdown.classList.toggle("is-active");
   }
 
   static get styles() {
@@ -66,13 +70,13 @@ export default class NavBar extends OmniElement{
         }
         .dropdown-content {
           width: 260px;
-          margin-right: 20px !important;    
+          margin-right: 20px !important;
         }
-        .text{
+        .text {
           text-align: center;
         }
-       
-        .hg{
+
+        .hg {
           background-image: url(./../assets/image.png);
           background-size: cover;
           background-position: center;
@@ -83,19 +87,29 @@ export default class NavBar extends OmniElement{
           align-items: center;
           width: 36px;
           height: 37px !important;
-      }
-      .fontsize {
-        font-size: 31px;
-      }
-        
+        }
+        .fontsize {
+          font-size: 31px;
+        }
       `,
     ];
   }
-  
+
   handleSignOut() {
-    Router.go('/');
+    Router.go("/");
   }
-  
+  handleTabChange(tab) {
+    this.selectedTab = tab;
+    this.activeTab = tab;
+
+    if (tab === "dashboard") {
+      const dashboardPage = this.shadowRoot.querySelector("dash-board");
+      if (dashboardPage) {
+        dashboardPage.updateData();
+      }
+    }
+  }
+
   render() {
     return html`
       <omni-style>
@@ -105,63 +119,108 @@ export default class NavBar extends OmniElement{
         >
           <header slot="header">
             <omni-toolbar class="">
-            ${this.user_role !== 'User' ? html`
-              <button class="button is-text " @click="${this.toggleDrawer}">
-                <omni-icon
-                  class="is-size-1"
-                  icon-id="${this.drawerOpen ? "omni:informative:menu" : "omni:informative:menu"}"
-                ></omni-icon>
-              </button>
-            ` : nothing }
-              <P class="hg"></P> 
+              ${this.user_role !== "User"
+                ? html`
+                    <button
+                      class="button is-text "
+                      @click="${this.toggleDrawer}"
+                    >
+                      <omni-icon
+                        class="is-size-1"
+                        icon-id="${this.drawerOpen
+                          ? "omni:informative:menu"
+                          : "omni:informative:menu"}"
+                      ></omni-icon>
+                    </button>
+                  `
+                : nothing}
+              <p class="hg"></p>
               <p class=" title is-2 pt-2 ">User Management</p>
               <div slot="center-end" class="pr-1">
-              <div class="is-flex pt-2">
-                  
-                
-                <div class="dropdown is-right">
-                                <div class="dropdown-trigger">
-                                  <button class="button is-text is-shadowless" aria-haspopup="true" aria-controls="dropdown-menu" @click="${
-                                    this.openDropdown
-                                  }">
-
-                                    <span>${this.userData.personal_details.first_name} ${this.userData.personal_details.last_name}</span>
-                                    <omni-icon class="is-size-1" icon-id="omni:informative:user"></omni-icon>
-                                  </button>
-                                </div>
-                                <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                                  <div class="dropdown-content">
-                                    
-                                    <div class="dropdown-item text">
-                                    <p class="is-flex is-justify-content-center pb-3"><omni-icon class="fontsize" icon-id="omni:informative:user"></omni-icon></p>
-                                      <p>
-                                      ${this.userData.personal_details.first_name} ${this.userData.personal_details.last_name}
-                                      </p>
-                                      <p>
-                                      ${this.userData.user_login_details.officeEmail}
-                                      </p>
-                                    </div>
-                                    <hr class="dropdown-divider" />
-                                    <a @click=${this.handleSignOut}>
-                                      <div class="dropdown-item is-flex">
-                                        <omni-icon class="is-size-3" icon-id="omni:interactive:exit" aria-label="icon" role="img"></omni-icon>
-                                        <p class="pl-2">Sign Out</p>
-                                      </div>
-                                    </a>
-                                  </div>
-                                </div>
-                              </div>
+                <div class="is-flex pt-2">
+                  <div class="dropdown is-right">
+                    <div class="dropdown-trigger">
+                      <button
+                        class="button is-text is-shadowless"
+                        aria-haspopup="true"
+                        aria-controls="dropdown-menu"
+                        @click="${this.openDropdown}"
+                      >
+                        <span
+                          >${this.userData.personal_details.first_name}
+                          ${this.userData.personal_details.last_name}</span
+                        >
+                        <omni-icon
+                          class="is-size-1"
+                          icon-id="omni:informative:user"
+                        ></omni-icon>
+                      </button>
+                    </div>
+                    <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                      <div class="dropdown-content">
+                        <div class="dropdown-item text">
+                          <p class="is-flex is-justify-content-center pb-3">
+                            <omni-icon
+                              class="fontsize"
+                              icon-id="omni:informative:user"
+                            ></omni-icon>
+                          </p>
+                          <p>
+                            ${this.userData.personal_details.first_name}
+                            ${this.userData.personal_details.last_name}
+                          </p>
+                          <p>${this.userData.user_login_details.officeEmail}</p>
+                        </div>
+                        <hr class="dropdown-divider" />
+                        <a @click=${this.handleSignOut}>
+                          <div class="dropdown-item is-flex">
+                            <omni-icon
+                              class="is-size-3"
+                              icon-id="omni:interactive:exit"
+                              aria-label="icon"
+                              role="img"
+                            ></omni-icon>
+                            <p class="pl-2">Sign Out</p>
+                          </div>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-            </div>
+              </div>
             </omni-toolbar>
           </header>
           <main>
-            ${this.user_role ==='User' ? html`<user-nav-bar></user-nav-bar>` : html`<home-tab></home-tab>`}
-            
+            ${this.user_role === "User"
+              ? html`<user-nav-bar></user-nav-bar>`
+              : html`
+                  ${this.selectedTab === "dashboard"
+                    ? html`<dash-board></dash-board>`
+                    : html`<home-tab></home-tab>`}
+                `}
           </main>
           <nav slot="drawer" class="menu">
             <ul class="menu-list pl-3">
-              <li><a class="is-active  has-background-almost-black">Users</a></li>
+              <li>
+                <a
+                  class="${this.activeTab === "home"
+                    ? "is-active"
+                    : ""} has-background-almost-black"
+                  @click=${() => this.handleTabChange("home")}
+                  >Users</a
+                >
+              </li>
+            </ul>
+            <ul class="menu-list pl-3">
+              <li>
+                <a
+                  class="${this.activeTab === "dashboard"
+                    ? "is-active"
+                    : ""} has-background-almost-black"
+                  @click=${() => this.handleTabChange("dashboard")}
+                  >Dashboard</a
+                >
+              </li>
             </ul>
           </nav>
         </omni-app-layout>
