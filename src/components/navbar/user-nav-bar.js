@@ -46,6 +46,21 @@ export default class UserNavBar extends OmniElement {
           border-bottom: 1px solid rgb(241, 245, 250) !important;
           height: 43px;
         }
+        .hg{
+          background-image: url(./../assets/image.png);
+          background-size: cover;
+          background-position: center;
+          overflow: hidden !important;
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          width: 36px;
+          height: 37px !important;
+      }
+      .fontsize {
+        font-size: 31px;
+      }
 
         .g-2 {
           margin-block-start: -28px !important;
@@ -158,8 +173,9 @@ export default class UserNavBar extends OmniElement {
                 }"
               ></omni-icon>
             </button>
+            <P class="hg"></P> 
             <p class=" title is-2 pt-2 ">User Management</p>
-              <div slot="center-end" class="pr-6">
+              <div slot="center-end" class="pr-5">
               <div class="is-flex pt-2">
               <div class="dropdown is-right">
                                 <div class="dropdown-trigger">
@@ -175,7 +191,7 @@ export default class UserNavBar extends OmniElement {
                                   <div class="dropdown-content">
                                     
                                     <div class="dropdown-item text">
-                                    <!-- <omni-icon class="is-size-1" icon-id="omni:informative:user"></omni-icon> -->
+                                    <p class="is-flex is-justify-content-center pb-3"><omni-icon class="fontsize" icon-id="omni:informative:user"></omni-icon></p>
                                       <p>
                                       ${this.userData.personal_details.first_name} ${this.userData.personal_details.last_name}
                                       </p>
@@ -423,7 +439,7 @@ export default class UserNavBar extends OmniElement {
                 <div class="column is-one-third">
                   <p class=" m-0 mb-2 has-text-grey is-size-6">Last Modified Date *</p>
                   <p class="mb-1" >
-                    N.A
+                  N.A
                   </p>
                 </div>
               </div>

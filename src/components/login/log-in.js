@@ -14,6 +14,7 @@ export default class LogIn extends OmniElement {
       rePasswordError: { type: String },
       openNav: { type: Boolean },
       userRole: { type: Array },
+      errorToastOpen: { type: Boolean }
     };
   }
 
@@ -28,6 +29,7 @@ export default class LogIn extends OmniElement {
     this.rePasswordError = "";
     this.openNav = false;
     this.userRole = [];
+    // this.errorToastOpen = false;
   }
 
   static get styles() {
@@ -45,9 +47,12 @@ export default class LogIn extends OmniElement {
         .pd-7 {
           padding: 4rem !important;
           border-radius: 20px;
-          height: 400px !important;
+          height: 390px !important;
           width: 400px !important;
          
+        }
+        .g-1 {
+          margin-block-start: -15px !important;
         }
         .font-size{
           font-size: 1.5rem;
@@ -71,7 +76,7 @@ export default class LogIn extends OmniElement {
         color: white;
       }
       .width {
-        width: 9rem;
+        width: 8rem;
       }
       `,
     ];
@@ -126,7 +131,7 @@ export default class LogIn extends OmniElement {
       if (matchedUser.user_login_details.role.includes("Admin")) {
         Router.go("/home");
       } else if (matchedUser.user_login_details.role.includes("User")) {
-        Router.go("/user-home");
+        Router.go("/home");
       }
     } else {
       this.openErrortoast();
@@ -149,6 +154,7 @@ export default class LogIn extends OmniElement {
       this.logusernameError = "Username is required";
     } else {
       this.logusernameError = "";
+      this.errorToastOpen = false;
     }
     this.requestUpdate();
   }
@@ -159,6 +165,7 @@ export default class LogIn extends OmniElement {
       this.logpasswordError = "Password is required";
     } else {
       this.logpasswordError = "";
+      this.errorToastOpen = false;
     }
     this.requestUpdate();
   }
@@ -166,16 +173,9 @@ export default class LogIn extends OmniElement {
   openErrortoast() {
     const toast = this.shadowRoot.querySelector("#toast");
     toast.openModal();
+    this.errorToastOpen = true;
   }
 
-  resetSignInForm() {
-    const usernameInput = this.shadowRoot.getElementById("signin-username");
-    const passwordInput = this.shadowRoot.getElementById("signin-password");
-    usernameInput.value = "";
-    passwordInput.value = "";
-    this.logusernameError = "";
-    this.logpasswordError = "";
-  }
   renderlogin() {
     return html`
       <omni-style>
@@ -191,7 +191,7 @@ export default class LogIn extends OmniElement {
                 
                   <input
                     id="signin-username"
-                    class="${this.logusernameError
+                    class="${this.logusernameError || this.errorToastOpen
                       ? "input error-border"
                       : "input"}"
                     name="signin-username"
@@ -216,17 +216,17 @@ export default class LogIn extends OmniElement {
                         aria-label="icon"
                         role="img"
                       ></omni-icon>
-                      <span class="pt-2 pl-1 has-text-grey is-size-6"
+                      <span class="pt-2 pl-1 has-text-white is-size-6"
                         >${this.logusernameError}</span
                       >
                     </div>`
                   : ""}
               </div>
-              <div class="field ">
+              <div class="field g-1 ">
                 <p class="control has-icons-left">
                   <input
                     id="signin-password"
-                    class="${this.logpasswordError
+                    class="${this.logpasswordError || this.errorToastOpen
                       ? "input error-border"
                       : "input"}"
                     name="signin-password"
@@ -250,13 +250,13 @@ export default class LogIn extends OmniElement {
                         aria-label="icon"
                         role="img"
                       ></omni-icon>
-                      <span class="pt-2 pl-1 has-text-grey is-size-6"
+                      <span class="pt-2 pl-1 has-text-white is-size-6"
                         >${this.logpasswordError}</span
                       >
                     </div>`
                   : ""}
               </div>
-              <div class="pt-5">
+              <div >
                 <button
                   id="signin-submit"
                   class="button is-link width"

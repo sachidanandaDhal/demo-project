@@ -1,5 +1,6 @@
 import { OmniElement, OmniStyleElement, css, html, nothing } from "omni-ui";
 import '../home/home-tab.js';
+import '../navbar/user-nav-bar.js';
 import { Router } from '@vaadin/router';
 OmniElement.register();
 OmniStyleElement.register();
@@ -9,6 +10,7 @@ export default class NavBar extends OmniElement{
     return {
       drawerOpen: { type: Boolean },
       endDrawerOpen: { type: Boolean },
+      user_role: { type: String },
     };
   }
 
@@ -16,14 +18,14 @@ export default class NavBar extends OmniElement{
     super();
     this.drawerOpen = false;
     this.endDrawerOpen = false;
-    this.userData = JSON.parse(localStorage.getItem("currentUser")) || {};
   }
 
   connectedCallback() {
     super.connectedCallback();
-    // Ensure data retrieval when navigating back to the home page
     this.userData = JSON.parse(localStorage.getItem("currentUser")) || {};
+    this.user_role = this.userData.user_login_details.role[0];
     this.requestUpdate();
+
   }
 
   toggleDrawer() {
@@ -72,6 +74,21 @@ export default class NavBar extends OmniElement{
         .omni{
           overflow: hidden;
         }
+        .hg{
+          background-image: url(./../assets/image.png);
+          background-size: cover;
+          background-position: center;
+          overflow: hidden !important;
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          width: 36px;
+          height: 37px !important;
+      }
+      .fontsize {
+        font-size: 31px;
+      }
         
       `,
     ];
@@ -98,9 +115,9 @@ export default class NavBar extends OmniElement{
                     : "omni:informative:menu"}"
                 ></omni-icon>
               </button>
-              <!-- <omni-icon class="is-size-4" icon-id="omni:brand:apple"></omni-icon> -->
+              <P class="hg"></P> 
               <p class=" title is-2 pt-2 ">User Management</p>
-              <div slot="center-end" class="pr-6">
+              <div slot="center-end" class="pr-5">
               <div class="is-flex pt-2">
                   
                 
@@ -118,7 +135,7 @@ export default class NavBar extends OmniElement{
                                   <div class="dropdown-content">
                                     
                                     <div class="dropdown-item text">
-                                    <p class=""><omni-icon class="is-size-1" icon-id="omni:informative:user"></omni-icon></p>
+                                    <p class="is-flex is-justify-content-center pb-3"><omni-icon class="fontsize" icon-id="omni:informative:user"></omni-icon></p>
                                       <p>
                                       ${this.userData.personal_details.first_name} ${this.userData.personal_details.last_name}
                                       </p>
@@ -149,7 +166,8 @@ export default class NavBar extends OmniElement{
             </omni-toolbar>
           </header>
           <main>
-            <slot><home-tab></home-tab></slot>
+            ${this.user_role ==='User' ? html`<user-nav-bar></user-nav-bar>` : html`<home-tab></home-tab>`}
+            
           </main>
           <nav slot="drawer" class="menu">
             <ul class="menu-list pl-3">

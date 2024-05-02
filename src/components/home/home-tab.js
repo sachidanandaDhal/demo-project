@@ -20,11 +20,13 @@ export default class Hometab extends (OmniElement) {
     this.users = JSON.parse(localStorage.getItem("userData")) || [];
     this.columns = [
       { label: "User Name", key: "username", isSortable: true },
-      { label: "Name", key: "fullName", isSortable: true },
-      { label: "Gender", key: "gender", isSortable: true },
-      { label: "Join Date", key: "joinDate" },
+      { label: "Full Name", key: "fullName", isSortable: true ,template: (val) => html` <td part="table-body-cell" class="has-text-black">${val}</td> ` },
+      // { label: "Gender", key: "gender", isSortable: true },
       { label: "Role", key: "role", isSortable: false },
-      { label: "Status", key: "status" },
+      { label: "Registered on", key: "joinDate" ,isSortable: true },
+      { label: "Modified on", key: "modified_on" ,isSortable: true },
+      
+      { label: "Status", key: "status",template: (val) => html` <td part="table-body-cell" class="${val === 'Active' ? 'has-text-success' : val === 'Inactive' ? 'has-text-danger' : ''}">${val}</td> ` },
       { label: "Actions", key: "actions" },
     ];
     this.refreshData();
@@ -48,16 +50,16 @@ export default class Hometab extends (OmniElement) {
         gender: `${user.personal_details?.gender || ''}`,
         status: `${user.user_login_details.active ? "Active" : "Inactive"|| ''}`,
         role: `${user.user_login_details?.role || ''}`,
-        joinDate: `${user.modified_on|| ''}`,
+        joinDate: `${user.registered_on|| ''}`,
+        modified_on : `${user.modified_on|| ''}`,
         actions: this.Actions(user)
       }));
     } else {
       this.data = this.users.filter(user => {
         return (
           (user.user_login_details?.username && user.user_login_details.username.includes(this.searchTerm)) ||
-          ((user.personal_details?.first_name || '') + ' ' + (user.personal_details?.last_name || '')).includes(this.searchTerm) ||
-          (user.personal_details?.gender && user.personal_details.gender.includes(this.searchTerm)) ||
-          (user.user_login_details?.role && user.user_login_details.role.includes(this.searchTerm))
+          ((user.personal_details?.first_name || '') + ' ' + (user.personal_details?.last_name || '')).includes(this.searchTerm)
+          
         );
       }).map(user => ({
         id: user.id,
@@ -65,7 +67,8 @@ export default class Hometab extends (OmniElement) {
         fullName: `${user.personal_details?.first_name || ''} ${user.personal_details?.last_name || ''}`,
         gender: `${user.personal_details?.gender || ''}`,
         role: `${user.user_login_details?.role || ''}`,
-        joinDate: `${user.modified_on|| ''}`,
+        joinDate: `${user.registered_on|| ''}`,
+        modified_on : `${user.modified_on|| ''}`,
         status: `${user.user_login_details?.active ? "Active" : "Inactive"|| ''}`,
         actions: this.Actions(user)
       }));

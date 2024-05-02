@@ -60,6 +60,7 @@ export default class UserForm extends OmniElement {
     sameAddress: { type: Boolean },
     userData: { type: Object },
     users: { type: Array },
+    user_role: { type: String },
   };
   constructor() {
     super();
@@ -69,7 +70,8 @@ export default class UserForm extends OmniElement {
     this.userData = {
       id: "",
       empId: "",
-      modified_on: formattedDate,
+      registered_on: formattedDate,
+      modified_on: "",
       personal_details: {
         first_name: "",
         last_name: "",
@@ -145,7 +147,7 @@ export default class UserForm extends OmniElement {
       "Separated",
       "Common Law",
     ];
-    this.roles = ["User", "Super Admin", "Admin"];
+    this.roles = ["User", "Admin"];
     this.loadUserData();
     this.sameAddress = false;
     this.generateUniqueId();
@@ -154,6 +156,9 @@ export default class UserForm extends OmniElement {
 
   connectedCallback() {
     super.connectedCallback();
+    this.currentUser = JSON.parse(localStorage.getItem("currentUser")) || {};
+    this.user_role = this.currentUser.user_login_details.role[0];
+    console.log(this.user_role);
     const params = new URLSearchParams(window.location.search);
     this.userId = params.get('userId');
     if (this.userId) {
@@ -200,9 +205,11 @@ export default class UserForm extends OmniElement {
   }
   adduserData() {
     if (this.userData.id) {
+      const currentTime = new Date();
       // If userData contains an ID, it means we're updating an existing user
       const index = this.users.findIndex(user => user.id === this.userData.id);
       if (index !== -1) {
+        this.userData.modified_on = currentTime.toISOString();
         this.users[index] = JSON.parse(JSON.stringify(this.userData));
       }
     } else {
@@ -552,27 +559,48 @@ export default class UserForm extends OmniElement {
     this.userData.personal_details.gender = e.target.value; // Update gender state variable
     this.requestUpdate(); // Trigger re-render
   }
+  handleActiveChange(e) {
+    const newValue = e.target.value === 'true'; // Convert the string value to a boolean
+    // Update your userData object with the new active state
+    this.userData.user_login_details.active = newValue;
+    // Dispatch a custom event to notify any listeners about the change
+    this.dispatchEvent(new CustomEvent('active-changed', {
+      detail: {
+        active: newValue
+      }
+    }));
+  }
 
   renderData() {
     const title = this.userId ? 'Edit User Details' : 'Create New User';
     const buttonText = this.userId ? 'Update' : 'Create';
     const isFormValid =
-      this.userData.personal_details.first_name && this.userData.personal_details.last_name &&
-      this.userData.personal_details.dob && this.userData.personal_details.gender &&
-      this.userData.personal_details.marital.length >  0 && this.userData.contact_details.phoneNumber &&
-      this.userData.contact_details.officephoneNumber && this.userData.contact_details.personalEmail &&
-      this.userData.address.current_address.flat_house_no && this.userData.address.current_address.building_no &&
-      this.userData.address.current_address.pin && this.userData.address.current_address.state.length > 0 &&
-      this.userData.address.current_address.district.length > 0 && this.userData.address.current_address.country.length > 0 &&
-      this.userData.address.permanent_address.flat_house_no && this.userData.address.permanent_address.building_no &&
-      this.userData.address.permanent_address.pin && this.userData.address.permanent_address.state.length > 0 &&
-      this.userData.address.permanent_address.district.length > 0 && this.userData.address.permanent_address.country.length > 0 &&
-      this.userData.user_login_details.username && this.userData.user_login_details.officeEmail && this.userData.user_login_details.role.length > 0 &&
-      !this.firstNameError && !this.lastNameError && !this.birthDateError && !this.phoneNumberError && !this.officephoneNumberError &&
-      !this.personalEmailError && !this.currentAddressError && ! this.currentStreetError && !this.currentPincodeError &&
-      !this.permanentAddressError && !this.permanentStreetError && !this.permanentPincodeError && !this.useridnameError &&
+      // this.userData.personal_details.first_name && this.userData.personal_details.last_name &&
+      // this.userData.personal_details.dob && this.userData.personal_details.gender &&
+      // this.userData.personal_details.marital.length >  0 && this.userData.contact_details.phoneNumber &&
+      // this.userData.contact_details.officephoneNumber && this.userData.contact_details.personalEmail &&
+      // this.userData.address.current_address.flat_house_no && this.userData.address.current_address.building_no &&
+      // this.userData.address.current_address.pin && this.userData.address.current_address.state.length > 0 &&
+      // this.userData.address.current_address.district.length > 0 && this.userData.address.current_address.country.length > 0 &&
+      // this.userData.address.permanent_address.flat_house_no && this.userData.address.permanent_address.building_no &&
+      // this.userData.address.permanent_address.pin && this.userData.address.permanent_address.state.length > 0 &&
+      // this.userData.address.permanent_address.district.length > 0 && this.userData.address.permanent_address.country.length > 0 &&
+      // this.userData.user_login_details.username && this.userData.user_login_details.officeEmail && this.userData.user_login_details.role.length > 0 &&
+      // !this.firstNameError && !this.lastNameError && !this.birthDateError && !this.phoneNumberError && !this.officephoneNumberError &&
+      // !this.personalEmailError && !this.currentAddressError && ! this.currentStreetError && !this.currentPincodeError &&
+      // !this.permanentAddressError && !this.permanentStreetError && !this.permanentPincodeError && !this.useridnameError &&
       !this.officeEmailError;
-    console.log("disable:", isFormValid);
+
+
+      let accountRender = html``; // Default to rendering nothing
+      if (
+        (this.user_role === "Admin" || this.user_role === "Super Admin") &&
+        !this.userId
+      ) {
+        accountRender = this.renderAccount(); // Render when user_role is "Admin" or "Super Admin" and userId is not present
+      } else if (this.user_role === "Super Admin" && this.userId) {
+        accountRender = this.renderAccount(); // Render when user_role is "Super Admin" and userId is present
+      }
     return html`
       <header class="modal-card-head header-separator">
       <p class="modal-card-title has-text-black">${title}</p>
@@ -634,11 +662,10 @@ export default class UserForm extends OmniElement {
             <omni-dropdown
               class="pd-4"
               placeholder="Select Marital"
-              typeahead
+              
               error="${this.selectedMaritalError
                 ? this.selectedMaritalError
                 : ""}"
-              searchindropdown
               .options=${this.marital}
               .value="${this.userData.personal_details.marital}"
               @change="${(e) => this.handleMaritalChange(e)}"
@@ -700,6 +727,7 @@ export default class UserForm extends OmniElement {
                 : ""}
             </div>
           </div>
+
         </div>
 
         <hr class="g-2" />
@@ -910,8 +938,6 @@ export default class UserForm extends OmniElement {
               error="${this.selectedCurrentcountryError
                 ? this.selectedCurrentcountryError
                 : ""}"
-              typeahead
-              searchindropdown
               .options=${this.country}
               .value=${this.userData.address.current_address.country}
               @change="${(e) => this.handleCurrentCountryChange(e)}"
@@ -1056,8 +1082,6 @@ export default class UserForm extends OmniElement {
               error="${this.selectedpermanentcountryError
                 ? this.selectedpermanentcountryError
                 : ""}"
-              typeahead
-              searchindropdown
               .value="${this.userData.address.permanent_address.country}"
               .options=${this.country}
               @change="${(e) => this.handlePermanentCountryChange(e)}"
@@ -1065,8 +1089,69 @@ export default class UserForm extends OmniElement {
             </omni-dropdown>
           </div>
         </div>
+        
+        ${accountRender}
+        
+        ${this.userId && this.user_role === "Super Admin" ? html`
+        <div class="columns col-spacing">
+          <div class="column is-one-third">
+            <p class="mb-2 ml-3">* Status</p>
+            <div class="control pt-3 pl-4">
+              <label class="radio">
+                <input
+                  type="radio"
+                  name="status"
+                  value=true
+                  @change="${(e) => this.handleActiveChange(e)}"
+                  ?checked="${this.userData.user_login_details.active === true}"
+                />
+                Active
+              </label>
+              <label class="radio">
+                <input
+                  type="radio"
+                  name="status"
+                  value=false
+                  @change="${(e) => this.handleActiveChange(e)}"
+                  ?checked="${this.userData.user_login_details.active === false}"
+                />
+                Inactive
+              </label>
+            </div>
+          </div>
+        </div>
+        ` : html``}
+        
 
-        <hr class="g-3" />
+        <div
+          class="columns is-flex is-align-items-center is-justify-content-space-between  pt-6 "
+        >
+          <span class="has-text-grey-light is-size-6 pl-3"
+            >* Required fields</span
+          >
+          <div class="buttons are-medium">
+            <button
+              class="button is-size-5 is-text"
+              @click="${this.closeUserForm}"
+            >
+              Cancel
+            </button>
+            <button
+              class="button is-size-5 is-link has-text-white bg-image "
+              ?disabled="${!isFormValid}"
+              @click="${this.adduserData}"
+            >
+            ${buttonText}
+            </button>
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  renderAccount() {
+    return html`
+    <hr class="g-3" />
         <p class="is-size-4  has-text-weight-bold has-text-dark pb-4">
           Account Access Details
         </p>
@@ -1130,31 +1215,10 @@ export default class UserForm extends OmniElement {
             >
             </omni-dropdown>
           </div>
+          
         </div>
 
-        <div
-          class="columns is-flex is-align-items-center is-justify-content-space-between  pt-6 "
-        >
-          <span class="has-text-grey-light is-size-6 pl-3"
-            >* Required fields</span
-          >
-          <div class="buttons are-medium">
-            <button
-              class="button is-size-5 is-text"
-              @click="${this.closeUserForm}"
-            >
-              Cancel
-            </button>
-            <button
-              class="button is-size-5 is-link has-text-white bg-image "
-              ?disabled="${!isFormValid}"
-              @click="${this.adduserData}"
-            >
-            ${buttonText}
-            </button>
-          </div>
-        </div>
-      </section>
+
     `;
   }
   
