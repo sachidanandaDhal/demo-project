@@ -207,26 +207,6 @@ export default class UserData extends OmniElement {
                   </p>
                 </div>
               </div>
-              <!-- <div class="columns col-spacing is-flex">
-                <div class="column is-one-third">
-                  <p class=" m-0 mb-2 has-text-grey is-size-6">Join Date *</p>
-                  <p class="mb-1" >
-                  ${this.userData.modified_on}
-                  </p>
-                </div>
-                <div class="column is-one-third">
-                  <p class=" m-0 mb-2 has-text-grey is-size-6">Password *</p>
-                  <p class="mb-1" >
-                  ${this.userData.user_login_details.password}
-                  </p>
-                </div>
-                <div class="column is-one-third">
-                  <p class=" m-0 mb-2 has-text-grey is-size-6">Last Modified Date *</p>
-                  <p class="mb-1" >
-                    N.A
-                  </p>
-                </div>
-              </div> -->
               <div class="buttons are-medium is-right pt-5 pr-4">
                 <button
                   class="button is-size-5 is-link"

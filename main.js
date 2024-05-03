@@ -2,7 +2,7 @@ import { Router } from "@vaadin/router";
 
 import "./src/components/login/log-in.js";
 import "./src/components/nav-bar/nav-bar.js";
-import "./src/components/home/user-nav-bar.js";
+import "./src/components/home/user-home.js";
 import "./src/components/form/user-form.js";
 import "./src/components/home/view-user-data.js";
 import "./src/components/nav-bar/dash-board.js";
@@ -42,7 +42,7 @@ export default class Main extends OmniElement {
       },
       {
         path: "/user-home",
-        component: "user-nav-bar",
+        component: "user-home",
       },
 
     ];

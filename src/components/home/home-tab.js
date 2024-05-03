@@ -61,7 +61,7 @@ export default class Hometab extends (OmniElement) {
         joinDate: `${user.registered_on|| ''}`,
         modified_on : `${user.modified_on|| ''}`,
         actions: this.Actions(user)
-      }));
+      })).reverse(); 
     } else {
       this.data = this.users.filter(user => {
         return (
@@ -79,7 +79,7 @@ export default class Hometab extends (OmniElement) {
         modified_on : `${user.modified_on|| ''}`,
         status: `${user.user_login_details?.active ? "Active" : "Inactive"|| ''}`,
         actions: this.Actions(user)
-      }));
+      })).reverse(); 
     }
   }
   

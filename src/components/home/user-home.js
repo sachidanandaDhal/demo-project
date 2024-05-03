@@ -1,11 +1,11 @@
 import { OmniElement, OmniStyleElement, css, html, nothing } from "omni-ui";
 import { Router } from "@vaadin/router";
-import "../home/edit-user.js";
+import "./edit-user.js";
 
 OmniElement.register();
 OmniStyleElement.register();
 
-export default class UserNavBar extends OmniElement {
+export default class UserHome extends OmniElement {
   static get styles() {
     return [
       super.styles,
@@ -122,7 +122,6 @@ export default class UserNavBar extends OmniElement {
     this.requestUpdate();
   }
   handleSignOut() {
-    // Navigate to the home route ("/") using Router.go()
     Router.go('/');
   }
   openDropdown() {
@@ -131,9 +130,6 @@ export default class UserNavBar extends OmniElement {
     this.requestUpdate();
   }
 
-  handleSignOut() {
-    Router.go('/');
-  }
 
   render() {
     return html`
@@ -147,7 +143,6 @@ export default class UserNavBar extends OmniElement {
             <h1 slot="start" class="titel is-size-2">User Profile</h1>
             </omni-toolbar>
           <section>
-              <!-- <h1 class="title is-2 pb-3">Personal Details</h1> -->
               <div class="is-flex is-justify-content-space-between">
               <h1 class="title is-3 pb-2">Biographical</h1>
               <button  class=" button is-text" @click="${() =>
@@ -432,4 +427,4 @@ export default class UserNavBar extends OmniElement {
     `;
   }
 }
-customElements.define("user-nav-bar", UserNavBar);
+customElements.define("user-home", UserHome);

@@ -1,7 +1,7 @@
 import { OmniElement, OmniStyleElement, css, html, nothing } from "omni-ui";
 import "../home/home-tab.js";
 import "../nav-bar/dash-board.js";
-import "../home/user-nav-bar.js";
+import "../home/user-home.js";
 import { Router } from "@vaadin/router";
 OmniElement.register();
 OmniStyleElement.register();
@@ -192,7 +192,7 @@ export default class NavBar extends OmniElement {
           </header>
           <main>
             ${this.user_role === "User"
-              ? html`<user-nav-bar></user-nav-bar>`
+              ? html`<user-home></user-home>`
               : html`
                   ${this.selectedTab === "dashboard"
                     ? html`<dash-board></dash-board>`
@@ -200,17 +200,7 @@ export default class NavBar extends OmniElement {
                 `}
           </main>
           <nav slot="drawer" class="menu">
-            <ul class="menu-list pl-3">
-              <li>
-                <a
-                  class="${this.activeTab === "home"
-                    ? "is-active"
-                    : ""} has-background-almost-black"
-                  @click=${() => this.handleTabChange("home")}
-                  >Users</a
-                >
-              </li>
-            </ul>
+            
             <ul class="menu-list pl-3">
               <li>
                 <a
@@ -219,6 +209,17 @@ export default class NavBar extends OmniElement {
                     : ""} has-background-almost-black"
                   @click=${() => this.handleTabChange("dashboard")}
                   >Dashboard</a
+                >
+              </li>
+            </ul>
+            <ul class="menu-list pl-3">
+              <li>
+                <a
+                  class="${this.activeTab === "home"
+                    ? "is-active"
+                    : ""} has-background-almost-black"
+                  @click=${() => this.handleTabChange("home")}
+                  >Users</a
                 >
               </li>
             </ul>

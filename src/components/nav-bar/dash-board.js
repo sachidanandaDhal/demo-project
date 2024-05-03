@@ -1,6 +1,6 @@
 import { OmniElement, OmniStyleElement, css, html, nothing } from "omni-ui";
 import "../home/home-tab.js";
-import "../home/user-nav-bar.js";
+import "../home/user-home.js";
 import { Router } from "@vaadin/router";
 OmniElement.register();
 OmniStyleElement.register();
@@ -61,7 +61,7 @@ connectedCallback() {
 
   renderData() {
     return html`
-        <div class="container pt-6 hg">
+        <div class="p-6 hg">
             
             <div class="columns is-centered">
               <div class="column is-one-quarter">

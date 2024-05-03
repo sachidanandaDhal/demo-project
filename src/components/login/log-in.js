@@ -48,14 +48,15 @@ export default class LogIn extends OmniElement {
           padding: 4rem !important;
           border-radius: 20px;
           height: 390px !important;
-          width: 400px !important;
+        
          
         }
         .g-1 {
           margin-block-start: -15px !important;
         }
         .font-size{
-          font-size: 1.5rem;
+          font-size: 2rem;
+          font-weight: 700;
         }
 
         .hg{

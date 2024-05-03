@@ -1,6 +1,6 @@
 import { OmniElement, OmniStyleElement, css, html, nothing } from "omni-ui";
 import { Router } from '@vaadin/router';
-import './user-nav-bar.js';
+import './user-home.js';
 OmniStyleElement.register();
 
 export default class editUser extends OmniElement {
@@ -500,8 +500,28 @@ handleOfficePhoneNumberChange(e) {
   /////////////////////
 
   renderBiographicalData() {
+    const isFormValid =
+      this.userData.personal_details.first_name && this.userData.personal_details.last_name &&
+      this.userData.personal_details.dob && this.userData.personal_details.gender &&
+      this.userData.personal_details.marital.length >  0 && !this.firstNameError && !this.lastNameError && !this.birthDateError;
     return html`
-     <div class="content pt-6">
+    <header class="modal-card-head header-separator">
+          <p class="modal-card-title is-size-1">Edit Biographical Details</p>
+          <div class="buttons are-medium">
+            <button class="button is-size-5 is-text" @click="${
+              this.closeEndDrawer
+            }">Cancel</button>
+            <button class="button is-size-5 is-link has-text-white bg-image "
+            ?disabled="${!isFormValid}"
+             @click="${
+              this.handleUpdate
+            }">
+              Update
+            </button>
+          </div>
+        </header>
+
+     <div class="content pt-6 p-4">
           <div class="columns col-spacing">
               <div class="column is-half">
                 <p class="mb-2 ml-2">* First Name</p>
@@ -640,8 +660,30 @@ handleOfficePhoneNumberChange(e) {
   }
 
    renderContactData() {
+    const isFormValid =
+    this.userData.contact_details.phoneNumber &&
+      this.userData.contact_details.officephoneNumber && this.userData.contact_details.personalEmail &&
+      !this.phoneNumberError && !this.officephoneNumberError &&
+      !this.personalEmailError;
     return html`
-     <div class="content pt-6">
+    <header class="modal-card-head header-separator">
+          <p class="modal-card-title is-size-1">Edit Contact Details</p>
+          <div class="buttons are-medium">
+            <button class="button is-size-5 is-text"
+            
+             @click="${
+              this.closeEndDrawer
+            }">Cancel</button>
+            <button class="button is-size-5 is-link has-text-white bg-image " 
+            ?disabled="${!isFormValid}"
+            @click="${
+              this.handleUpdate
+            }">
+              Update
+            </button>
+          </div>
+        </header>
+     <div class="content pt-6 p-4">
           <div class="columns col-spacing">
                 <div class="column is-half">
                 <p class="mb-3 ml-3">* Personal Email ID</p>
@@ -737,8 +779,32 @@ handleOfficePhoneNumberChange(e) {
   }
 
   renderAddresData() {
+    const isFormValid =
+    this.userData.address.current_address.flat_house_no && this.userData.address.current_address.building_no &&
+    this.userData.address.current_address.pin && this.userData.address.current_address.state.length > 0 &&
+    this.userData.address.current_address.district.length > 0 && this.userData.address.current_address.country.length > 0 &&
+    this.userData.address.permanent_address.flat_house_no && this.userData.address.permanent_address.building_no &&
+    this.userData.address.permanent_address.pin && this.userData.address.permanent_address.state.length > 0 &&
+    this.userData.address.permanent_address.district.length > 0 && this.userData.address.permanent_address.country.length > 0 &&
+    !this.currentAddressError && ! this.currentStreetError && !this.currentPincodeError &&
+      !this.permanentAddressError && !this.permanentStreetError && !this.permanentPincodeError;
     return html`
-      
+      <header class="modal-card-head header-separator">
+          <p class="modal-card-title is-size-1">Edit Address Details</p>
+          <div class="buttons are-medium">
+            <button class="button is-size-5 is-text" @click="${
+              this.closeEndDrawer
+            }">Cancel</button>
+            <button class="button is-size-5 is-link has-text-white bg-image "
+            ?disabled="${!isFormValid}"
+            @click="${
+              this.handleUpdate
+            }">
+              Update
+            </button>
+          </div>
+        </header>
+        <div class="p-4">
           <p class="is-size-4  pt-4 mt-2 has-text-weight-bold has-text-dark g-3">
           Current Address Details
         </p>
@@ -1037,11 +1103,30 @@ handleOfficePhoneNumberChange(e) {
         </div>
               
             </div>
+            </div>
     `;
   }
   renderEdit() {
+    const isFormValid =
+    this.userData.user_login_details.username && this.userData.user_login_details.password &&
+    !this.useridnameError && !this.userpasswordError;
     return html`
-    <div class="columns col-spacing">
+    <header class="modal-card-head header-separator">
+          <p class="modal-card-title is-size-1">Edit Login Details</p>
+          <div class="buttons are-medium">
+            <button class="button is-size-5 is-text" @click="${
+              this.closeEndDrawer
+            }">Cancel</button>
+            <button class="button is-size-5 is-link has-text-white bg-image " 
+            ?disabled="${!isFormValid}"
+            @click="${
+              this.handleUpdate
+            }">
+              Update
+            </button>
+          </div>
+        </header>
+    <div class="columns col-spacing p-4">
           <div class="column is-half">
             <p class="mb-2 ml-2">* User Name</p>
             <input
@@ -1093,28 +1178,17 @@ handleOfficePhoneNumberChange(e) {
   }
 
   render() {
+
     return html`
       <omni-style>
       <div class="p-2 ">
-        <header class="modal-card-head header-separator">
-          <p class="modal-card-title is-size-1">Edit Contact Details</p>
-          <div class="buttons are-medium">
-            <button class="button is-size-5 is-text" @click="${
-              this.closeEndDrawer
-            }">Cancel</button>
-            <button class="button is-size-5 is-link has-text-white bg-image " @click="${
-              this.handleUpdate
-            }">
-              Update
-            </button>
-          </div>
-        </header>
-        <div class="p-4">
+        
+       
           ${this.editSection === 'biographical' ? this.renderBiographicalData() : ''}
           ${this.editSection === 'contact' ? this.renderContactData() : ''}
           ${this.editSection === 'address' ? this.renderAddresData() : ''}
           ${this.editSection === 'login' ? this.renderEdit() : ''}
-        </div>
+       
       </div>
       </omni-style>
     `;
