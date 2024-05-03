@@ -28,6 +28,10 @@ export default class editUser extends OmniElement {
       .error-border {
         border: 1px solid var(--color-melon) !important;
       }
+      
+      omni-dialog::part(slot) {
+        top: 4.42857rem !important;
+      }
       .error-icon {
         --color-icon-lines: #eb0465 !important;
         fill: var(--color-icon-lines) !important;
@@ -138,12 +142,14 @@ export default class editUser extends OmniElement {
     if (index !== -1) {
         existingUserData[index] = { ...existingUserData[index], ...this.userData };
         localStorage.setItem("userData", JSON.stringify(existingUserData));
+        this.openOmniToastElModal();
     }
+    
     const currentUserData = JSON.parse(localStorage.getItem("currentUser")) || {};
     if (currentUserData.id === this.userData.id) {
         localStorage.setItem("currentUser", JSON.stringify(this.userData));
     }
-    this.dispatchEvent(new CustomEvent("close-edit-user"));
+    // this.dispatchEvent(new CustomEvent("close-edit-user"));
   }
 //////////////////////////Biographocal/////////////////////
 handleFirstNameChange(e) {
@@ -499,12 +505,35 @@ handleOfficePhoneNumberChange(e) {
   }
   /////////////////////
 
+  openOmniToastElModal(){
+    const toast = this.shadowRoot.querySelector('#toast');
+    toast.openModal();
+    setTimeout(() => {
+      this.closeEndDrawer();
+    }, 1500);
+    this.requestUpdate();
+  }
+
+
+
+
   renderBiographicalData() {
     const isFormValid =
       this.userData.personal_details.first_name && this.userData.personal_details.last_name &&
       this.userData.personal_details.dob && this.userData.personal_details.gender &&
       this.userData.personal_details.marital.length >  0 && !this.firstNameError && !this.lastNameError && !this.birthDateError;
     return html`
+    
+    
+    <omni-dialog
+        id="toast"
+        modalType="banner"
+        modalStyle="success"
+        toastTimeOut="2000"
+        >
+        <p slot="content">User Biographical has been successfully updated!</p>
+      </omni-dialog>
+      
     <header class="modal-card-head header-separator">
           <p class="modal-card-title is-size-1">Edit Biographical Details</p>
           <div class="buttons are-medium">
@@ -520,7 +549,7 @@ handleOfficePhoneNumberChange(e) {
             </button>
           </div>
         </header>
-
+        
      <div class="content pt-6 p-4">
           <div class="columns col-spacing">
               <div class="column is-half">
@@ -666,6 +695,14 @@ handleOfficePhoneNumberChange(e) {
       !this.phoneNumberError && !this.officephoneNumberError &&
       !this.personalEmailError;
     return html`
+    <omni-dialog
+        id="toast"
+        modalType="banner"
+        modalStyle="success"
+        toastTimeOut="2000"
+        >
+        <p slot="content">User Contact has been successfully updated!</p>
+      </omni-dialog>
     <header class="modal-card-head header-separator">
           <p class="modal-card-title is-size-1">Edit Contact Details</p>
           <div class="buttons are-medium">
@@ -789,6 +826,14 @@ handleOfficePhoneNumberChange(e) {
     !this.currentAddressError && ! this.currentStreetError && !this.currentPincodeError &&
       !this.permanentAddressError && !this.permanentStreetError && !this.permanentPincodeError;
     return html`
+    <omni-dialog
+        id="toast"
+        modalType="banner"
+        modalStyle="success"
+        toastTimeOut="2000"
+        >
+        <p slot="content">User Address Details has been successfully updated!</p>
+      </omni-dialog>
       <header class="modal-card-head header-separator">
           <p class="modal-card-title is-size-1">Edit Address Details</p>
           <div class="buttons are-medium">
@@ -1111,6 +1156,14 @@ handleOfficePhoneNumberChange(e) {
     this.userData.user_login_details.username && this.userData.user_login_details.password &&
     !this.useridnameError && !this.userpasswordError;
     return html`
+    <omni-dialog
+        id="toast"
+        modalType="banner"
+        modalStyle="success"
+        toastTimeOut="2000"
+        >
+        <p slot="content">User Password has been successfully updated!</p>
+      </omni-dialog>
     <header class="modal-card-head header-separator">
           <p class="modal-card-title is-size-1">Edit Login Details</p>
           <div class="buttons are-medium">
@@ -1135,6 +1188,7 @@ handleOfficePhoneNumberChange(e) {
               placeholder="Enter username"
               .value="${this.userData.user_login_details.username}"
               @input="${(e) => this.handleuserNameChange(e)}"
+              Disabled
             />
             <div class=" is-flex">
               ${this.useridnameError

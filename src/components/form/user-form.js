@@ -218,6 +218,9 @@ export default class UserForm extends OmniElement {
       // If userData does not contain an ID, it means we're creating a new user
       const empId = this.generateUniqueempId();
       const Id = this.generateUniqueId();
+      const currentTime= new Date();
+      const modifiedDate = `${currentTime.getDate().toString().padStart(2, '0')}-${(currentTime.getMonth() + 1).toString().padStart(2, '0')}-${currentTime.getFullYear()}`;
+        this.userData.modified_on = modifiedDate;
       this.userData.id = Id;
       this.userData.empId = empId;
       this.users.push(JSON.parse(JSON.stringify(this.userData)));
