@@ -36,6 +36,11 @@ export default class UserForm extends OmniElement {
       .omni .footer-container span {
         text-align: left !important ;
       }
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
 
       .error-border {
         border: 1px solid var(--color-melon) !important;
@@ -744,9 +749,9 @@ export default class UserForm extends OmniElement {
             <p class="mb-3 ml-3 ">* Personal Mobile No</p>
             <input
               class="${this.phoneNumberError ? "input error-border" : "input"}"
-              type="tel"
-              maxlength="10"
+              type="number"
               placeholder="Personal Mobile Number"
+              oninput="this.value = this.value.slice(0, 10);"
               .value="${this.userData.contact_details.phoneNumber}"
               @input="${(e) => this.handlePhoneNumberChange(e)}"
             />
@@ -770,9 +775,9 @@ export default class UserForm extends OmniElement {
               class="${this.officephoneNumberError
                 ? "input error-border"
                 : "input"}"
-              type="tel"
-              maxlength="10"
+              type="number"
               placeholder="Office Mobile Number"
+              oninput="this.value = this.value.slice(0, 10);"
               .value="${this.userData.contact_details.officephoneNumber}"
               @input="${(e) => this.handleOfficePhoneNumberChange(e)}"
             />
@@ -878,9 +883,9 @@ export default class UserForm extends OmniElement {
               class="${this.currentPincodeError
                 ? "input error-border"
                 : "input"}"
-              type="text"
-              maxlength="6"
+              type="number"
               placeholder="Enter Pincode"
+              oninput="this.value = this.value.slice(0, 6);"
               .value="${this.userData.address.current_address.pin}"
               @input="${(e) => this.handleCurrentPincodeChange(e)}"
             />
@@ -1023,11 +1028,11 @@ export default class UserForm extends OmniElement {
               class="${this.permanentPincodeError
                 ? "input error-border"
                 : "input"}"
-              type="text"
-              maxlength="6"
+              type="number"
               placeholder="Enter Pincode"
               .value="${this.userData.address.permanent_address.pin}"
               @input="${(e) => this.handlePermanentPincodeChange(e)}"
+              oninput="this.value = this.value.slice(0, 6);"
             />
             <div class=" is-flex">
               ${this.permanentPincodeError

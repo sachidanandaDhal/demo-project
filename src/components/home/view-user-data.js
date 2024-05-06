@@ -48,7 +48,7 @@ export default class UserData extends OmniElement {
           <div class="modal-card ">
             <header class="modal-card-head header-seperator">
               <p class="modal-card-title">User Details</p>
-              <button class="button is-outlined " @click="${this.closeUserData}">
+              <button class="button is-text " @click="${this.closeUserData}">
           <omni-icon class="is-size-1" icon-id="omni:interactive:close"></omni-icon>
         </button>
             </header>
