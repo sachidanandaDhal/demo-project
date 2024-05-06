@@ -57,16 +57,16 @@ export default class UserData extends OmniElement {
               <h1 class="title is-3 pb-2">Biographical</h1>
               <div class="columns col-spacing is-flex">
                 <div class="column is-one-third">
-                  <p class=" m-0 mb-2 has-text-grey is-size-6">First Name *</p>
+                  <p class=" m-0 mb-2 has-text-grey is-size-6">First Name</p>
                   <p class="mb-1">${this.userData.personal_details.first_name}</p>
                 </div>
                 <div class="column is-one-third">
-                  <p class=" m-0 mb-2 has-text-grey is-size-6">Last Name *</p>
+                  <p class=" m-0 mb-2 has-text-grey is-size-6">Last Name</p>
                   <p class="mb-1">${this.userData.personal_details.last_name}</p>
                 </div>
                 <div class="column is-one-third">
                   <p class=" m-0 mb-2 has-text-grey is-size-6">
-                    Marital Status *
+                    Marital Status
                   </p>
                   <p class="mb-1">${this.userData.personal_details.marital}</p>
                 </div>
@@ -74,15 +74,15 @@ export default class UserData extends OmniElement {
 
               <div class="columns col-spacing is-flex">
                 <div class="column is-one-third">
-                  <p class=" m-0 mb-2 has-text-grey is-size-6">Gender *</p>
+                  <p class=" m-0 mb-2 has-text-grey is-size-6">Gender</p>
                   <p class="mb-1">${this.userData.personal_details.gender}</p>
                 </div>
                 <div class="column is-one-third">
-                  <p class=" m-0 mb-2 has-text-grey is-size-6">DOB *</p>
+                  <p class=" m-0 mb-2 has-text-grey is-size-6">DOB</p>
                   <p class="mb-1">${this.userData.personal_details.dob}</p>
                 </div>
                 <div class="column is-one-third">
-                  <p class=" m-0 mb-2 has-text-grey is-size-6">User ID *</p>
+                  <p class=" m-0 mb-2 has-text-grey is-size-6">User ID</p>
                   <p class="mb-1">${this.userData.empId}</p>
                 </div>
               </div>
@@ -92,19 +92,19 @@ export default class UserData extends OmniElement {
               <div class="columns col-spacing is-flex">
                 <div class="column is-one-third">
                   <p class=" m-0 mb-2 has-text-grey is-size-6">
-                    Personal Email ID *
+                    Personal Email ID
                   </p>
                   <p class="mb-1">${this.userData.contact_details.personalEmail}</p>
                 </div>
                 <div class="column is-one-third">
                   <p class=" m-0 mb-2 has-text-grey is-size-6">
-                    Personal Mobile No *
+                    Personal Mobile No
                   </p>
                   <p class="mb-1">${this.userData.contact_details.phoneNumber}</p>
                 </div>
                 <div class="column is-one-third">
                   <p class=" m-0 mb-2 has-text-grey is-size-6">
-                    Office Mobile No *
+                    Office Mobile No
                   </p>
                   <p class="mb-1">${this.userData.contact_details.officephoneNumber}</p>
                 </div>
@@ -116,34 +116,34 @@ export default class UserData extends OmniElement {
                 <div class="column is-half">
                   <h1 class="title is-4 pb-2">Current Address Detail</h1>
                   <div>
-                    <p class="mb-1 c">Flat/House/Wing Number *</p>
+                    <p class="mb-1 c">Flat/House/Wing Number </p>
                     <p class="mb-4">${this.userData.address.current_address.flat_house_no}</p>
                   </div>
 
                   <div>
                     <p class="mb-1 has-text-grey is-size-6">
-                      Street/Locality/Area *
+                      Street/Locality/Area 
                     </p>
                     <p class="mb-4">${this.userData.address.current_address.building_no}</p>
                   </div>
 
                   <div>
-                    <p class="mb-1 has-text-grey is-size-6">Pincode *</p>
+                    <p class="mb-1 has-text-grey is-size-6">Pincode </p>
                     <p class="mb-4">${this.userData.address.current_address.pin}</p>
                   </div>
 
                   <div>
-                    <p class="mb-1 has-text-grey is-size-6">District *</p>
+                    <p class="mb-1 has-text-grey is-size-6">District </p>
                     <p class="mb-4">${this.userData.address.current_address.district}</p>
                   </div>
 
                   <div>
-                    <p class="mb-1 has-text-grey is-size-6">State *</p>
+                    <p class="mb-1 has-text-grey is-size-6">State </p>
                     <p class="mb-4">${this.userData.address.current_address.state}</p>
                   </div>
 
                   <div>
-                    <p class="mb-1 has-text-grey is-size-6">Country *</p>
+                    <p class="mb-1 has-text-grey is-size-6">Country </p>
                     <p class="mb-4">${this.userData.address.current_address.country}</p>
                   </div>
                 </div>
@@ -152,34 +152,34 @@ export default class UserData extends OmniElement {
                   <h1 class="title is-4 pb-2">Permanent Address Detail</h1>
                   <div>
                     <p class="mb-1 has-text-grey is-size-6">
-                      Flat/House/Wing Number *
+                      Flat/House/Wing Number 
                     </p>
                     <p class="mb-4">${this.userData.address.permanent_address.flat_house_no}</p>
                   </div>
 
                   <div>
                     <p class="mb-1 has-text-grey is-size-6">
-                      Street/Locality/Area *
+                      Street/Locality/Area 
                     </p>
                     <p class="mb-4">${this.userData.address.permanent_address.building_no}</p>
                   </div>
 
                   <div>
-                    <p class="mb-1 has-text-grey is-size-6">Pincode *</p>
+                    <p class="mb-1 has-text-grey is-size-6">Pincode </p>
                     <p class="mb-4">${this.userData.address.permanent_address.pin}</p>
                   </div>
                   <div>
-                    <p class="mb-1 has-text-grey is-size-6">District *</p>
+                    <p class="mb-1 has-text-grey is-size-6">District </p>
                     <p class="mb-4">${this.userData.address.permanent_address.district}</p>
                   </div>
 
                   <div>
-                    <p class="mb-1 has-text-grey is-size-6">State *</p>
+                    <p class="mb-1 has-text-grey is-size-6">State </p>
                     <p class="mb-4">${this.userData.address.permanent_address.state}</p>
                   </div>
 
                   <div>
-                    <p class="mb-1 has-text-grey is-size-6">Country *</p>
+                    <p class="mb-1 has-text-grey is-size-6">Country </p>
                     <p class="mb-4">${this.userData.address.permanent_address.country}</p>
                   </div>
                 </div>
@@ -188,20 +188,20 @@ export default class UserData extends OmniElement {
               <h1 class="title is-3 pb-2">Account Access Details</h1>
               <div class="columns col-spacing is-flex">
                 <div class="column is-one-third">
-                  <p class=" m-0 mb-2 has-text-grey is-size-6">User Name *</p>
+                  <p class=" m-0 mb-2 has-text-grey is-size-6">User Name </p>
                   <p class="mb-1" >
                   ${this.userData.user_login_details.username}
                   </p>
                 </div>
                 <div class="column is-one-third">
-                  <p class=" m-0 mb-2 has-text-grey is-size-6">Roll *</p>
+                  <p class=" m-0 mb-2 has-text-grey is-size-6">Role </p>
                   <p class="mb-1" >
                   ${this.userData.user_login_details.role}
                   </p>
                 </div>
                 
                 <div class="column is-one-third">
-                  <p class=" m-0 mb-2 has-text-grey is-size-6">Office Email ID *</p>
+                  <p class=" m-0 mb-2 has-text-grey is-size-6">Office Email ID </p>
                   <p class="mb-1" >
                   ${this.userData.user_login_details.officeEmail}
                   </p>

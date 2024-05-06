@@ -1,6 +1,5 @@
 import { OmniElement, OmniStyleElement, css, html, nothing } from "omni-ui";
 import "../home/home-tab.js";
-import "../nav-bar/dash-board.js";
 import "../home/user-home.js";
 import { Router } from "@vaadin/router";
 OmniElement.register();
@@ -12,8 +11,7 @@ export default class NavBar extends OmniElement {
       drawerOpen: { type: Boolean },
       endDrawerOpen: { type: Boolean },
       user_role: { type: String },
-      selectedTab: { type: String },
-      activeTab: { type: String },
+      activeLink: { type: String }
     };
   }
 
@@ -21,14 +19,16 @@ export default class NavBar extends OmniElement {
     super();
     this.drawerOpen = false;
     this.endDrawerOpen = false;
-    this.selectedTab = "home"; // Default tab is home
-    this.activeTab = "home";
+    
+    this.activeLink = '';
   }
 
   connectedCallback() {
     super.connectedCallback();
     this.userData = JSON.parse(localStorage.getItem("currentUser")) || {};
     this.user_role = this.userData.user_login_details.role[0];
+    const currentPath = window.location.pathname;
+    this.activeLink = currentPath;
     this.requestUpdate();
   }
 
@@ -43,6 +43,15 @@ export default class NavBar extends OmniElement {
   openDropdown() {
     const dropdown = this.shadowRoot.querySelector(".dropdown");
     dropdown.classList.toggle("is-active");
+  }
+
+  navigateTo(path) {
+    Router.go(path);
+  }
+
+  handleLinkClick(path) {
+    this.navigateTo(path);
+    this.activeLink = path;
   }
 
   static get styles() {
@@ -97,17 +106,6 @@ export default class NavBar extends OmniElement {
 
   handleSignOut() {
     Router.go("/");
-  }
-  handleTabChange(tab) {
-    this.selectedTab = tab;
-    this.activeTab = tab;
-
-    if (tab === "dashboard") {
-      const dashboardPage = this.shadowRoot.querySelector("dash-board");
-      if (dashboardPage) {
-        dashboardPage.updateData();
-      }
-    }
   }
 
   render() {
@@ -191,37 +189,31 @@ export default class NavBar extends OmniElement {
             </omni-toolbar>
           </header>
           <main>
-            ${this.user_role === "User"
+            <slot>
+          ${this.user_role === "User"
               ? html`<user-home></user-home>`
-              : html`
-                  ${this.selectedTab === "dashboard"
-                    ? html`<dash-board></dash-board>`
-                    : html`<home-tab></home-tab>`}
-                `}
+              : html`<home-tab></home-tab>
+                `}</slot>
           </main>
+          
           <nav slot="drawer" class="menu">
             
             <ul class="menu-list pl-3">
-              <li>
-                <a
-                  class="${this.activeTab === "dashboard"
-                    ? "is-active"
-                    : ""} has-background-almost-black"
-                  @click=${() => this.handleTabChange("dashboard")}
-                  >Dashboard</a
-                >
-              </li>
-            </ul>
-            <ul class="menu-list pl-3">
-              <li>
-                <a
-                  class="${this.activeTab === "home"
-                    ? "is-active"
-                    : ""} has-background-almost-black"
-                  @click=${() => this.handleTabChange("home")}
-                  >Users</a
-                >
-              </li>
+            <li>
+                  <a
+                    @click="${() => this.handleLinkClick("/home/dashboard")}"
+                    class="${this.activeLink === '/home/dashboard' ? 'is-active' : ''}"
+                    >Dashboard</a
+                  >
+                </li>
+                <li>
+                  <a
+                    @click="${() => this.handleLinkClick("/home")}"
+                    class="${this.activeLink === '/home' ? 'is-active' : ''}"
+                    >User</a
+                  >
+                </li>
+              </div>
             </ul>
           </nav>
         </omni-app-layout>

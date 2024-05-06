@@ -44,6 +44,20 @@ export default class Main extends OmniElement {
         path: "/user-home",
         component: "user-home",
       },
+      {
+        path: "/home",
+        component: "nav-bar",
+        children: [
+          {
+            path: "/dashboard",
+            component: "dash-board",
+          },
+          {
+            path: "/",
+            component: "home-tab",
+          },
+        ],
+      },
 
     ];
 

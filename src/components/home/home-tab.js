@@ -162,6 +162,8 @@ onSubmit() {
     }
     this.userToDelete = null; // Reset the userToDelete property
   }
+  const toast = this.shadowRoot.querySelector('#toast');
+  toast.openModal();
 }
 
 viewUser(user) {
@@ -240,6 +242,13 @@ closeEditUser() {
           Delete
         </button>
       </omni-dialog>
+      <omni-dialog
+      id="toast"
+      modalType="toast"
+      modalStyle="success"
+      toastTimeOut="3000">
+      <p slot="content">User deleted successfully!</p>
+    </omni-dialog>
     `;
   }
   
