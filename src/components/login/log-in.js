@@ -148,9 +148,6 @@ export default class LogIn extends OmniElement {
     // passwordInput.value = "";
   }
   showInactiveUserError() {
-    const toast = this.shadowRoot.querySelector("#toast");
-    const errorMessage = this.shadowRoot.querySelector("#error-message");
-    errorMessage.textContent = "User is inactive. Please contact the administrator.";
     toast.openModal();
     this.errorToastOpen = true;
     this.logusernameError = "User is inactive";
@@ -186,8 +183,6 @@ export default class LogIn extends OmniElement {
   }
 
   openErrortoast() {
-    const toast = this.shadowRoot.querySelector("#toast");
-    toast.openModal();
     this.errorToastOpen = true;
     this.logusernameError = "Invalid Username";
     this.logpasswordError = "Invalid Password";
@@ -293,18 +288,6 @@ export default class LogIn extends OmniElement {
     return html`
       <omni-style>
         ${!this.openNav ? this.renderlogin() : ""}
-        <omni-dialog
-          id="toast"
-          modalType="toast"
-          modalStyle="error"
-          toastTimeOut="5000"
-        >
-          <p slot="content" id="error-message">
-            Invalid username or password. Please check your credentials and try
-            again.
-          </p>
-        </omni-dialog>
-       
       </omni-style>
     `;
   }
