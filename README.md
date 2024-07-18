@@ -1,18 +1,22 @@
-# \<demo-project>
+
 
 This webcomponent follows the [open-wc](https://github.com/open-wc/open-wc) recommendation.
 
-## Installation npm
-npm install
+## Installation
 
-## First Login 
+```bash
+npm i demo-project
+```
 
-Username - omni
-Password - omni
+## Usage
 
+```html
+<script type="module">
+  import 'demo-project/demo-project.js';
+</script>
 
-
-
+<demo-project></demo-project>
+```
 
 
 
