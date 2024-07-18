@@ -1,24 +1,7 @@
-# \<demo-project>
+
 
 This webcomponent follows the [open-wc](https://github.com/open-wc/open-wc) recommendation.
-
-## Installation
-
-```bash
-npm i demo-project
-```
-
-## Usage
-
-```html
-<script type="module">
-  import 'demo-project/demo-project.js';
-</script>
-
-<demo-project></demo-project>
-```
-
-
+## install npm 
 
 ## Tooling configs
 
@@ -32,4 +15,4 @@ If you customize the configuration a lot, you can consider moving them to indivi
 npm start
 ```
 
-To run a local development server that serves the basic demo located in `demo/index.html`
+
